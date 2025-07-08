@@ -33,6 +33,8 @@ public partial class VwUsuario
 
     public int IdRol { get; set; }
 
+    public int? IdDireccion { get; set; }
+
     public string? Calle { get; set; }
 
     public string? NumeroInterior { get; set; }

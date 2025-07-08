@@ -211,9 +211,9 @@ namespace BL
             return result;
         }
 
-        //GetAllByID EntityFramework StoredProcedure
+        // ======================= GET BY ID =========================== \\
 
-        public static ML.Result GetByIdEFSP(int IdUsuario)
+        public ML.Result GetById(int IdUsuario)
         {
 
             ML.Result result = new ML.Result();
@@ -221,52 +221,51 @@ namespace BL
             try
             {
 
-                using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
+
+                ML.Usuario usuario = new ML.Usuario();
+                usuario.Rol = new ML.Rol();
+                usuario.Direccion = new ML.Direccion();
+                usuario.Direccion.Colonia = new ML.Colonia();
+                usuario.Direccion.Colonia.Municipio = new ML.Municipio();
+                usuario.Direccion.Colonia.Municipio.Estado = new ML.Estado();
+
+                var row = _context.VwUsuarios.FromSqlRaw($"UsuarioGetById {IdUsuario}").ToList().SingleOrDefault();
+
+                usuario.IdUsuario = row.IdUsuario;
+                usuario.Nombre = row.Nombre;
+                usuario.ApellidoPaterno = row.ApellidoPaterno;
+                usuario.ApellidoMaterno = row.ApellidoMaterno;
+                usuario.Email = row.Email;
+                usuario.UserName = row.UserName;
+                usuario.Password = row.Password;
+                usuario.Sexo = row.Sexo;
+                usuario.Telefono = row.Telefono;
+                usuario.Celular = row.Celular;
+                usuario.FechaNacimiento = row.FechaNacimiento.ToString();
+                usuario.Curp = row.Curp;
+                usuario.Rol.IdRol = row.IdRol;
+                usuario.Imagen = row.Imagen;
+                usuario.Direccion.IdDireccion = (row.IdDireccion == null) ? 0 : row.IdDireccion.Value;
+                usuario.Direccion.Calle = row.Calle ?? " ";
+                usuario.Direccion.NumeroInterior = row.NumeroInterior ?? " ";
+                usuario.Direccion.NumeroExterior = row.NumeroExterior ?? " ";
+                //usuario.Direccion.Colonia.IdColonia = (row.IdDireccion == null) ? 0 : row.IdColonia;
+                //usuario.Direccion.Colonia.Municipio.IdMunicipio = (row.IdMunicipio == null) ? 0 : row.IdMunicipio.Value;
+                //usuario.Direccion.Colonia.Municipio.Estado.IdEstado = (row.IdEstado == null) ? 0 : row.IdEstado.Value;
+                result.Object = usuario;
+
+                if (result.Object != null)
                 {
 
-                    ML.Usuario usuario = new ML.Usuario();
-                    usuario.Rol = new ML.Rol();
-                    usuario.Direccion = new ML.Direccion();
-                    usuario.Direccion.Colonia = new ML.Colonia();
-                    usuario.Direccion.Colonia.Municipio = new ML.Municipio();
-                    usuario.Direccion.Colonia.Municipio.Estado = new ML.Estado();
-                    var row = context.UsuarioGetById(IdUsuario).SingleOrDefault();
-
-                    usuario.IdUsuario = row.IdUsuario;
-                    usuario.Nombre = row.Nombre;
-                    usuario.ApellidoPaterno = row.ApellidoPaterno;
-                    usuario.ApellidoMaterno = row.ApellidoMaterno;
-                    usuario.Email = row.Email;
-                    usuario.UserName = row.UserName;
-                    usuario.Password = row.Password;
-                    usuario.Sexo = row.Sexo;
-                    usuario.Telefono = row.Telefono;
-                    usuario.Celular = row.Celular;
-                    usuario.FechaNacimiento = row.FechaNacimiento.ToString();
-                    usuario.Curp = row.CURP;
-                    usuario.Rol.IdRol = row.IdRol.Value;
-                    usuario.Imagen = row.Imagen;
-                    usuario.Direccion.IdDireccion = (row.IdDireccion == null) ? 0 : row.IdDireccion.Value;
-                    usuario.Direccion.Calle = row.Calle ?? " ";
-                    usuario.Direccion.NumeroInterior = row.NumeroInterior ?? " ";
-                    usuario.Direccion.NumeroExterior = row.NumeroExterior ?? " ";
-                    usuario.Direccion.Colonia.IdColonia = (row.IdDireccion == null) ? 0 : row.IdColonia;
-                    usuario.Direccion.Colonia.Municipio.IdMunicipio = (row.IdMunicipio == null) ? 0 : row.IdMunicipio.Value;
-                    usuario.Direccion.Colonia.Municipio.Estado.IdEstado = (row.IdEstado == null) ? 0 : row.IdEstado.Value;
-                    result.Object = usuario;
-
-                    if (result.Object != null)
-                    {
-
-                        result.Correct = true;
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un problema al traer los datos del usuario";
-                    }
-
+                    result.Correct = true;
                 }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al traer los datos del usuario";
+                }
+
+
 
             }
             catch (Exception ex)
@@ -282,15 +281,13 @@ namespace BL
 
         //Set Status 
 
-        public static ML.Result SetStatus(int IdUsuario, bool statusCheck)
+        public  ML.Result SetStatus(int IdUsuario, bool statusCheck)
         {
 
             ML.Result result = new ML.Result();
             try
             {
-                using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
-                {
-                    var query = context.UsuarioStatusSet(IdUsuario, statusCheck);
+                var query = _context.Database.ExecuteSqlRaw($"UsuarioStatusSet {IdUsuario}");
 
                     if (query > 0)
                     {
@@ -301,7 +298,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = "Ocurrio un problema al actualizar status";
                     }
-                }
+                
             }
             catch (Exception ex)
             {
@@ -314,73 +311,73 @@ namespace BL
         }
 
 
-        public static ML.Result GetAllView()
-        {
+        //public static ML.Result GetAllView()
+        //{
 
-            ML.Result result = new ML.Result();
+        //    ML.Result result = new ML.Result();
 
-            try
-            {
+        //    try
+        //    {
 
-                using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
-                {
+        //        using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
+        //        {
 
-                    var query = context.vwUsuarios.ToList();
-                    result.Objects = new List<object>();
+        //            var query = context.vwUsuarios.ToList();
+        //            result.Objects = new List<object>();
 
-                    if (query.Count > 0)
-                    {
+        //            if (query.Count > 0)
+        //            {
 
-                        foreach (var item in query)
-                        {
+        //                foreach (var item in query)
+        //                {
 
-                            ML.Usuario usuario = new ML.Usuario();
-                            usuario.Rol = new ML.Rol();
-                            usuario.Direccion = new ML.Direccion();
-                            usuario.IdUsuario = item.IdUsuario;
-                            usuario.Nombre = item.Nombre;
-                            usuario.ApellidoPaterno = item.ApellidoPaterno;
-                            usuario.ApellidoMaterno = item.ApellidoMaterno;
-                            usuario.Email = item.Email;
-                            usuario.UserName = item.UserName;
-                            usuario.Password = item.Password;
-                            usuario.Telefono = item.Telefono;
-                            usuario.Celular = item.Celular;
-                            usuario.FechaNacimiento = item.FechaNacimiento.ToString();
-                            usuario.Curp = item.CURP;
-                            usuario.Rol.IdRol = item.IdRol;
-                            usuario.Rol.Nombre = item.Rol;
-                            usuario.Direccion.Calle = item.Calle;
-                            usuario.Direccion.NumeroExterior = item.NumeroExterior;
-                            usuario.Direccion.NumeroInterior = item.NumeroInterior;
-                            usuario.Imagen = item.Imagen;
+        //                    ML.Usuario usuario = new ML.Usuario();
+        //                    usuario.Rol = new ML.Rol();
+        //                    usuario.Direccion = new ML.Direccion();
+        //                    usuario.IdUsuario = item.IdUsuario;
+        //                    usuario.Nombre = item.Nombre;
+        //                    usuario.ApellidoPaterno = item.ApellidoPaterno;
+        //                    usuario.ApellidoMaterno = item.ApellidoMaterno;
+        //                    usuario.Email = item.Email;
+        //                    usuario.UserName = item.UserName;
+        //                    usuario.Password = item.Password;
+        //                    usuario.Telefono = item.Telefono;
+        //                    usuario.Celular = item.Celular;
+        //                    usuario.FechaNacimiento = item.FechaNacimiento.ToString();
+        //                    usuario.Curp = item.CURP;
+        //                    usuario.Rol.IdRol = item.IdRol;
+        //                    usuario.Rol.Nombre = item.Rol;
+        //                    usuario.Direccion.Calle = item.Calle;
+        //                    usuario.Direccion.NumeroExterior = item.NumeroExterior;
+        //                    usuario.Direccion.NumeroInterior = item.NumeroInterior;
+        //                    usuario.Imagen = item.Imagen;
 
-                            result.Objects.Add(usuario);
-                        }
+        //                    result.Objects.Add(usuario);
+        //                }
 
-                        result.Correct = true;
+        //                result.Correct = true;
 
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un error al obtener los datos";
-                    }
+        //            }
+        //            else
+        //            {
+        //                result.Correct = false;
+        //                result.ErrorMessage = "Ocurrio un error al obtener los datos";
+        //            }
 
-                }
+        //        }
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                result.Correct = false;
-                result.ErrorMessage = ex.Message;
-                result.Ex = ex;
-            }
+        //        result.Correct = false;
+        //        result.ErrorMessage = ex.Message;
+        //        result.Ex = ex;
+        //    }
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
 
         //public static ML.Result InsertUser(string path)
