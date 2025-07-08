@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BL
+{
+    public class Estado
+    {
+
+        private readonly DL.DpradoProgramacionNcapasContext _context;
+        public Estado(DL.DpradoProgramacionNcapasContext context)
+        {
+
+            _context = context;
+
+        }
+
+    }
+}
