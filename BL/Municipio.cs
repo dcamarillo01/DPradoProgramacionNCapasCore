@@ -28,7 +28,7 @@ namespace BL
             try
             {
 
-                var query = _context.Municipios.FromSqlRaw("MunicipioGetByIdEstado").ToList();
+                var query = _context.Municipios.FromSqlRaw($"MunicipioGetByIdEstado {IdEstado}").ToList();
 
                 if (query != null)
                 {
