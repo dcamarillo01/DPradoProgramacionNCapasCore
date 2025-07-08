@@ -101,7 +101,7 @@ namespace BL
 
         // ================ UPDATE ========================= \\
 
-        public  ML.Result Update(int IdUsuario, ML.Usuario Usuario)
+        public ML.Result Update(int IdUsuario, ML.Usuario Usuario)
         {
             ML.Result result = new ML.Result();
             try
@@ -120,15 +120,15 @@ namespace BL
                 int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioAdd {IdUsuario},'{Usuario.Nombre}', '{Usuario.ApellidoPaterno}', '{Usuario.ApellidoMaterno}', '{Usuario.Email}', '{Usuario.UserName}', '{Usuario.Password}', '{Usuario.Sexo}', '{Usuario.Telefono}', '{Usuario.Celular}', '{Usuario.FechaNacimiento}', '{Usuario.Curp}', '{Usuario.Rol.IdRol}','{Usuario.Direccion.Calle}', '{Usuario.Direccion.NumeroInterior}', '{Usuario.Direccion.NumeroExterior}', '{Usuario.Direccion.Colonia.IdColonia}',@Imagen", img);
 
                 if (filasAfectadas > 0)
-                    {
+                {
 
-                        result.Correct = true;
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un problema al actualizar los datos del usuario";
-                    }
+                    result.Correct = true;
+                }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al actualizar los datos del usuario";
+                }
             }
             catch (Exception ex)
             {
@@ -141,9 +141,9 @@ namespace BL
             return result;
         }
 
-        // GetAll EntityFramework Stored Procedure 
+        // ====================== GET ALL ========================= \\
 
-        public static ML.Result GetAllEFSP(ML.Usuario Usuario)
+        public ML.Result GetAll(ML.Usuario Usuario)
         {
 
             ML.Result result = new ML.Result();
@@ -151,74 +151,62 @@ namespace BL
             try
             {
 
-                using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
+                result.Objects = new List<object>();
+
+                var query = _context.VwUsuarios.FromSqlRaw($"UsuarioGetAll '{Usuario.Nombre}', '{Usuario.ApellidoPaterno}','{Usuario.ApellidoMaterno}', '{Usuario.Rol.IdRol}'").ToList();
+
+                if (query.Count > 0)
                 {
-
-                    result.Objects = new List<object>();
-
-                    var query = context.UsuarioGetAll(Usuario.Nombre, Usuario.ApellidoPaterno, Usuario.ApellidoMaterno, Usuario.Rol.IdRol).ToList();
-
-                    if (query.Count > 0)
+                    foreach (var row in query)
                     {
-                        foreach (var row in query)
+                        ML.Usuario usuario = new ML.Usuario();
+                        usuario.Rol = new ML.Rol();
+                        usuario.Direccion = new ML.Direccion();
+
+                        usuario.IdUsuario = row.IdUsuario;
+                        usuario.Nombre = row.Nombre;
+                        usuario.ApellidoPaterno = row.ApellidoPaterno;
+                        usuario.ApellidoMaterno = row.ApellidoMaterno;
+                        usuario.Email = row.Email;
+                        usuario.UserName = row.UserName;
+                        usuario.Password = row.Password;
+                        usuario.Sexo = row.Sexo;
+                        usuario.Telefono = row.Telefono;
+                        usuario.Celular = row.Celular;
+                        usuario.FechaNacimiento = row.FechaNacimiento.ToString();
+                        usuario.Curp = row.Curp;
+                        usuario.Rol.Nombre = row.Rol;
+                        usuario.Imagen = row.Imagen;
+                        if (usuario.Imagen == null)
                         {
-
-                            ML.Usuario usuario = new ML.Usuario();
-                            usuario.Rol = new ML.Rol();
-                            usuario.Direccion = new ML.Direccion();
-
-
-                            usuario.IdUsuario = row.IdUsuario;
-                            usuario.Nombre = row.Nombre;
-                            usuario.ApellidoPaterno = row.ApellidoPaterno;
-                            usuario.ApellidoMaterno = row.ApellidoMaterno;
-                            usuario.Email = row.Email;
-                            usuario.UserName = row.UserName;
-                            usuario.Password = row.Password;
-                            usuario.Sexo = row.Sexo;
-                            usuario.Telefono = row.Telefono;
-                            usuario.Celular = row.Celular;
-                            usuario.FechaNacimiento = row.FechaNacimiento;
-                            usuario.Curp = row.CURP;
-                            usuario.Rol.Nombre = row.Rol;
-                            usuario.Imagen = row.Imagen;
-                            if (usuario.Imagen == null)
-                            {
-                                usuario.ImagenBase64 = "";
-                            }
-                            else
-                            {
-                                usuario.ImagenBase64 = Convert.ToBase64String(usuario.Imagen);
-                            }
-                            usuario.Direccion.Calle = row.Calle;
-                            usuario.Direccion.NumeroInterior = row.NumeroInterior;
-                            usuario.Direccion.NumeroExterior = row.NumeroExterior;
-
-                            result.Objects.Add(usuario);
-
+                            usuario.ImagenBase64 = "";
                         }
+                        else
+                        {
+                            usuario.ImagenBase64 = Convert.ToBase64String(usuario.Imagen);
+                        }
+                        usuario.Direccion.Calle = row.Calle;
+                        usuario.Direccion.NumeroInterior = row.NumeroInterior;
+                        usuario.Direccion.NumeroExterior = row.NumeroExterior;
 
-                        result.Correct = true;
+                        result.Objects.Add(usuario);
 
                     }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un problema al traer la informacion de usuarios";
-                    }
-
+                    result.Correct = true;
 
                 }
-
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al traer la informacion de usuarios";
+                }
             }
             catch (Exception ex)
             {
-
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
                 result.Ex = ex;
             }
-
 
             return result;
         }
