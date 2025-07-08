@@ -14,14 +14,16 @@ namespace BL
         private readonly DL.DpradoProgramacionNcapasContext _context;
 
 
-        public Usuario(DL.DpradoProgramacionNcapasContext context) { 
-        
+        public Usuario(DL.DpradoProgramacionNcapasContext context)
+        {
+
             _context = context;
 
         }
 
+        // ================ ADD ====================== \\
 
-        public  ML.Result Add(ML.Usuario Usuario)
+        public ML.Result Add(ML.Usuario Usuario)
         {
             ML.Result result = new ML.Result();
 
@@ -38,17 +40,17 @@ namespace BL
                 }
 
 
-                var filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioAdd '{Usuario.Nombre}', '{Usuario.ApellidoPaterno}', '{Usuario.ApellidoMaterno}', '{Usuario.Email}', '{Usuario.UserName}', '{Usuario.Password}', '{Usuario.Sexo}', '{Usuario.Telefono}', '{Usuario.Celular}', '{Usuario.FechaNacimiento}', '{Usuario.Curp}', '{Usuario.Rol.IdRol}','{Usuario.Direccion.Calle}', '{Usuario.Direccion.NumeroInterior}', '{Usuario.Direccion.NumeroExterior}', '{Usuario.Direccion.Colonia.IdColonia}',@Imagen",img);
-               
-                    if (filasAfectadas > 0)
-                    {
-                        result.Correct = true;
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un error al agregar usuario";
-                    }
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioAdd '{Usuario.Nombre}', '{Usuario.ApellidoPaterno}', '{Usuario.ApellidoMaterno}', '{Usuario.Email}', '{Usuario.UserName}', '{Usuario.Password}', '{Usuario.Sexo}', '{Usuario.Telefono}', '{Usuario.Celular}', '{Usuario.FechaNacimiento}', '{Usuario.Curp}', '{Usuario.Rol.IdRol}','{Usuario.Direccion.Calle}', '{Usuario.Direccion.NumeroInterior}', '{Usuario.Direccion.NumeroExterior}', '{Usuario.Direccion.Colonia.IdColonia}',@Imagen", img);
+
+                if (filasAfectadas > 0)
+                {
+                    result.Correct = true;
+                }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un error al agregar usuario";
+                }
 
             }
             catch (Exception ex)
@@ -64,30 +66,25 @@ namespace BL
         }
 
 
-        // DELETE Usuario con Entity Framework y Store Procedure
+        // ================ DELETE ====================== \\
 
-        public static ML.Result DeleteEFSP(int UsuarioID)
+
+        public ML.Result Delete(int IdUsuario)
         {
-
             ML.Result result = new ML.Result();
-
             try
             {
 
-                using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioDelete {IdUsuario}");
+
+                if (filasAfectadas > 0)
                 {
-
-                    int filasAfectadas = context.UsuarioDelete(UsuarioID);
-
-                    if (filasAfectadas > 0)
-                    {
-                        result.Correct = true;
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un problema al eliminar al usuario";
-                    }
+                    result.Correct = true;
+                }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al eliminar al usuario";
                 }
 
             }
@@ -99,9 +96,7 @@ namespace BL
                 result.Ex = ex;
             }
 
-
             return result;
-
         }
 
 
