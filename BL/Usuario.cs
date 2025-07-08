@@ -99,23 +99,27 @@ namespace BL
             return result;
         }
 
+        // ================ UPDATE ========================= \\
 
-        //UPDATE Usuario con EntityFramework y StoreProcedure
-
-        public static ML.Result UpdateEFSP(int UsuarioId, ML.Usuario Usuario)
+        public  ML.Result Update(int IdUsuario, ML.Usuario Usuario)
         {
-
             ML.Result result = new ML.Result();
-
-
             try
             {
 
-                using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
+                var img = new SqlParameter("@Imagen", System.Data.SqlDbType.VarBinary);
+                if (Usuario.Imagen != null)
                 {
-                    int filasAfectadas = context.UsuarioUpdate(UsuarioId, Usuario.Nombre, Usuario.ApellidoPaterno, Usuario.ApellidoMaterno, Usuario.Email, Usuario.UserName, Usuario.Password, Usuario.Sexo, Usuario.Telefono, Usuario.Celular, Usuario.FechaNacimiento, Usuario.Curp, Usuario.Rol.IdRol, Usuario.Imagen, Usuario.Direccion.Calle, Usuario.Direccion.NumeroInterior, Usuario.Direccion.NumeroExterior, Usuario.Direccion.Colonia.IdColonia);
+                    img.Value = Usuario.Imagen;
+                }
+                else
+                {
+                    img.Value = DBNull.Value;
+                }
 
-                    if (filasAfectadas > 0)
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioAdd {IdUsuario},'{Usuario.Nombre}', '{Usuario.ApellidoPaterno}', '{Usuario.ApellidoMaterno}', '{Usuario.Email}', '{Usuario.UserName}', '{Usuario.Password}', '{Usuario.Sexo}', '{Usuario.Telefono}', '{Usuario.Celular}', '{Usuario.FechaNacimiento}', '{Usuario.Curp}', '{Usuario.Rol.IdRol}','{Usuario.Direccion.Calle}', '{Usuario.Direccion.NumeroInterior}', '{Usuario.Direccion.NumeroExterior}', '{Usuario.Direccion.Colonia.IdColonia}',@Imagen", img);
+
+                if (filasAfectadas > 0)
                     {
 
                         result.Correct = true;
@@ -125,8 +129,6 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = "Ocurrio un problema al actualizar los datos del usuario";
                     }
-
-                }
             }
             catch (Exception ex)
             {
