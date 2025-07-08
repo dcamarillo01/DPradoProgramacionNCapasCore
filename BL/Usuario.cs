@@ -173,7 +173,7 @@ namespace BL
                         usuario.Sexo = row.Sexo;
                         usuario.Telefono = row.Telefono;
                         usuario.Celular = row.Celular;
-                        usuario.FechaNacimiento = row.FechaNacimiento.ToString();
+                        usuario.FechaNacimiento = row.FechaNacimiento;
                         usuario.Curp = row.Curp;
                         usuario.Rol.Nombre = row.Rol;
                         usuario.Imagen = row.Imagen;

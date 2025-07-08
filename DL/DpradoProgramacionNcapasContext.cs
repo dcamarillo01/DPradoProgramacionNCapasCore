@@ -186,6 +186,9 @@ public partial class DpradoProgramacionNcapasContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.FechaNacimiento)
+                .HasMaxLength(30)
+                .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .HasMaxLength(30)
                 .IsUnicode(false);

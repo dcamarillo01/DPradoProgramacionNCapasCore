@@ -25,7 +25,7 @@ public partial class VwUsuario
 
     public string Celular { get; set; } = null!;
 
-    public DateOnly FechaNacimiento { get; set; }
+    public string? FechaNacimiento { get; set; }
 
     public string Curp { get; set; } = null!;
 
