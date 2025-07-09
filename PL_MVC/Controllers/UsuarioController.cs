@@ -345,21 +345,21 @@ namespace PL_MVC.Controllers
             //ML.Usuario usuario = new ML.Usuario();
             //usuario.Rol = new ML.Rol();
 
-            HttpPostedFileBase imgInput = Request.Files["imagenInputUser"];
+            //HttpPostedFileBase imgInput = Request.Files["imagenInputUser"];
 
-            if (imgInput.ContentLength > 0)
-            {
+            //if (imgInput.ContentLength > 0)
+            //{
 
-                using (Stream inputStream = imgInput.InputStream)
-                {
-                    if (!(inputStream is MemoryStream memoryStream))
-                    {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
-                    }
-                    usuario.Imagen = memoryStream.ToArray();
-                }
-            }
+            //    using (Stream inputStream = imgInput.InputStream)
+            //    {
+            //        if (!(inputStream is MemoryStream memoryStream))
+            //        {
+            //            memoryStream = new MemoryStream();
+            //            inputStream.CopyTo(memoryStream);
+            //        }
+            //        usuario.Imagen = memoryStream.ToArray();
+            //    }
+            //}
 
             ML.Result resultRol = _rol.GetAll();
             if (resultRol.Correct)
@@ -367,20 +367,20 @@ namespace PL_MVC.Controllers
                 usuario.Rol.Roles = resultRol.Objects;
             }
 
-            ML.Result resultEstado = BL.Estado.GetAll();
+            ML.Result resultEstado = _estado.GetAll();
             if (resultEstado.Correct)
             {
                 usuario.Direccion.Colonia.Municipio.Estado.Estados = resultEstado.Objects;
             }
 
-            ML.Result resultMunicipio = BL.Municipio.GetMunicipioByIdEstado(usuario.Direccion.Colonia.Municipio.Estado.IdEstado);
+            ML.Result resultMunicipio = _municipio.GetMunicipioByIdEstado(usuario.Direccion.Colonia.Municipio.Estado.IdEstado);
             if (resultMunicipio.Correct)
             {
 
                 usuario.Direccion.Colonia.Municipio.Municipios = resultMunicipio.Objects;
             }
 
-            ML.Result resultColonia = BL.Colonia.GetColoniaByIdMunicipio(usuario.Direccion.Colonia.Municipio.IdMunicipio);
+            ML.Result resultColonia = _colonia.GetColoniaByIdMunicipio(usuario.Direccion.Colonia.Municipio.IdMunicipio);
             if (resultColonia.Correct)
             {
                 usuario.Direccion.Colonia.Colonias = resultColonia.Objects;
@@ -491,10 +491,10 @@ namespace PL_MVC.Controllers
         public JsonResult GetMunicipioByIdEstado(int IdEstado)
         {
 
-            ML.Result resultMunicipio = BL.Municipio.GetMunicipioByIdEstado(IdEstado);
+            ML.Result resultMunicipio = _municipio.GetMunicipioByIdEstado(IdEstado);
 
 
-            return Json(resultMunicipio, JsonRequestBehavior.AllowGet);
+            return Json(resultMunicipio);
         }
 
         ///Json para obtener colonias
@@ -502,7 +502,7 @@ namespace PL_MVC.Controllers
         public JsonResult GetColoniaByIdMunicipio(int IdMunicipio)
         {
 
-            ML.Result resultColonia = BL.Colonia.GetColoniaByIdMunicipio(IdMunicipio);
+            ML.Result resultColonia = _colonia.GetColoniaByIdMunicipio(IdMunicipio);
 
             return Json(resultColonia);
         }
