@@ -20,6 +20,9 @@ builder.Services.AddDbContext<DpradoProgramacionNcapasContext>(options =>
 //Donde va a vivir la coneccion.
 builder.Services.AddScoped<BL.Usuario>();
 builder.Services.AddScoped<BL.Rol>();
+builder.Services.AddScoped<BL.Colonia>();
+builder.Services.AddScoped<BL.Municipio>();
+builder.Services.AddScoped<BL.Estado>();
 
 
 var app = builder.Build();
