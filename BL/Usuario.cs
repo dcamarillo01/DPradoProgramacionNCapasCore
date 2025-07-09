@@ -249,9 +249,9 @@ namespace BL
                 usuario.Direccion.Calle = row.Calle ?? " ";
                 usuario.Direccion.NumeroInterior = row.NumeroInterior ?? " ";
                 usuario.Direccion.NumeroExterior = row.NumeroExterior ?? " ";
-                //usuario.Direccion.Colonia.IdColonia = (row.IdDireccion == null) ? 0 : row.IdColonia;
-                //usuario.Direccion.Colonia.Municipio.IdMunicipio = (row.IdMunicipio == null) ? 0 : row.IdMunicipio.Value;
-                //usuario.Direccion.Colonia.Municipio.Estado.IdEstado = (row.IdEstado == null) ? 0 : row.IdEstado.Value;
+                usuario.Direccion.Colonia.IdColonia = (row.IdDireccion == null) ? 0 : row.IdColonia;
+                usuario.Direccion.Colonia.Municipio.IdMunicipio = (row.IdMunicipio == null) ? 0 : row.IdMunicipio.Value;
+                usuario.Direccion.Colonia.Municipio.Estado.IdEstado = (row.IdEstado == null) ? 0 : row.IdEstado.Value;
                 result.Object = usuario;
 
                 if (result.Object != null)

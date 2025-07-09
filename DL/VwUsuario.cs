@@ -42,4 +42,10 @@ public partial class VwUsuario
     public string? NumeroExterior { get; set; }
 
     public byte[]? Imagen { get; set; }
+
+    public int? IdMunicipio { get; set; }
+
+    public int? IdEstado { get; set; }
+
+    public int? IdColonia { get; set; }
 }

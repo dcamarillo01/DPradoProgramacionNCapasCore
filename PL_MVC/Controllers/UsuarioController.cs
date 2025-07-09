@@ -487,7 +487,7 @@ namespace PL_MVC.Controllers
 
 
         ///Json para obtener municipios
-        [NonAction]
+        [HttpGet]
         public JsonResult GetMunicipioByIdEstado(int IdEstado)
         {
 
@@ -498,7 +498,7 @@ namespace PL_MVC.Controllers
         }
 
         ///Json para obtener colonias
-        [NonAction]
+        [HttpGet]
         public JsonResult GetColoniaByIdMunicipio(int IdMunicipio)
         {
 
@@ -508,7 +508,7 @@ namespace PL_MVC.Controllers
         }
 
         ///Json para obtener Status bit 
-        [NonAction]
+        [HttpPost]
         public JsonResult SetUserStatus(int IdUsuario, bool statusCheck)
         {
 

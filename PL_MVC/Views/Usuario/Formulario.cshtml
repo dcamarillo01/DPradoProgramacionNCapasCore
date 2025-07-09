@@ -316,7 +316,7 @@
                 <div class="row">
                     <div class="col-12" style="padding-top:20px">
                         <input class="form-control" type="file" name="imagenInputUser" id="imgFile" value="" onchange="CargarArchivo(event)" />
-                        <img alt="" src="~/Content/Imagenes/defaultUser.jpeg" id="imgInput" style="width:80px" />
+                        <img alt="" src="~/Imagenes/defaultUser.jpeg" id="imgInput" style="width:80px" />
                         <div style="padding-top:20px" id="imgInput"></div>
                     </div>
                 </div>
@@ -434,25 +434,27 @@
         console.log(IdEstado)
 
         $.ajax({
-            url: '@Url.Action("GetMunicipioByIdEstado")',
+            url: '@Url.Action("GetMunicipioByIdEstado", "Usuario")',
             dataType: 'JSON',
             method: 'GET',
             data: { IdEstado },
             success: function (resultMunicipio) {
                 console.log(resultMunicipio)
-                if (resultMunicipio.Correct) {
+                console.log(resultMunicipio.correct)
+                if (resultMunicipio.correct) {
+                    
                     $("#ddlMunicipio").empty()
                     $("#ddlMunicipio").append('<option value=""> Seleccione un municipio</option>')
                     $("#ddlColonia").empty()
                     $("#ddlColonia").append('<option value=""> Seleccione una colonia</option>')
 
-                    $.each(resultMunicipio.Objects, function (i, municipio) {
-                        $("#ddlMunicipio").append('<option value="'+ municipio.IdMunicipio +'">'+municipio.Nombre+'</option>')
+                    $.each(resultMunicipio.objects, function (i, municipio) {
+                        $("#ddlMunicipio").append('<option value="'+ municipio.idMunicipio +'">'+municipio.nombre+'</option>')
                     })
                 }
             },
             error: function (ex) {
-                alert(ex)
+                alert("Error en GetMunicipioByIdEstado")
             }
         })
     }
@@ -469,13 +471,13 @@
         data: { IdMunicipio },
         success: function (resultColonia) {
             console.log(resultColonia)
-            if (resultColonia.Correct)
+            if (resultColonia.correct)
             {
                 $("#ddlColonia").empty()
                 $("#ddlColonia").append('<option value=""> Seleccione una Colonia</option>')
 
-                $.each(resultColonia.Objects, function (i, colonia) {
-                    $("#ddlColonia").append('<option value="'+ colonia.IdColonia +'">'+ colonia.Nombre+'</option>')
+                $.each(resultColonia.objects, function (i, colonia) {
+                    $("#ddlColonia").append('<option value="'+ colonia.idColonia +'">'+ colonia.nombre+'</option>')
                 })
             }
         },
