@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PL_MVC.Controllers
 {
@@ -339,7 +340,7 @@ namespace PL_MVC.Controllers
 
         // POST : UsuarioPost
         [HttpPost]
-        public ActionResult Formulario(ML.Usuario usuario)
+        public ActionResult Formulario(ML.Usuario usuario, IFormFile imagenInputUser)
         {
 
             //ML.Usuario usuario = new ML.Usuario();
@@ -347,19 +348,19 @@ namespace PL_MVC.Controllers
 
             //HttpPostedFileBase imgInput = Request.Files["imagenInputUser"];
 
-            //if (imgInput.ContentLength > 0)
-            //{
+            if (imagenInputUser != null)
+            {
 
-            //    using (Stream inputStream = imgInput.InputStream)
-            //    {
-            //        if (!(inputStream is MemoryStream memoryStream))
-            //        {
-            //            memoryStream = new MemoryStream();
-            //            inputStream.CopyTo(memoryStream);
-            //        }
-            //        usuario.Imagen = memoryStream.ToArray();
-            //    }
-            //}
+                using (Stream inputStream = imagenInputUser.OpenReadStream())
+                {
+                    if (!(inputStream is MemoryStream memoryStream))
+                    {
+                        memoryStream = new MemoryStream();
+                        inputStream.CopyTo(memoryStream);
+                    }
+                    usuario.Imagen = memoryStream.ToArray();
+                }
+            }
 
             ML.Result resultRol = _rol.GetAll();
             if (resultRol.Correct)
@@ -393,7 +394,7 @@ namespace PL_MVC.Controllers
                 {
 
                     // ==================== Implementacion desde BL ================= \\
-                    _usuario.Update(usuario.IdUsuario, usuario);
+                    ML.Result resultUpdate = _usuario.Update(usuario.IdUsuario, usuario);
 
                     //Implementacion de Web Service
                     //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
@@ -409,12 +410,15 @@ namespace PL_MVC.Controllers
                     //AddUpdateSoap(usuario);
                     /// WEB SERVICE API REST
                     //UpdateByAPI(usuario);
+                    if (resultUpdate.Correct) {
+                        return RedirectToAction("GetAll", "Usuario");
+                    }
 
                 }
                 else
                 {
                     // =========== Implementacion con BL ========== \\
-                    _usuario.Add(usuario);
+                    ML.Result resultAdd = _usuario.Add(usuario);
                     //Implementacion de WebService
                     //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
                     //usuarioSoap.Add(usuario);
@@ -425,7 +429,9 @@ namespace PL_MVC.Controllers
                     //WebSercice API REST
                     //ML.Result resultadd = GetAllByAPI();
                     //AddByAPI(usuario);
-
+                    if (resultAdd.Correct) { 
+                        return RedirectToAction("GetAll", "Usuario");
+                    }
 
                 }
             }
@@ -436,7 +442,7 @@ namespace PL_MVC.Controllers
                 //Mostrar los erroes en form
             }
 
-            return RedirectToAction("GetAll", "Usuario");
+            return View(usuario);
 
             //return View(usuario);
         }
