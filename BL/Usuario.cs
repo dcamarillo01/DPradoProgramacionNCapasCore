@@ -287,7 +287,7 @@ namespace BL
             ML.Result result = new ML.Result();
             try
             {
-                var query = _context.Database.ExecuteSqlRaw($"UsuarioStatusSet {IdUsuario}");
+                var query = _context.Database.ExecuteSqlRaw($"UsuarioStatusSet {IdUsuario},{statusCheck}");
 
                     if (query > 0)
                     {

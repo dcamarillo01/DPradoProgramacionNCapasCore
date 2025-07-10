@@ -340,7 +340,7 @@ namespace PL_MVC.Controllers
 
         // POST : UsuarioPost
         [HttpPost]
-        public ActionResult Formulario(ML.Usuario usuario, IFormFile imagenInputUser)
+        public ActionResult Formulario(ML.Usuario usuario, IFormFile Imagen)
         {
 
             //ML.Usuario usuario = new ML.Usuario();
@@ -348,10 +348,10 @@ namespace PL_MVC.Controllers
 
             //HttpPostedFileBase imgInput = Request.Files["imagenInputUser"];
 
-            if (imagenInputUser != null)
+            if (Imagen != null)
             {
 
-                using (Stream inputStream = imagenInputUser.OpenReadStream())
+                using (Stream inputStream = Imagen.OpenReadStream())
                 {
                     if (!(inputStream is MemoryStream memoryStream))
                     {
@@ -514,7 +514,7 @@ namespace PL_MVC.Controllers
         }
 
         ///Json para obtener Status bit 
-        [HttpPost]
+        [HttpGet]
         public JsonResult SetUserStatus(int IdUsuario, bool statusCheck)
         {
 
