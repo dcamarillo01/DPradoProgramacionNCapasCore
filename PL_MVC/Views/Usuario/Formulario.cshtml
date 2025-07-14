@@ -296,6 +296,7 @@
 
             }
 
+            
             @Html.HiddenFor(model => model.Imagen)
 
 
@@ -424,7 +425,7 @@
 
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/jqueryui/jquery-ui.js"></script> 
+<script src="~/jqueryui/jquery-ui.js"></script>
 <script>
 
     /// ==================== DDLs =========================== \\\
@@ -442,7 +443,7 @@
                 console.log(resultMunicipio)
                 console.log(resultMunicipio.correct)
                 if (resultMunicipio.correct) {
-                    
+
                     $("#ddlMunicipio").empty()
                     $("#ddlMunicipio").append('<option value=""> Seleccione un municipio</option>')
                     $("#ddlColonia").empty()
