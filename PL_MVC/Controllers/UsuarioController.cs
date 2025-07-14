@@ -135,12 +135,12 @@ namespace PL_MVC.Controllers
                 Usuario.Rol.Roles = resultRol.Objects;
             }
 
-            // ======================== Carga Masiva ============================ \\
+            // ======================== Carga Masiva ============================ 
             //if (file != null)
             //{
 
             //    //Fetch the File.
-            //    HttpPostedFileBase postedFile = Request.Files["ImportFile2"];
+            //    IFormFile postedFile = Request.Files["ImportFile2"];
 
             //    if (file == "txt")
             //    {
@@ -254,7 +254,7 @@ namespace PL_MVC.Controllers
             //            TempData["downloadPath"] = fullPathErrores;
             //        }
             //        else
-            //        {
+            //        { 
             //            Session["noErrorFile"] = fullPath;
             //            Session["ErroresFile"] = null;
             //        }
