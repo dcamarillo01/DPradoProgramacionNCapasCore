@@ -117,7 +117,7 @@ namespace BL
                     img.Value = DBNull.Value;
                 }
 
-                int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioAdd {IdUsuario},'{Usuario.Nombre}', '{Usuario.ApellidoPaterno}', '{Usuario.ApellidoMaterno}', '{Usuario.Email}', '{Usuario.UserName}', '{Usuario.Password}', '{Usuario.Sexo}', '{Usuario.Telefono}', '{Usuario.Celular}', '{Usuario.FechaNacimiento}', '{Usuario.Curp}', '{Usuario.Rol.IdRol}','{Usuario.Direccion.Calle}', '{Usuario.Direccion.NumeroInterior}', '{Usuario.Direccion.NumeroExterior}', '{Usuario.Direccion.Colonia.IdColonia}',@Imagen", img);
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioUpdate {IdUsuario},'{Usuario.Nombre}', '{Usuario.ApellidoPaterno}', '{Usuario.ApellidoMaterno}', '{Usuario.Email}', '{Usuario.UserName}', '{Usuario.Password}', '{Usuario.Sexo}', '{Usuario.Telefono}', '{Usuario.Celular}', '{Usuario.FechaNacimiento}', '{Usuario.Curp}', '{Usuario.Rol.IdRol}','{Usuario.Direccion.Calle}', '{Usuario.Direccion.NumeroInterior}', '{Usuario.Direccion.NumeroExterior}', '{Usuario.Direccion.Colonia.IdColonia}',@Imagen", img);
 
                 if (filasAfectadas > 0)
                 {

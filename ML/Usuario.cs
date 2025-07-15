@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Remoting;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ML
 {
@@ -52,8 +53,11 @@ namespace ML
         [RegularExpression(@"^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$", ErrorMessage = "CURP es invalido")]
         public string? Curp { get; set; }
         public ML.Rol? Rol { get; set; }
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [Required(AllowEmptyStrings = true)]
+
+        //[DisplayFormat(ConvertEmptyStringToNull = false)]
+        //[Required(AllowEmptyStrings = true)]
+
+        [NotMapped]
         public byte[]? Imagen { get; set; }
         public string? ImagenBase64 { get; set; }
         public List<object>? Usuarios { get; set; }
