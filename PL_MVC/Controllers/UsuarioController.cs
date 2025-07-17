@@ -17,7 +17,8 @@ namespace PL_MVC.Controllers
         private readonly BL.Colonia _colonia;
         private readonly BL.Estado _estado;
         private readonly BL.Municipio _municipio;
-        public UsuarioController(BL.Usuario usuario, BL.Rol rol, BL.Colonia colonia, BL.Estado estado, BL.Municipio municipio)
+        private readonly IConfiguration _configuration;
+        public UsuarioController(BL.Usuario usuario, BL.Rol rol, BL.Colonia colonia, BL.Estado estado, BL.Municipio municipio, IConfiguration configuration)
         {
 
             _usuario = usuario;
@@ -25,7 +26,7 @@ namespace PL_MVC.Controllers
             _colonia = colonia;
             _estado = estado;
             _municipio = municipio;
-
+            _configuration = configuration;
         }
 
 
@@ -47,22 +48,25 @@ namespace PL_MVC.Controllers
                 Direccion = new ML.Direccion()
             };
 
-            /// ================ Utilizando API REST ==================== \\\
+            
 
 
-            /// ============ Utilizando WebServices ===========
-            // Implementaion de Web Services Automaticamente s
-            //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
-            //var respuesta = usuarioSoap.GetAll(usuario);
-            //if (respuesta.Correct)
-            //{
+                /// ================ Utilizando API REST ==================== \\\
 
-            //    usuario.Usuarios = new List<object>();
-            //    usuario.Usuarios = respuesta.Objects.ToList();
-            //}
 
-            // ============= Funcionalidad desde BL ======================
-            ML.Result resultGetAll = _usuario.GetAll(usuario);
+                /// ============ Utilizando WebServices ===========
+                // Implementaion de Web Services Automaticamente s
+                //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
+                //var respuesta = usuarioSoap.GetAll(usuario);
+                //if (respuesta.Correct)
+                //{
+
+                //    usuario.Usuarios = new List<object>();
+                //    usuario.Usuarios = respuesta.Objects.ToList();
+                //}
+
+                // ============= Funcionalidad desde BL ======================
+                ML.Result resultGetAll = _usuario.GetAll(usuario);
             if (resultGetAll.Correct)
             {
                 usuario.Usuarios = new List<object>();
@@ -1075,44 +1079,44 @@ namespace PL_MVC.Controllers
 
         // ====================== METODOS CONSUMIR APIs ================================ \\
 
-        //[NonAction]
-        //public static ML.Result GetAllByAPI(ML.Usuario Usuario)
-        //{
-        //    ML.Result result = new ML.Result();
-        //    result.Objects = new List<object>();
-        //    try
-        //    {
-        //        using (var client = new HttpClient())
-        //        {
+        [NonAction]
+        public  ML.Result GetAllByAPI(ML.Usuario Usuario)
+        {
+            ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
+            try
+            {
+                using (var client = new HttpClient())
+                {
 
-        //            //RecuperarBaseAddress de AppSettings  
-        //            var userEndPoint = ConfigurationManager.AppSettings["UsuarioEndPoint"];
-        //            client.BaseAddress = new Uri(userEndPoint);
-        //            var responseTask = client.PostAsJsonAsync("GetAll", Usuario);
-        //            responseTask.Wait(); //abrir otro hilo 
-        //            var resultServicio = responseTask.Result;
-        //            if (resultServicio.IsSuccessStatusCode) //200 - 299
-        //            {
-        //                result.Correct = true;
-        //                var readTask = resultServicio.Content.ReadAsAsync<ML.Result>();
-        //                readTask.Wait();
-        //                foreach (var resultItem in readTask.Result.Objects)
-        //                {
-        //                    ML.Usuario resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Usuario>(resultItem.ToString());
-        //                    result.Objects.Add(resultItemList);
-        //                }
+                    //RecuperarBaseAddress de AppSettings  
+                    var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
+                    client.BaseAddress = new Uri(userEndPoint);
+                    var responseTask = client.PostAsJsonAsync("GetAll", Usuario);
+                    responseTask.Wait(); //abrir otro hilo 
+                    var resultServicio = responseTask.Result;
+                    if (resultServicio.IsSuccessStatusCode) //200 - 299
+                    {
+                        result.Correct = true;
+                        var readTask = resultServicio.Content.ReadAsAsync<ML.Result>();
+                        readTask.Wait();
+                        foreach (var resultItem in readTask.Result.Objects)
+                        {
+                            ML.Usuario resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Usuario>(resultItem.ToString());
+                            result.Objects.Add(resultItemList);
+                        }
 
-        //                return result;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Correct = false;
-        //        result.ErrorMessage = ex.Message;
-        //    }
-        //    return result;
-        //}
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+            return result;
+        }
 
         //[NonAction]
         //public static ML.Result AddByAPI(ML.Usuario Usuario)
