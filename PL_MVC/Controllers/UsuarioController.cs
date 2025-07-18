@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ML;
 using Newtonsoft.Json;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Xml.Linq;
@@ -18,7 +19,8 @@ namespace PL_MVC.Controllers
         private readonly BL.Estado _estado;
         private readonly BL.Municipio _municipio;
         private readonly IConfiguration _configuration;
-        public UsuarioController(BL.Usuario usuario, BL.Rol rol, BL.Colonia colonia, BL.Estado estado, BL.Municipio municipio, IConfiguration configuration)
+        private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _webHostEnvironment;
+        public UsuarioController(BL.Usuario usuario, BL.Rol rol, BL.Colonia colonia, BL.Estado estado, BL.Municipio municipio, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
 
             _usuario = usuario;
@@ -27,6 +29,7 @@ namespace PL_MVC.Controllers
             _estado = estado;
             _municipio = municipio;
             _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
 
@@ -103,7 +106,7 @@ namespace PL_MVC.Controllers
 
         [HttpPost]
         //, HttpPostedFileBase archivo
-        public ActionResult GetAll(ML.Usuario Usuario, string file)
+        public ActionResult GetAll(ML.Usuario Usuario, IFormFile ImportFile2)
         {
             //Traer roles 
             Usuario.Rol = new ML.Rol();
@@ -146,133 +149,213 @@ namespace PL_MVC.Controllers
                 Usuario.Rol.Roles = resultRol.Objects;
             }
 
+
             // ======================== Carga Masiva ============================ 
-            //if (file != null)
-            //{
 
-            //    //Fetch the File.
-            //    IFormFile postedFile = Request.Files["ImportFile2"];
+            var file = ImportFile2;
+            if (file != null)
+            {
 
-            //    if (file == "txt")
-            //    {
+                //Fetch the File.
+                IFormFile postedFile = file;
+                var fileExtension = System.IO.Path.GetExtension(file.FileName);
 
-            //        //Create the Directory.
-            //        string path = Server.MapPath("~/Content/txt/");
-            //        if (!Directory.Exists(path))
-            //        {
-            //            Directory.CreateDirectory(path);
-            //            //Session[Correctos] = ruta
-            //        }
+                if (fileExtension == ".txt")
+                {
 
-            //        ////Fetch the File Name.
-            //        string fileName = Path.GetFileNameWithoutExtension(postedFile.FileName);
+                    //Alternative way to use server.MapPath in .net core
+                    string webRootPath = _webHostEnvironment.WebRootPath;
+                    string contentRootPath = _webHostEnvironment.ContentRootPath;
 
-            //        string fullPath = path + fileName + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
-            //        //Session["RutaFile"] = fullPath;
-            //        //Save the File.
-            //        postedFile.SaveAs(fullPath);
+                    string path = "";
+                    path = Path.Combine(webRootPath, "txt");
+                    //or path = Path.Combine(contentRootPath , "wwwroot" ,"CSS" );
 
+                    //Create the Directory.
+                    //string path = Server.MapPath("~/Content/txt/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                        //Session[Correctos] = ruta
+                    }
 
-            //        //Mandar como viewBag MOdelo Carga masiva 
-            //        ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
-            //        cargaMasiva.Errores = new List<string>();
-            //        cargaMasiva.Validados = new List<string>();
+                    ////Fetch the File Name.
+                    string fileName = Path.GetFileNameWithoutExtension(postedFile.FileName);
 
-            //        BL.CargaMasiva.LeerArchivo(fullPath, cargaMasiva.Errores, cargaMasiva.Validados);
-
-            //        ViewBag.CargaMasiva = cargaMasiva;
-
-            //        if (cargaMasiva.Errores.Count > 1)
-            //        {
-            //            //SEND PATH FILE 
-            //            System.IO.File.Delete(fullPath);
-
-
-            //            //Crear carpeteta errores en txt
-            //            string pathErrores = Server.MapPath("~/Content/txt/Errores/");
-            //            if (!Directory.Exists(pathErrores))
-            //            {
-            //                Directory.CreateDirectory(pathErrores);
-            //            }
-            //            string fullPathErrores = pathErrores + fileName + "Errors" + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
-            //            Session["ErroresFile"] = fullPathErrores;
-            //            //Crear nuevo archivo con errores
-            //            using (StreamWriter outputFile = new StreamWriter(Path.Combine(fullPathErrores)))
-            //            {
-            //                foreach (string line in cargaMasiva.Errores)
-            //                    outputFile.WriteLine(line);
-            //            }
-
-            //            //AHORA VE COMO HACER PARA QUE EL USUARIO PUEDA DESCARGAR UN ARCHIVO
-            //            TempData["downloadPath"] = fullPathErrores;
-            //        }
-            //        else
-            //        {
-            //            Session["noErrorFile"] = fullPath;
-            //            Session["ErroresFile"] = null;
-            //        }
-
-            //    }
-            //    else if (file == "xlsx")
-            //    {
-            //        //Create the Directory.
-            //        string pathExcel = Server.MapPath("~/Content/xlsx/");
-            //        if (!Directory.Exists(pathExcel))
-            //        {
-            //            Directory.CreateDirectory(pathExcel);
-            //            //Session[Correctos] = ruta
-            //        }
-
-            //        ////Fetch the File Name.
-            //        string fileName = Path.GetFileNameWithoutExtension(postedFile.FileName);
-
-            //        string fullPath = pathExcel + fileName + DateTime.Now.ToString("ddMMyyhhmmss") + ".xlsx";
-            //        //Session["RutaFile"] = fullPath;
-            //        //Save the File.
-            //        postedFile.SaveAs(fullPath);
-
-            //        // Llamar a metodo para leer archivo excel
-            //        ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
-            //        cargaMasiva.Errores = new List<string>();
-            //        cargaMasiva.Validados = new List<string>();
-            //        ML.Result resultExcel = BL.CargaMasiva.LeerArchivoExcel(fullPath, cargaMasiva.Errores, cargaMasiva.Validados);
-
-            //        ViewBag.CargaMasiva = cargaMasiva;
-
-            //        ViewBag.Tabla = resultExcel.Object;
-            //        if (cargaMasiva.Errores.Count > 1)
-            //        {
-            //            //SEND PATH FILE 
-            //            System.IO.File.Delete(fullPath);
+                    string fullPath = path + fileName + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
+                    //Session["RutaFile"] = fullPath;
+                    //Save the File.
+                    //postedFile.SaveAs(fullPath);
+                    //============ .NET CORE SAVE FILE????? ===============\\
+                    //Save file????
+                    using (FileStream fs = System.IO.File.Create(fullPath))
+                    {
+                        file.CopyTo(fs);
+                    }
 
 
-            //            //Crear carpeteta errores en txt
-            //            string pathErrores = Server.MapPath("~/Content/xlsx/Errores/");
-            //            if (!Directory.Exists(pathErrores))
-            //            {
-            //                Directory.CreateDirectory(pathErrores);
-            //            }
-            //            string fullPathErrores = pathErrores + fileName + "Errors" + DateTime.Now.ToString("ddMMyyhhmmss") + ".xlsx";
-            //            Session["ErroresFile"] = fullPathErrores;
-            //            //Crear nuevo archivo con errores
-            //            using (StreamWriter outputFile = new StreamWriter(Path.Combine(fullPathErrores)))
-            //            {
-            //                foreach (string line in cargaMasiva.Errores)
-            //                    outputFile.WriteLine(line);
-            //            }
+                    //Mandar como viewBag MOdelo Carga masiva 
+                    ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
+                    cargaMasiva.Errores = new List<string>();
+                    cargaMasiva.Validados = new List<string>();
 
-            //            //AHORA VE COMO HACER PARA QUE EL USUARIO PUEDA DESCARGAR UN ARCHIVO
-            //            TempData["downloadPath"] = fullPathErrores;
-            //        }
-            //        else
-            //        { 
-            //            Session["noErrorFile"] = fullPath;
-            //            Session["ErroresFile"] = null;
-            //        }
-            //    }
-            //}
+                    BL.CargaMasiva.LeerArchivo(fullPath, cargaMasiva.Errores, cargaMasiva.Validados);
+
+                    ViewBag.CargaMasiva = cargaMasiva;
+
+                    if (cargaMasiva.Errores.Count > 1)
+                    {
+                        //SEND PATH FILE 
+                        System.IO.File.Delete(fullPath);
+
+
+                        //Crear carpeteta errores en txt
+                        //string pathErrores = Server.MapPath("~/Content/txt/Errores/");
+                        string pathErrores = "";
+                        pathErrores = Path.Combine(webRootPath, "txt\\Errores");
+                        if (!Directory.Exists(pathErrores))
+                        {
+                            Directory.CreateDirectory(pathErrores);
+                        }
+                        string fullPathErrores = pathErrores + fileName + "Errors" + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
+                        //Session["ErroresFile"] = fullPathErrores;
+                        //Session .Net Core
+                        HttpContext.Session.SetString("ErroresFile", fullPathErrores);
+
+                        //Crear nuevo archivo con errores
+                        using (StreamWriter outputFile = new StreamWriter(Path.Combine(fullPathErrores)))
+                        {
+                            foreach (string line in cargaMasiva.Errores)
+                                outputFile.WriteLine(line);
+                        }
+
+                        //AHORA VE COMO HACER PARA QUE EL USUARIO PUEDA DESCARGAR UN ARCHIVO
+                        TempData["downloadPath"] = fullPathErrores;
+                    }
+                    else
+                    {
+
+                        //Session["noErrorFile"] = fullPath;
+                        //Session["ErroresFile"] = null;
+                        HttpContext.Session.SetString("noErrorFile", fullPath);
+                        HttpContext.Session.SetString("noErrorFile", null);
+
+                    }
+
+                }
+                else if (fileExtension == ".xlsx")
+                {
+
+
+                    //Alternative way to use server.MapPath in .net core
+                    string webRootPath = _webHostEnvironment.WebRootPath;
+                    string contentRootPath = _webHostEnvironment.ContentRootPath;
+                    //Create the Directory.
+                    string pathExcel = "";
+                    pathExcel = Path.Combine(webRootPath, "xlsx");
+                    //string pathExcel = Server.MapPath("~/Content/xlsx/");
+                    if (!Directory.Exists(pathExcel))
+                    {
+                        Directory.CreateDirectory(pathExcel);
+                        //Session[Correctos] = ruta
+                    }
+
+                    ////Fetch the File Name.
+                    string fileName = Path.GetFileNameWithoutExtension(postedFile.FileName);
+
+                    string fullPath = pathExcel + fileName + DateTime.Now.ToString("ddMMyyhhmmss") + ".xlsx";
+                    //Session["RutaFile"] = fullPath;
+                    //Save the File.
+                    //postedFile.SaveAs(fullPath);
+
+                    using (FileStream fs = System.IO.File.Create(fullPath))
+                    {
+                        file.CopyTo(fs);
+                    }
+
+
+                    // Llamar a metodo para leer archivo excel
+                    ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
+                    cargaMasiva.Errores = new List<string>();
+                    cargaMasiva.Validados = new List<string>();
+                    ML.Result resultExcel = BL.CargaMasiva.LeerArchivoExcel(fullPath, cargaMasiva.Errores, cargaMasiva.Validados);
+
+                    ViewBag.CargaMasiva = cargaMasiva;
+
+                    ViewBag.Tabla = resultExcel.Object;
+                    if (cargaMasiva.Errores.Count > 1)
+                    {
+                        //SEND PATH FILE 
+                        System.IO.File.Delete(fullPath);
+
+                        string pathErrores = "";
+                        pathErrores = Path.Combine(webRootPath, "xlsx\\Errores");
+                        //Crear carpeteta errores en txt
+                        //string pathErrores = Server.MapPath("~/Content/xlsx/Errores/");
+                        if (!Directory.Exists(pathErrores))
+                        {
+                            Directory.CreateDirectory(pathErrores);
+                        }
+                        string fullPathErrores = pathErrores + fileName + "Errors" + DateTime.Now.ToString("ddMMyyhhmmss") + ".xlsx";
+                        //Session["ErroresFile"] = fullPathErrores;
+                        HttpContext.Session.SetString("ErroresFile", fullPathErrores);
+
+                        //Crear nuevo archivo con errores
+                        using (StreamWriter outputFile = new StreamWriter(Path.Combine(fullPathErrores)))
+                        {
+                            foreach (string line in cargaMasiva.Errores)
+                                outputFile.WriteLine(line);
+                        }
+
+                        //AHORA VE COMO HACER PARA QUE EL USUARIO PUEDA DESCARGAR UN ARCHIVO
+                        TempData["downloadPath"] = fullPathErrores;
+                    }
+                    else
+                    {
+                        //Session["noErrorFile"] = fullPath;
+                        //Session["ErroresFile"] = null;
+                        HttpContext.Session.SetString("noErrorFile", fullPath);
+                        HttpContext.Session.SetString("ErroresFile", null);
+
+                    }
+                }
+            }
 
             return View(Usuario);
+        }
+
+
+        // ============ METODOS CARGA MASIVA ============ \\
+
+        [HttpGet]
+        public FileResult Download()
+        {
+            string data = TempData["downloadPath"].ToString();
+            // Session de errores
+            //Session["noErrorFile"] = null;
+            HttpContext.Session.SetString("noErrorFile", "0");
+
+
+
+            return PhysicalFile(data, "text/plain", Path.GetFileNameWithoutExtension(data));
+            //return File(data, "text/plain", Path.GetFileNameWithoutExtension(data));
+        }
+
+        
+
+        //Guardar insertar datos
+        [HttpGet]
+        public ActionResult InsertarDatos()
+        {
+
+            //BL.Usuario.InsertUser(Session["noErrorFile"].ToString());
+            var username = HttpContext.Session.GetString("Username");
+            _usuario.InsertUser(username);
+            //Session["noErrorFile"] = null;
+            HttpContext.Session.SetString("noErrorFile", "0");
+
+
+            return RedirectToAction("GetAll", "Usuario");
         }
 
 

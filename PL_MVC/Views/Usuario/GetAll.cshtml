@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+
+    var sessionErroresFile = HttpContextAccessor.HttpContext.Session.GetString("ErroresFile");
+    var sessionNoErrorFile = HttpContextAccessor.HttpContext.Session.GetString("noErrorFile");
+    
+}
 
 
 
@@ -26,83 +33,83 @@
 
         </div>
         @*==================== TABLA CARGA MASIVA ======================*@
-        
-      
-        @* <div class="row">
-             <div class="col-12" style="display:none" id="cargaMasiva">
-                 <div class="row">
-                     <div class="col">
-                         <h4>Selecciona el tipo de archivo</h4>
-                     </div>
-
-                 </div>
-
-                 @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                 {
 
 
-                     <div class="row" style="padding-top:15px">
+        <div class="row">
+            <div class="col-12" style="display:none" id="cargaMasiva">
+                <div class="row">
+                    <div class="col">
+                        <h4>Selecciona el tipo de archivo</h4>
+                    </div>
 
-                         <div class="col-6" style="padding-bottom:20px">
-                             <div class="form-check">
-                                 <input type="radio" class="selectfileclass" name="file" id="txt" value="txt" /><br />
-                                 <label class="form-check-label" for="flexRadioDefault1">
-                                     Text
-                                 </label>
-                             </div>
-                         </div>
-                         <div class="col-6" style="padding-bottom:20px">
-                             <div class="form-check">
-                                 <input type="radio" class="selectfileclass" name="file" id="xlsx" value="xlsx" /><br />
-                                 <label class="form-check-label" for="flexRadioDefault2">
-                                     Excel
-                                 </label>
-                             </div>
-                         </div>
-                         <div class="row">
-                             <div class="col-3">
-                                 <input class="form-control" type="file" name="ImportFile2" id="ImportFile" accept=".txt" onchange="ExtensionSeleciconada()" data-bind="event: { change: $root.Browse }">
-                             </div>
-                             <div class="col-3">
-                                 <button id="btnValidar" type="submit" class="btn btn-outline-dark" disabled><i class="bi bi-clipboard2-check"></i> Validar</button>
-                             </div>
-                             @if (Session["ErroresFile"] != null)
-                             {
-                                 <div class="col-3">
-                                     <a id="btnErrores" href="@Url.Action("Download","Usuario") " style="width:120px; " class="btn btn-outline-info"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Errores</a>
-                                 </div>
-                             }
-                             else
-                             {
-                                 <div class="col-3">
-                                     <a id="btnErrores" href="@Url.Action("Download","Usuario") " style="width:120px; pointer-events:none " class="btn btn-outline-info"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Errores</a>
-                                 </div>
-                             }
-                             @if (Session["noErrorFile"] != null)
-                             {
-                                 <div class="col-3">
-                                     <a href="@Url.Action("InsertarDatos","Usuario") " style="width:120px; " class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Cargar</a>
-                                 </div>
+                </div>
 
-                             }
-                             else
-                             {
-                                 <div class="col-3">
-                                     <a href="@Url.Action("InsertarDatos","Usuario") " style="width:120px; pointer-events:none " class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Cargar</a>
-                                 </div>
-
-                             }
+                @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
 
 
+                    <div class="row" style="padding-top:15px">
 
-                             <div style="padding-top:20px">
-                                 @Html.Partial("_UsuarioErrores")
-                             </div>
-                         </div>
-                     </div>
-                 }
-             </div>
-         </div> *@
+                        <div class="col-6" style="padding-bottom:20px">
+                            <div class="form-check">
+                                <input type="radio" class="selectfileclass" name="file" id="txt" value="txt" /><br />
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Text
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6" style="padding-bottom:20px">
+                            <div class="form-check">
+                                <input type="radio" class="selectfileclass" name="file" id="xlsx" value="xlsx" /><br />
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Excel
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <input class="form-control" type="file" name="ImportFile2" id="ImportFile" accept=".txt" onchange="ExtensionSeleciconada()" data-bind="event: { change: $root.Browse }">
+                            </div>
+                            <div class="col-3">
+                                <button id="btnValidar" type="submit" class="btn btn-outline-dark" disabled><i class="bi bi-clipboard2-check"></i> Validar</button>
+                            </div>
+                            @if (sessionErroresFile != "0")
+                            {
+                                <div class="col-3">
+                                    <a id="btnErrores" href="@Url.Action("Download", "Usuario") " style="width:120px; " class="btn btn-outline-info"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Errores</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-3">
+                                    <a id="btnErrores" href="@Url.Action("Download", "Usuario") " style="width:120px; pointer-events:none " class="btn btn-outline-info"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Errores</a>
+                                </div>
+                            }
+                            @if (sessionNoErrorFile != "0")
+                            {
+                                <div class="col-3">
+                                    <a href="@Url.Action("InsertarDatos", "Usuario") " style="width:120px; " class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Cargar</a>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="col-3">
+                                    <a href="@Url.Action("InsertarDatos", "Usuario") " style="width:120px; pointer-events:none " class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Cargar</a>
+                                </div>
+
+                            }
+
+
+
+                            <div style="padding-top:20px">
+                                @Html.Partial("_UsuarioErrores")
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
         @*==================== TABLA BUSCAR ======================*@
         <div class="row">
             <div class="col" style="display:none" id="tablaBuscar">
@@ -143,7 +150,7 @@
     <div class="row ">
         <div class="col-12" id="tablaUsuarios">
             <div class="col-12" style="text-align: end; padding-bottom: 15px;" display="hidden" id="btnAgregar">
-                <a href="@Url.Action("Formulario","Usuario")" style="width:200px;" class="btn btn-dark col-10 col-sm"><i class="bi bi-person-plus-fill"></i> &nbsp;&nbsp;Agregar Usuario</a>
+                <a href="@Url.Action("Formulario", "Usuario")" style="width:200px;" class="btn btn-dark col-10 col-sm"><i class="bi bi-person-plus-fill"></i> &nbsp;&nbsp;Agregar Usuario</a>
             </div>
             <div class="table-responsive" display="hidden">
                 <table class="table table-sm  table-hover table-borderless table-responsive" id="tablaUsuarios">

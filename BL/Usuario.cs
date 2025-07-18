@@ -106,7 +106,8 @@ namespace BL
             ML.Result result = new ML.Result();
             try
             {
-                if (Usuario.Imagen.SequenceEqual(new byte[0])) {
+                if (Usuario.Imagen.SequenceEqual(new byte[0]))
+                {
 
                     Usuario.Imagen = null;
                 }
@@ -285,7 +286,7 @@ namespace BL
 
         //Set Status 
 
-        public  ML.Result SetStatus(int IdUsuario, bool statusCheck)
+        public ML.Result SetStatus(int IdUsuario, bool statusCheck)
         {
 
             ML.Result result = new ML.Result();
@@ -293,16 +294,16 @@ namespace BL
             {
                 var query = _context.Database.ExecuteSqlRaw($"UsuarioStatusSet {IdUsuario},{statusCheck}");
 
-                    if (query > 0)
-                    {
-                        result.Correct = true;
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "Ocurrio un problema al actualizar status";
-                    }
-                
+                if (query > 0)
+                {
+                    result.Correct = true;
+                }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al actualizar status";
+                }
+
             }
             catch (Exception ex)
             {
@@ -384,61 +385,48 @@ namespace BL
         //}
 
 
-        //public static ML.Result InsertUser(string path)
-        //{
-        //    ML.Result result = new ML.Result();
+        public  ML.Result InsertUser(string path)
+        {
+            ML.Result result = new ML.Result();
 
-        //    try
-        //    {
+            try
+            {
 
-        //        using (DL_EF.DPradoProgramacionNCapasEntities context = new DL_EF.DPradoProgramacionNCapasEntities())
-        //        {
-        //            ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
-        //            cargaMasiva.Errores = new List<string>();
-        //            cargaMasiva.Validados = new List<string>();
+                    ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
+                    cargaMasiva.Errores = new List<string>();
+                    cargaMasiva.Validados = new List<string>();
 
-        //            ML.Result resultCarga = BL.CargaMasiva.LeerArchivoExcel(path, cargaMasiva.Errores, cargaMasiva.Validados);
+                    ML.Result resultCarga = BL.CargaMasiva.LeerArchivoExcel(path, cargaMasiva.Errores, cargaMasiva.Validados);
 
-        //            foreach (ML.Usuario usuarioCarga in resultCarga.Objects)
-        //            {
-        //                ML.Usuario usuario = new ML.Usuario();
-        //                usuario.Rol = new ML.Rol();
+                    foreach (ML.Usuario usuarioCarga in resultCarga.Objects)
+                    {
+                        ML.Usuario usuario = new ML.Usuario();
+                        usuario.Rol = new ML.Rol();
 
-
-
-        //                int filasAfectadas = context.UsuarioInsert(usuario.Nombre = usuarioCarga.Nombre, usuario.ApellidoMaterno = usuarioCarga.ApellidoPaterno, usuario.ApellidoMaterno = usuarioCarga.ApellidoMaterno, usuario.Email = usuarioCarga.Email, usuario.UserName = usuarioCarga.UserName, usuario.Password = usuarioCarga.Password, usuario.Sexo = usuarioCarga.Sexo, usuario.Telefono = usuarioCarga.Telefono, usuario.Celular = usuarioCarga.Celular, usuario.FechaNacimiento = usuarioCarga.FechaNacimiento, usuario.Curp = usuarioCarga.Curp, usuario.Rol.IdRol = usuarioCarga.Rol.IdRol);
+                    int filasAfectadas = _context.Database.ExecuteSqlRaw($"UsuarioInsert '{usuario.Nombre = usuarioCarga.Nombre}','{usuario.ApellidoMaterno = usuarioCarga.ApellidoPaterno}','{usuario.ApellidoMaterno = usuarioCarga.ApellidoMaterno}','{usuario.Email = usuarioCarga.Email}', '{usuario.UserName = usuarioCarga.UserName}','{usuario.Password = usuarioCarga.Password}', '{usuario.Sexo = usuarioCarga.Sexo}', '{usuario.Telefono = usuarioCarga.Telefono}','{usuario.Celular = usuarioCarga.Celular}', '{usuario.FechaNacimiento = usuarioCarga.FechaNacimiento}', '{usuario.Curp = usuarioCarga.Curp}', '{usuario.Rol.IdRol = usuarioCarga.Rol.IdRol}'");
 
 
-        //                if (filasAfectadas > 0)
-        //                {
-        //                    result.Correct = true;
-        //                }
-        //                else
-        //                {
-        //                    result.Correct = false;
-        //                    result.ErrorMessage = "Ocurrio un problema al insertar datos";
-        //                }
-        //            }
+                        if (filasAfectadas > 0)
+                        {
+                            result.Correct = true;
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.ErrorMessage = "Ocurrio un problema al insertar datos";
+                        }
+                    }
+                
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
 
-
-
-
-
-
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Correct = false;
-        //        result.ErrorMessage = ex.Message;
-        //        result.Ex = ex;
-        //    }
-
-        //    return result;
-        //}
-
-
+            return result;
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 using DL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,18 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
+//Sessions in .Net Core
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true; // Ensures the session cookie is accessible only by the server
+    options.Cookie.IsEssential = true; // Required for GDPR compliance
+});
+
+// To use injeccion of Sessions
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
 var app = builder.Build();
 
 
@@ -51,7 +64,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//Use session
+app.UseSession();
+
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
