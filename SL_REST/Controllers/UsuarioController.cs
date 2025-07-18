@@ -100,7 +100,7 @@ namespace SL_REST.Controllers
 
         [HttpPost]
         [Route("GetAll")]
-        public IActionResult GetAll(ML.Usuario usuario)
+        public IActionResult GetAll(ML.Usuario? usuario)
         {
 
             ML.Result result = _usuario.GetAll(usuario);

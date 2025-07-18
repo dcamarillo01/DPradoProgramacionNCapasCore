@@ -48,30 +48,30 @@ namespace PL_MVC.Controllers
                 Direccion = new ML.Direccion()
             };
 
-            
 
 
-                /// ================ Utilizando API REST ==================== \\\
+
+            /// ================ Utilizando API REST ==================== \\\
 
 
-                /// ============ Utilizando WebServices ===========
-                // Implementaion de Web Services Automaticamente s
-                //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
-                //var respuesta = usuarioSoap.GetAll(usuario);
-                //if (respuesta.Correct)
-                //{
+            /// ============ Utilizando WebServices ===========
+            // Implementaion de Web Services Automaticamente s
+            //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
+            //var respuesta = usuarioSoap.GetAll(usuario);
+            //if (respuesta.Correct)
+            //{
 
-                //    usuario.Usuarios = new List<object>();
-                //    usuario.Usuarios = respuesta.Objects.ToList();
-                //}
+            //    usuario.Usuarios = new List<object>();
+            //    usuario.Usuarios = respuesta.Objects.ToList();
+            //}
 
-                // ============= Funcionalidad desde BL ======================
-                ML.Result resultGetAll = _usuario.GetAll(usuario);
-            if (resultGetAll.Correct)
-            {
-                usuario.Usuarios = new List<object>();
-                usuario.Usuarios = resultGetAll.Objects;
-            }
+            // ============= Funcionalidad desde BL ======================
+            //ML.Result resultGetAll = _usuario.GetAll(usuario);
+            //if (resultGetAll.Correct)
+            //{
+            //    usuario.Usuarios = new List<object>();
+            //    usuario.Usuarios = resultGetAll.Objects;
+            //}
 
             //===================== GetAll y deserialización Manual. ===========================//
             //var usuarioTemp = GetAllSoap();
@@ -80,13 +80,13 @@ namespace PL_MVC.Controllers
             //    usuario = usuarioTemp;
             //}
             //============ Web Service API REST ===============\\\
-            //ML.Result resultGetAll = GetAllByAPI(usuario);
+            ML.Result resultGetAll = GetAllByAPI(usuario);
 
-            //if (resultGetAll.Correct)
-            //{
-            //    usuario.Usuarios = new List<object>();
-            //    usuario.Usuarios = resultGetAll.Objects;
-            //}
+            if (resultGetAll.Correct)
+            {
+                usuario.Usuarios = new List<object>();
+                usuario.Usuarios = resultGetAll.Objects;
+            }
 
 
             //Traer roles 
@@ -126,8 +126,15 @@ namespace PL_MVC.Controllers
             //    Usuario.Usuarios = respuesta.Objects.ToList();
             //}
 
-            ML.Result result = _usuario.GetAll(Usuario);
+            //BL ======== BUSQUEDA ABIERTA ===============
+            //ML.Result result = _usuario.GetAll(Usuario);
 
+            //if (result.Correct)
+            //{
+            //    Usuario.Usuarios = result.Objects;
+            //}
+
+            ML.Result result = GetAllByAPI(Usuario);
             if (result.Correct)
             {
                 Usuario.Usuarios = result.Objects;
