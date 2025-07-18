@@ -187,7 +187,7 @@ namespace PL_MVC.Controllers
                     //Save the File.
                     //postedFile.SaveAs(fullPath);
                     //============ .NET CORE SAVE FILE????? ===============\\
-                    //Save file????
+                    
                     using (FileStream fs = System.IO.File.Create(fullPath))
                     {
                         file.CopyTo(fs);
