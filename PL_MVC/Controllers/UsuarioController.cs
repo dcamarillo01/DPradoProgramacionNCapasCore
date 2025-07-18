@@ -315,7 +315,7 @@ namespace PL_MVC.Controllers
                         //Session["noErrorFile"] = fullPath;
                         //Session["ErroresFile"] = null;
                         HttpContext.Session.SetString("noErrorFile", fullPath);
-                        HttpContext.Session.SetString("ErroresFile", null);
+                        HttpContext.Session.SetString("ErroresFile", "0");
 
                     }
                 }
@@ -349,7 +349,7 @@ namespace PL_MVC.Controllers
         {
 
             //BL.Usuario.InsertUser(Session["noErrorFile"].ToString());
-            var username = HttpContext.Session.GetString("Username");
+            var username = HttpContext.Session.GetString("noErrorFile");
             _usuario.InsertUser(username);
             //Session["noErrorFile"] = null;
             HttpContext.Session.SetString("noErrorFile", "0");
