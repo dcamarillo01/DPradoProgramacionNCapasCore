@@ -301,8 +301,8 @@ namespace PL_MVC.Controllers
             {
                 // =================== IMPLEMENTACION DESDE BL ================ \\
 
-                ML.Result result = _usuario.GetById(IdUsuario.Value);
-                usuario = (ML.Usuario)result.Object;
+                //ML.Result result = _usuario.GetById(IdUsuario.Value);
+                //usuario = (ML.Usuario)result.Object;
 
                 /// Implementacion de uso de Web Service
                 //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
@@ -315,10 +315,10 @@ namespace PL_MVC.Controllers
                 //usuario = (ML.Usuario)usuarioById.Object;
 
 
-
+                // ==================== IMPLEMENTACION CON API ===================== \\
                 // GetById Utilizando API REST
-                //ML.Result resultAPIGetId = GeyByIdAPI(IdUsuario.Value);
-                //usuario = (ML.Usuario)resultAPIGetId.Object;
+                ML.Result resultAPIGetId = GeyByIdAPI(IdUsuario.Value);
+                usuario = (ML.Usuario)resultAPIGetId.Object;
 
 
                 usuario.Direccion.Colonia.Municipio.Estado.Estados = resultEstado.Objects;
@@ -405,7 +405,7 @@ namespace PL_MVC.Controllers
                 {
 
                     // ==================== Implementacion desde BL ================= \\
-                    ML.Result resultUpdate = _usuario.Update(usuario.IdUsuario, usuario);
+                    //ML.Result resultUpdate = _usuario.Update(usuario.IdUsuario, usuario);
 
                     //Implementacion de Web Service
                     //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
@@ -419,8 +419,12 @@ namespace PL_MVC.Controllers
                     //}
 
                     //AddUpdateSoap(usuario);
+
+
                     /// WEB SERVICE API REST
                     //UpdateByAPI(usuario);
+                    // =================== IMPLEMENTACION CON API ==================\\
+                    ML.Result resultUpdate = UpdateByAPI(usuario);
                     if (resultUpdate.Correct) {
                         return RedirectToAction("GetAll", "Usuario");
                     }
@@ -429,7 +433,7 @@ namespace PL_MVC.Controllers
                 else
                 {
                     // =========== Implementacion con BL ========== \\
-                    ML.Result resultAdd = _usuario.Add(usuario);
+                    //ML.Result resultAdd = _usuario.Add(usuario);
                     //Implementacion de WebService
                     //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
                     //usuarioSoap.Add(usuario);
@@ -440,6 +444,10 @@ namespace PL_MVC.Controllers
                     //WebSercice API REST
                     //ML.Result resultadd = GetAllByAPI();
                     //AddByAPI(usuario);
+
+                    // ====================== Implementacion con API ============ \\
+                    ML.Result resultAdd = AddByAPI(usuario);
+
                     if (resultAdd.Correct) { 
                         return RedirectToAction("GetAll", "Usuario");
                     }
@@ -485,7 +493,7 @@ namespace PL_MVC.Controllers
         public ActionResult Delete(int IdUsuario)
         {
             // Delete desde BL
-            _usuario.Delete(IdUsuario);
+            //_usuario.Delete(IdUsuario);
 
             //Implementar web service 
             //UsuarioReference.UsuarioClient usuarioSoap = new UsuarioReference.UsuarioClient();
@@ -496,7 +504,7 @@ namespace PL_MVC.Controllers
 
             //Delete Usando API REST 
 
-            //DeleteByAPI(IdUsuario);
+            DeleteByAPI(IdUsuario);
 
 
             return RedirectToAction("GetAll", "Usuario");
@@ -1126,137 +1134,139 @@ namespace PL_MVC.Controllers
         }
 
         //[NonAction]
-        //public static ML.Result AddByAPI(ML.Usuario Usuario)
-        //{
-        //    ML.Result resultAdd = new Result();
+        public  ML.Result AddByAPI(ML.Usuario Usuario)
+        {
+            ML.Result resultAdd = new Result();
 
-        //    if (Usuario.Imagen != null)
-        //    {
-        //        Usuario.ImagenBase64 = Convert.ToBase64String(Usuario.Imagen);
-        //    }
-        //    else
-        //    {
-        //        Usuario.ImagenBase64 = "";
-        //    }
-        //    Usuario.Imagen = null;
+            if (Usuario.Imagen != null)
+            {
+                Usuario.ImagenBase64 = Convert.ToBase64String(Usuario.Imagen);
+            }
+            else
+            {
+                Usuario.ImagenBase64 = "";
+            }
+            Usuario.Imagen = null;
 
-        //    using (var client = new HttpClient())
-        //    {
-        //        var userEndPoint = ConfigurationManager.AppSettings["UsuarioEndPoint"];
-        //        client.BaseAddress = new Uri(userEndPoint);
-        //        //HTTP POST 
-        //        var postTask = client.PostAsJsonAsync<ML.Usuario>("Add", Usuario); //Serializar 
-        //        postTask.Wait();
-        //        var result = postTask.Result;
-        //        if (result.IsSuccessStatusCode)
-        //        {
-        //            //MODAL 
-        //            //ViewBag.ErrorMessage;
-        //            resultAdd.Object = result.Content;
-        //            return resultAdd;
-        //        }
-        //    }
-        //    return resultAdd;
-        //}
+            using (var client = new HttpClient())
+            {
+                var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
+                client.BaseAddress = new Uri(userEndPoint);
+                //HTTP POST 
+                var postTask = client.PostAsJsonAsync<ML.Usuario>("Add", Usuario); //Serializar 
+                postTask.Wait();
+                var result = postTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    //MODAL 
+                    //ViewBag.ErrorMessage;
+                    resultAdd.Correct = true;
+                    resultAdd.Object = result.Content;
+                    return resultAdd;
+                }
+            }
+            return resultAdd;
+        }
         //[NonAction]
-        //public static ML.Result UpdateByAPI(ML.Usuario Usuario)
-        //{
-        //    ML.Result resultUpdate = new Result();
+        public  ML.Result UpdateByAPI(ML.Usuario Usuario)
+        {
+            ML.Result resultUpdate = new Result();
 
-        //    if (Usuario.Imagen != null)
-        //    {
-        //        Usuario.ImagenBase64 = Convert.ToBase64String(Usuario.Imagen);
-        //    }
-        //    else
-        //    {
-        //        Usuario.ImagenBase64 = "";
-        //    }
-        //    Usuario.Imagen = null;
+            if (Usuario.Imagen != null)
+            {
+                Usuario.ImagenBase64 = Convert.ToBase64String(Usuario.Imagen);
+            }
+            else
+            {
+                Usuario.ImagenBase64 = "";
+            }
+            Usuario.Imagen = null;
 
 
-        //    using (var client = new HttpClient())
-        //    {
-        //        var userEndPoint = ConfigurationManager.AppSettings["UsuarioEndPoint"];
-        //        client.BaseAddress = new Uri(userEndPoint);
-        //        //HTTP POST 
-        //        var postTask = client.PutAsJsonAsync<ML.Usuario>($"Update/{Usuario.IdUsuario}", Usuario); //Serializar 
-        //        postTask.Wait();
-        //        var result = postTask.Result;
-        //        if (result.IsSuccessStatusCode)
-        //        {
-        //            //MODAL 
-        //            //ViewBag.ErrorMessage;
-        //            resultUpdate.Object = result.Content;
-        //            return resultUpdate;
-        //        }
-        //    }
-        //    return resultUpdate;
-        //}
+            using (var client = new HttpClient())
+            {
+                var userEndPoint = _configuration.GetValue<string>("ApiEndPoint"); ;
+                client.BaseAddress = new Uri(userEndPoint);
+                //HTTP POST 
+                var postTask = client.PutAsJsonAsync<ML.Usuario>($"Update/{Usuario.IdUsuario}", Usuario); //Serializar 
+                postTask.Wait();
+                var result = postTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    //MODAL 
+                    //ViewBag.ErrorMessage;
+                    resultUpdate.Correct = true;
+                    resultUpdate.Object = result.Content;
+                    return resultUpdate;
+                }
+            }
+            return resultUpdate;
+        }
         //[NonAction]
-        //public static ML.Result DeleteByAPI(int IdUsuario)
-        //{
+        public  ML.Result DeleteByAPI(int IdUsuario)
+        {
 
-        //    ML.Result result = new ML.Result();
-        //    using (var client = new HttpClient())
-        //    {
-        //        var userEndPoint = ConfigurationManager.AppSettings["UsuarioEndPoint"];
-        //        client.BaseAddress = new Uri(userEndPoint);
+            ML.Result result = new ML.Result();
+            using (var client = new HttpClient())
+            {
+                var userEndPoint = _configuration.GetValue<string>("ApiEndPoint"); ;
+                client.BaseAddress = new Uri(userEndPoint);
 
-        //        var deleteTask = client.DeleteAsync($"Delete/{IdUsuario}");
-        //        deleteTask.Wait();
-        //        var resultAPI = deleteTask.Result;
-        //        if (resultAPI.IsSuccessStatusCode)
-        //        {
-        //            result.Object = resultAPI.Content;
-        //            return result;
-        //        }
-        //        else
-        //        {
-        //            result.Correct = false;
-        //            return result;
-        //        }
+                var deleteTask = client.DeleteAsync($"Delete/{IdUsuario}");
+                deleteTask.Wait();
+                var resultAPI = deleteTask.Result;
+                if (resultAPI.IsSuccessStatusCode)
+                {
+                    result.Object = resultAPI.Content;
+                    return result;
+                }
+                else
+                {
+                    result.Correct = false;
+                    return result;
+                }
 
-        //    }
+            }
 
-        //}
+        }
 
         //[NonAction]
-        //public static ML.Result GeyByIdAPI(int IdUsuario)
-        //{
+        public  ML.Result GeyByIdAPI(int IdUsuario)
+        {
 
-        //    ML.Result resultGetById = new ML.Result();
+            ML.Result resultGetById = new ML.Result();
 
-        //    using (var client = new HttpClient())
-        //    {
+            using (var client = new HttpClient())
+            {
 
-        //        var userEndPoint = ConfigurationManager.AppSettings["UsuarioEndPoint"];
-        //        client.BaseAddress = new Uri(userEndPoint);
+                var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
+                client.BaseAddress = new Uri(userEndPoint);
 
-        //        var getIdTask = client.GetAsync($"GetById/{IdUsuario}");
-        //        getIdTask.Wait();
-        //        var resultAPI = getIdTask.Result;
+                var getIdTask = client.GetAsync($"GetById/{IdUsuario}");
+                getIdTask.Wait();
+                var resultAPI = getIdTask.Result;
 
 
 
-        //        if (resultAPI.IsSuccessStatusCode)
-        //        {
-        //            resultGetById.Correct = true;
-        //            var readTask = resultAPI.Content.ReadAsAsync<ML.Result>();
-        //            readTask.Wait();
-        //            ML.Usuario newUser = JsonConvert.DeserializeObject<ML.Usuario>(readTask.Result.Object.ToString());
+                if (resultAPI.IsSuccessStatusCode)
+                {
+                    resultGetById.Correct = true;
+                    var readTask = resultAPI.Content.ReadAsAsync<ML.Result>();
+                    readTask.Wait();
+                    ML.Usuario newUser = JsonConvert.DeserializeObject<ML.Usuario>(readTask.Result.Object.ToString());
 
-        //            resultGetById.Object = newUser;
-        //            return resultGetById;
-        //        }
-        //        else
-        //        {
-        //            resultGetById.Correct = false;
-        //            resultGetById.Object = resultAPI.Content;
-        //            return resultGetById;
-        //        }
+                    resultGetById.Object = newUser;
+                    return resultGetById;
+                }
+                else
+                {
+                    resultGetById.Correct = false;
+                    resultGetById.Object = resultAPI.Content;
+                    return resultGetById;
+                }
 
-        //    }
-        //}
+            }
+        }
 
 
     }

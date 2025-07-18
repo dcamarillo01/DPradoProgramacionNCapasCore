@@ -106,6 +106,10 @@ namespace BL
             ML.Result result = new ML.Result();
             try
             {
+                if (Usuario.Imagen.SequenceEqual(new byte[0])) {
+
+                    Usuario.Imagen = null;
+                }
 
                 var img = new SqlParameter("@Imagen", System.Data.SqlDbType.VarBinary);
                 if (Usuario.Imagen != null)
