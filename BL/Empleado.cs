@@ -15,5 +15,88 @@ namespace BL
             _context = context;
         }
 
+
+
+        // ============ ADD EMPLEADO ============== \\
+        public ML.Result Add(ML.Empleado Empleado)
+        {
+            ML.Result result = new ML.Result();
+            try {
+                
+
+            }
+            catch(Exception ex) 
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
+        // ============ UPDATE EMPLEADO ============== \\
+        public ML.Result Update(ML.Empleado Empleado) {
+
+            ML.Result result = new ML.Result();
+
+            try { }
+            catch (Exception ex) 
+            {
+                result.Correct = false;
+                result.ErrorMessage= ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
+        // =============== DELETE EMPLEADO ================= \\
+
+        public ML.Result Delete(ML.Empleado Empleaado) {
+
+            ML.Result result = new ML.Result();
+
+            try { }
+            catch (Exception ex) 
+            {
+                result.Correct = false;
+                result.ErrorMessage= ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
+        // =============== GET ALL EMPLEADO =============== \\
+
+        public ML.Result GetAll() {
+
+            ML.Result result = new ML.Result();
+
+            try { }
+            catch (Exception ex) 
+            {
+                result.Correct= false;
+                result.ErrorMessage= ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
+        // =============== GET BY ID EMPLEADO ================= \\
+        public ML.Result GetById(int IdEmpleado) { 
+            
+            ML.Result result = new ML.Result();
+
+            try { }
+            catch (Exception ex) 
+            {
+                result.Correct= false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
     }
 }
