@@ -77,11 +77,24 @@ namespace BL
 
         // =============== DELETE EMPLEADO ================= \\
 
-        public ML.Result Delete(ML.Empleado Empleaado) {
+        public ML.Result Delete(int IdEmpleado) {
 
             ML.Result result = new ML.Result();
 
-            try { }
+            try {
+
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"EmpleadoDelete {IdEmpleado}");
+
+                if (filasAfectadas > 1)
+                {
+                    result.Correct = true;
+                }
+                else {
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al eliminar usuario";
+                }
+
+            }
             catch (Exception ex) 
             {
                 result.Correct = false;
