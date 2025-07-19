@@ -47,11 +47,25 @@ namespace BL
         }
 
         // ============ UPDATE EMPLEADO ============== \\
-        public ML.Result Update(ML.Empleado Empleado) {
+        public ML.Result Update(ML.Empleado Empleado, int IdEmpleado) {
 
             ML.Result result = new ML.Result();
 
-            try { }
+            try
+            {
+
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"EmpleadoUpdate {IdEmpleado}, '{Empleado.Nombre}','{Empleado.ApellidoPaterno}','{Empleado.ApellidoMaterno}','{Empleado.FechaNacimiento}','{Empleado.RFC}','{Empleado.NSS}','{Empleado.CURP}','{Empleado.FechaIngreso}','{Empleado.Departamento.IdDepartamento}','{Empleado.SalarioBase}','{Empleado.NoFaltas}'");
+
+                if (filasAfectadas > 0)
+                {
+                    result.Correct = true;
+                }
+                else { 
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un problema al actualizar Empleado";
+                }
+
+            }
             catch (Exception ex) 
             {
                 result.Correct = false;
