@@ -2,6 +2,7 @@
 
 namespace PL_MVC.Controllers
 {
+    // Se CREO BRANCH EMPLEADOCRUD PARA IMPLEMENTAR EMPLEADO CRUD.
     public class EmpleadoController : Controller
     {
 
