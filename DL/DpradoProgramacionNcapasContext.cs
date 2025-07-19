@@ -17,7 +17,11 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
     public virtual DbSet<Colonium> Colonia { get; set; }
 
+    public virtual DbSet<Departamento> Departamentos { get; set; }
+
     public virtual DbSet<Direccion> Direccions { get; set; }
+
+    public virtual DbSet<Empleado> Empleados { get; set; }
 
     public virtual DbSet<Estado> Estados { get; set; }
 
@@ -29,7 +33,9 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
     public virtual DbSet<VwUsuario> VwUsuarios { get; set; }
 
-    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.; Database=DPradoProgramacionNCapas; TrustServerCertificate=True; User ID=sa; Password=pass@word1;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,6 +54,18 @@ public partial class DpradoProgramacionNcapasContext : DbContext
             entity.HasOne(d => d.IdMunicipioNavigation).WithMany(p => p.Colonia)
                 .HasForeignKey(d => d.IdMunicipio)
                 .HasConstraintName("FK__Colonia__IdMunic__2A4B4B5E");
+        });
+
+        modelBuilder.Entity<Departamento>(entity =>
+        {
+            entity.HasKey(e => e.IdDepartamento).HasName("PK__Departam__787A433D7A39F183");
+
+            entity.ToTable("Departamento");
+
+            entity.Property(e => e.IdDepartamento).ValueGeneratedNever();
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Direccion>(entity =>
@@ -73,6 +91,40 @@ public partial class DpradoProgramacionNcapasContext : DbContext
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Direccions)
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("FK__Direccion__IdUsu__36B12243");
+        });
+
+        modelBuilder.Entity<Empleado>(entity =>
+        {
+            entity.HasKey(e => e.IdEmpleado).HasName("PK__Empleado__CE6D8B9E1B6A15F3");
+
+            entity.ToTable("Empleado");
+
+            entity.Property(e => e.ApellidoMaterno)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ApellidoPaterno)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Curp)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CURP");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Nss)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NSS");
+            entity.Property(e => e.Rfc)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("RFC");
+            entity.Property(e => e.SalarioBase).HasColumnType("money");
+
+            entity.HasOne(d => d.IdDepartamentoNavigation).WithMany(p => p.Empleados)
+                .HasForeignKey(d => d.IdDepartamento)
+                .HasConstraintName("FK__Empleado__IdDepa__5EBF139D");
         });
 
         modelBuilder.Entity<Estado>(entity =>
