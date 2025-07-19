@@ -1,0 +1,107 @@
+﻿@{
+
+    int correctos = 1;
+    int errores = 1;
+
+}
+
+<div class="container">
+    <div class="row">
+        @if (ViewBag.CargaMasiva != null)
+        {
+            <div class="col-12">
+                <div class="table">
+                    @if (ViewBag.CargaMasiva != null && ViewBag.CargaMasiva.Errores.Count > 0)
+                    {
+                        <table class="table table-striped table-bordered table-hover ">
+                            <thead class="bg-danger">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Errores</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (string error in ViewBag.CargaMasiva.Errores)
+                                {
+                                    <tr>
+                                        <td>
+                                            @errores
+                                        </td>
+                                        <td>
+                                            @error
+                                        </td>
+                                        <td>
+                                            <i class="text-danger bi bi-x-octagon "></i>
+                                        </td>
+                                    </tr>
+                                    errores++;
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                    }
+
+
+                </div>
+
+            </div>
+            <div class="col-12">
+                @if (ViewBag.CargaMasiva != null && ViewBag.CargaMasiva.Validados.Count > 0)
+                {
+                    <table class="table table-striped table-bordered table-hover table-responsive">
+                        <thead class="bg-success">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Correctos</th>
+                                <th scope="col">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (string validate in ViewBag.CargaMasiva.Validados)
+                            {
+                                <tr>
+                                    <td>
+                                        @correctos
+                                    </td>
+                                    <td>
+                                        @validate
+                                    </td>
+                                    <td>
+                                        <i class="text-success bi bi-check-circle"></i>
+                                    </td>
+                                </tr>
+                                correctos++;
+                            }
+
+                        </tbody>
+                    </table>
+
+                }
+
+            </div>
+        }
+
+        @*<div class="row">
+        @if (ViewBag.Tabla != null)
+
+        {
+
+            
+
+            foreach (System.Data.DataRow row in ViewBag.Tabla.Rows)
+            {
+                foreach(object item in row.ItemArray)
+                {
+                    <p>@item</p>
+                }
+            }
+        }
+    </div>*@
+    </div>
+</div>
+

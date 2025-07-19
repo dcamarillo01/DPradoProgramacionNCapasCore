@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace ML
 {
-    internal class Rol
+    public class Rol
     {
+
+        public int IdRol { get; set; }
+
+        public string? Nombre { get; set; }
+
+        public List<object>? Roles { get; set; }
+
     }
 }

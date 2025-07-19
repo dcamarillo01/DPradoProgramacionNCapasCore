@@ -25,13 +25,15 @@ public partial class VwUsuario
 
     public string Celular { get; set; } = null!;
 
-    public DateOnly FechaNacimiento { get; set; }
+    public string? FechaNacimiento { get; set; }
 
     public string Curp { get; set; } = null!;
 
     public string? Rol { get; set; }
 
     public int IdRol { get; set; }
+
+    public int? IdDireccion { get; set; }
 
     public string? Calle { get; set; }
 
@@ -40,4 +42,10 @@ public partial class VwUsuario
     public string? NumeroExterior { get; set; }
 
     public byte[]? Imagen { get; set; }
+
+    public int? IdMunicipio { get; set; }
+
+    public int? IdEstado { get; set; }
+
+    public int? IdColonia { get; set; }
 }

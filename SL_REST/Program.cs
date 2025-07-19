@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using DL;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,11 @@ builder.Services.AddDbContext<DpradoProgramacionNcapasContext>(options =>
 //Donde va a vivir la coneccion.
 builder.Services.AddScoped<BL.Usuario>();
 
-
+//Ignore DataAnotations
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 var app = builder.Build();
 

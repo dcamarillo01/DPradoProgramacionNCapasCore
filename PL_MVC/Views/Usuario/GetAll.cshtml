@@ -1,0 +1,393 @@
+﻿@model ML.Usuario
+
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+
+    var sessionErroresFile = HttpContextAccessor.HttpContext.Session.GetString("ErroresFile");
+    var sessionNoErrorFile = HttpContextAccessor.HttpContext.Session.GetString("noErrorFile");
+    
+}
+
+
+
+<div class="container">
+    <div class="container">
+        <div class="row  ">
+            <h1 class="text-center">Usuarios</h1>
+
+
+
+        </div>
+        <div class="row" style="text-align:center; padding-top:10px; padding-bottom:10px">
+            <div class="col-6">
+                <a id="buscarBTN" class="btn btn-dark col-10 col-sm"><i class="bi bi-search"></i> &nbsp;&nbsp;Buscar Usuario</a>
+            </div>
+            <div class="col-6">
+                <a id="cargaBTN" class="btn btn-dark col-10 col-sm"><i class="bi bi-file-earmark-plus"></i> &nbsp;&nbsp;Carga Masiva</a>
+            </div>
+
+        </div>
+        @*==================== TABLA CARGA MASIVA ======================*@
+
+
+        <div class="row">
+            <div class="col-12" style="display:none" id="cargaMasiva">
+                <div class="row">
+                    <div class="col">
+                        <h4>Selecciona el tipo de archivo</h4>
+                    </div>
+
+                </div>
+
+                @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+
+
+                    <div class="row" style="padding-top:15px">
+
+                        <div class="col-6" style="padding-bottom:20px">
+                            <div class="form-check">
+                                <input type="radio" class="selectfileclass" name="file" id="txt" value="txt" /><br />
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Text
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6" style="padding-bottom:20px">
+                            <div class="form-check">
+                                <input type="radio" class="selectfileclass" name="file" id="xlsx" value="xlsx" /><br />
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Excel
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <input class="form-control" type="file" name="ImportFile2" id="ImportFile" accept=".txt" onchange="ExtensionSeleciconada()" data-bind="event: { change: $root.Browse }">
+                            </div>
+                            <div class="col-3">
+                                <button id="btnValidar" type="submit" class="btn btn-outline-dark" disabled><i class="bi bi-clipboard2-check"></i> Validar</button>
+                            </div>
+                            @if (sessionErroresFile != "0")
+                            {
+                                <div class="col-3">
+                                    <a id="btnErrores" href="@Url.Action("Download", "Usuario") " style="width:120px; " class="btn btn-outline-info"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Errores</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-3">
+                                    <a id="btnErrores" href="@Url.Action("Download", "Usuario") " style="width:120px; pointer-events:none " class="btn btn-outline-info"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Errores</a>
+                                </div>
+                            }
+                            @if (sessionNoErrorFile != "0")
+                            {
+                                <div class="col-3">
+                                    <a href="@Url.Action("InsertarDatos", "Usuario") " style="width:120px; " class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Cargar</a>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="col-3">
+                                    <a href="@Url.Action("InsertarDatos", "Usuario") " style="width:120px; pointer-events:none " class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down"></i> &nbsp;&nbsp;Cargar</a>
+                                </div>
+
+                            }
+
+
+
+                            <div style="padding-top:20px">
+                                @Html.Partial("_UsuarioErrores")
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        @*==================== TABLA BUSCAR ======================*@
+        <div class="row">
+            <div class="col" style="display:none" id="tablaBuscar">
+
+                @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-1" hidden>
+                            @Html.LabelFor(model => model.IdUsuario, new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.IdUsuario, new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm">
+                            @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm">
+                            @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control" })<br />
+                        </div>
+                        <div class="col-sm">
+                            @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control" })<br />
+                        </div>
+                        <div class="col-sm">
+                            @Html.LabelFor(model => model.Rol.Roles, new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Seleccione un Rol", new { @class = "form-control" })<br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mx-auto" style="width: 200px; padding-top: 15px">
+                            <input id="Submit" type="submit" value="Buscar Usuario" class="btn btn-primary btn-lg  " />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-12" id="tablaUsuarios">
+            <div class="col-12" style="text-align: end; padding-bottom: 15px;" display="hidden" id="btnAgregar">
+                <a href="@Url.Action("Formulario", "Usuario")" style="width:200px;" class="btn btn-dark col-10 col-sm"><i class="bi bi-person-plus-fill"></i> &nbsp;&nbsp;Agregar Usuario</a>
+            </div>
+            <div class="table-responsive" display="hidden">
+                <table class="table table-sm  table-hover table-borderless table-responsive" id="tablaUsuarios">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Status</th>
+                            <th>Id</th>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th>A.Paterno</th>
+                            <th>A.Materno</th>
+                            <th>Email</th>
+                            <th>UserName</th>
+                            <th>Fecha</th>
+                            <th>Telefono</th>
+                            <th>Curp</th>
+                            <th>Rol</th>
+                            <th>Calle</th>
+                            <th>#Interior</th>
+                            <th>#Exterior</th>
+                            <th>Delete</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+
+                        @foreach (ML.Usuario usuario in Model.Usuarios)
+                        {
+
+                            <tr>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="StatusUser" onchange="UserStatus( this, @usuario.IdUsuario)">
+                                    </div>
+                                </td>
+                                <td>@usuario.IdUsuario</td>
+                                @if (usuario.Imagen != null)
+                                {
+                                    <td>
+                                        <img style="width:45px" src="data:image/*;base64,@Convert.ToBase64String(usuario.Imagen) " />
+
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <img alt="" src="~/imagenes/defaultUser.jpeg" style="width:45px" />
+                                    </td>
+                                }
+                                <td>@usuario.Nombre</td>
+                                <td>@usuario.ApellidoPaterno</td>
+                                <td>@usuario.ApellidoMaterno</td>
+                                <td>@usuario.Email</td>
+                                <td>@usuario.UserName</td>
+                                <td>@usuario.FechaNacimiento</td>
+                                <td>@usuario.Telefono</td>
+                                <td>@usuario.Curp</td>
+                                <td>@usuario.Rol.Nombre</td>
+                                <td>@usuario.Direccion.Calle</td>
+                                <td>@usuario.Direccion.NumeroInterior</td>
+                                <td>@usuario.Direccion.NumeroExterior</td>
+
+                                <td>
+                                    <a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario })" onclick="return confirm('Deseas eliminar usuario?') "><i class="bi bi-trash"></i></a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-info" href="@Url.Action("Formulario", "Usuario", new { IdUsuario = usuario.IdUsuario })"><i class="bi bi-pencil-square"></i></a>
+                                </td>
+                            </tr>
+
+
+
+                        }
+
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function UserStatus(input ,Idusuario)
+    {
+        var status = $(input).is(':checked');
+
+        //var checkedValue = $('#StatusUser:checked').val();
+        console.log(Idusuario)
+        console.log(status)
+        //console.log($(input).is(':checked'))
+
+        $.ajax({
+
+            url:'@Url.Action("SetUserStatus")',
+            dataType: 'JSON',
+            method:'Get',
+            data: { Idusuario, statusCheck:status} ,
+            success: function (resultStatus) {
+                console.log(resultStatus)
+                if (resultStatus.Correct) {
+                    console.log("Se actualizo el Status de usuario")
+                }
+            },
+            error: function (ex) {
+                alert("Ocurrio un problema")
+            }
+
+        })
+
+    }
+
+    /// OCULTAR O MOSTRAR TABLA DE USUARIO
+
+    //$(document).ready(function () {
+    //    $("#buscarBTN").click(function () {
+    //        $("#tablaUsuarios").toggle();
+    //        if ($("#tablaUsuarios").is(":visible")) {
+    //            $(this).text("Buscar usuario");
+    //            $('#tablaBuscar').hide();
+
+    //        } else {
+    //            $(this).text("Tabla Usuarios");
+    //            $('#tablaBuscar').show();
+    //            $('#cargaMasiva').hide();
+
+    //        }
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $("#buscarBTN").click(function () {
+            $("#tablaBuscar").toggle();
+            if ($("#tablaBuscar").is(":visible")) {
+                $(this).text("Buscar usuario");
+                $('#tablaBuscar').show();
+
+            } else {
+                $(this).text("Tabla Usuarios");
+                $('#tablaBuscar').hide();
+                $('#cargaMasiva').hide();
+
+            }
+        });
+    });
+
+    //$(document).ready(function () {
+    //    $("#buscarBTN").click(function () {
+    //        $("#tablaBuscar").toggle();
+
+    //    });
+    //}
+
+
+
+    $(document).ready(function () {
+        $("#cargaBTN").click(function () {
+            $("#cargaMasiva").toggle();
+            if ($("#cargaMasiva").is(":visible")) {
+                $(this).text("Carga Masiva");
+                $('#cargaMasiva').show();
+
+            } else {
+                $(this).text("Tabla Usuarios");
+                $('#cargaMasiva').hide();
+                $('#tablaBuscar').hide();
+
+            }
+        });
+    });
+
+
+    function ExtensionSeleciconada() {
+        var valortxt = $('#txt').is(':checked');
+        var valortxttest = $('#txt').val();
+        var valorExcel = $('#xlsx').is(':checked');
+        var valorExceltest = $("#xlsx").val();
+        var fileName = $("#ImportFile").val();
+
+        //Checar si uno es verdad , es ckecked entonces valido
+        if (valortxt) {
+            validar(fileName, valortxttest)
+        }
+        if (valorExcel) {
+            validar(fileName, valorExceltest)
+
+        }
+
+        console.log(valortxt)
+        console.log(valortxttest)
+        console.log(valorExcel)
+        console.log(idInput)
+    }
+
+
+    //Validar txt o excel
+    $('.selectfileclass').change(function () {
+
+        $('#ImportFile').attr("accept", "." + $(this).val())
+        console.log(idInput)
+    })
+
+    var idInput = $("#ImportFile").val()
+    function validar(fileName, thefileExtension) {
+
+        let extensions = [thefileExtension]
+
+        if (fileName == null) {
+            $('#btnValidar').prop('disabled', true);
+            alert("No se subio arhivo");
+            return false;
+        }
+
+        let fileExtension = fileName.split('.').pop().toLowerCase();
+
+        if (!extensions.includes(fileExtension)) {
+            $('#btnValidar').prop('disabled', true);
+            alert("No es una extension valida")
+            $('#ImportFile').val('');
+            return false;
+
+        }
+
+        $("#btnValidar").prop(
+            "disabled", false);
+
+        return true;
+    }
+
+
+</script>

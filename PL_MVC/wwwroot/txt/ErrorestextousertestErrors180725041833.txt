@@ -1,0 +1,4 @@
+Nombre: Diego1 es invalido |ApellidoPaterno: Prado0 es invalido |
+Nombre: Jose2 es invalido |CURP: FDKDFJKJKDFK es invalido |
+ApellidoMaterno: Ortega5 es invalido |CURP: FDKDFJKJKDFK es invalido |IdUsuario: -3 es invalido |
+IdUsuario: -1 es invalido |CURP: FDKDFJKJKDFK es invalido |
