@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,17 @@ namespace BL
         {
             ML.Result result = new ML.Result();
             try {
-                
+
+                int filasAfectadas = _context.Database.ExecuteSqlRaw($"EmpleadoAdd '{Empleado.Nombre}', '{Empleado.ApellidoPaterno}','{Empleado.ApellidoMaterno}','{Empleado.FechaNacimiento}','{Empleado.RFC}','{Empleado.NSS}','{Empleado.CURP}','{Empleado.FechaIngreso}','{Empleado.Departamento.IdDepartamento}','{Empleado.SalarioBase}','{Empleado.NoFaltas}'");
+
+                if (filasAfectadas > 0)
+                {
+                    result.Correct = true;
+                }
+                else { 
+                    result.Correct = false;
+                    result.ErrorMessage = "Ocurrio un error al agregar al Empleado";
+                }
 
             }
             catch(Exception ex) 
