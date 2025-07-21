@@ -35,5 +35,23 @@ namespace PL_MVC.Controllers
             return View(empleado);
         }
 
+
+
+        // ===================== FORM ADD EMPLOYEE ======================== \\
+
+        [HttpGet]
+        public IActionResult EmpleadoForm(int? IdEmpleado) {
+
+            ML.Empleado empleado = new ML.Empleado();
+            empleado.Departamento = new ML.Departamento();
+
+
+            // Llenar Departamentos 
+
+            
+
+            return View();
+        }
+
     }
 }
