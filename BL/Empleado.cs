@@ -109,8 +109,41 @@ namespace BL
         public ML.Result GetAll() {
 
             ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
 
-            try { }
+            try
+            {
+
+                var query = _context.Empleados.FromSqlRaw("EmpleadoGetAll").ToList();
+
+                if (query.Count > 0){
+
+                    foreach (var empleadoScaffold in query) {
+                        
+                        ML.Empleado empleado = new ML.Empleado();
+                        empleado.Departamento = new ML.Departamento();
+
+                        empleado.IdEmpleado = (int)empleadoScaffold.IdEmpleado;
+                        empleado.Nombre = empleadoScaffold.Nombre;
+                        empleado.ApellidoPaterno = empleadoScaffold.ApellidoPaterno;
+                        empleado.ApellidoMaterno = empleadoScaffold.ApellidoMaterno;
+                        //empleado.FechaNacimiento = empleadoScaffold.FechaNacimiento;
+                        empleado.RFC = empleadoScaffold.Rfc;
+                        empleado.NSS = empleadoScaffold.Nss;
+                        empleado.CURP = empleadoScaffold.Curp;
+                        //empleado.FechaIngreso = empleadoScaffold.FechaIngreso;
+                        empleado.Departamento.IdDepartamento = empleadoScaffold.IdDepartamento;
+                        empleado.SalarioBase = (int?)empleadoScaffold.SalarioBase;
+                        empleado.NoFaltas = empleadoScaffold.NoFaltas;
+
+                        result.Objects.Add(empleado);
+                    
+                    }
+
+                    result.Correct = true;
+                }
+            
+            }
             catch (Exception ex) 
             {
                 result.Correct= false;
@@ -125,7 +158,34 @@ namespace BL
             
             ML.Result result = new ML.Result();
 
-            try { }
+            try {
+
+                var query = _context.Empleados.FromSqlRaw($"EmpleadoGetById {IdEmpleado}").ToList().SingleOrDefault();
+
+                if (query != null) { 
+                    
+                    ML.Empleado empleado = new ML.Empleado();
+                    empleado.Departamento = new ML.Departamento();
+
+                    empleado.IdEmpleado = (int)query.IdEmpleado;
+                    empleado.Nombre = query.Nombre;
+                    empleado.ApellidoPaterno = query.ApellidoPaterno;
+                    empleado.ApellidoMaterno = query.ApellidoMaterno;
+                    //empleado.FechaNacimiento = empleadoScaffold.FechaNacimiento;
+                    empleado.RFC = query.Rfc;
+                    empleado.NSS = query.Nss;
+                    empleado.CURP = query.Curp;
+                    //empleado.FechaIngreso = empleadoScaffold.FechaIngreso;
+                    empleado.Departamento.IdDepartamento = query.IdDepartamento;
+                    empleado.SalarioBase = (int?)query.SalarioBase;
+                    empleado.NoFaltas = query.NoFaltas;
+
+                    result.Object = empleado;
+
+                }
+
+            
+            }
             catch (Exception ex) 
             {
                 result.Correct= false;
