@@ -7,10 +7,13 @@ namespace PL_MVC.Controllers
     {
 
         private readonly BL.Empleado _empleado;
+        private readonly BL.Departamento _departamento;
 
-        public EmpleadoController(BL.Empleado empleado) {
+        public EmpleadoController(BL.Empleado empleado, BL.Departamento departamento)
+        {
 
             _empleado = empleado;
+            _departamento = departamento;
         }
 
         public IActionResult Index()
@@ -44,13 +47,45 @@ namespace PL_MVC.Controllers
 
             ML.Empleado empleado = new ML.Empleado();
             empleado.Departamento = new ML.Departamento();
+            empleado.Departamento.Departamentos = new List<object>();
 
 
             // Llenar Departamentos 
 
+            ML.Result resultDepartamento = _departamento.GetAll();
+            empleado.Departamento.Departamentos = resultDepartamento.Objects;
             
 
-            return View();
+            return View(empleado);
+        }
+
+        [HttpPost]
+        public IActionResult EmpleadoForm(ML.Empleado Empleado) {
+
+            if (Empleado.IdEmpleado > 0)
+            {
+
+                ML.Result resultUpdate = _empleado.Update(Empleado,Empleado.IdEmpleado);
+
+                if (resultUpdate.Correct) {
+
+                    return RedirectToAction("EmpleadoGetAll","Empleado");
+                }
+
+            }
+            else {
+
+                ML.Result resultAdd = _empleado.Add(Empleado);
+
+                if (resultAdd.Correct) {
+
+                    return RedirectToAction("EmpleadoGetAll","Empleado");
+                }
+            
+            }
+
+
+                return View();
         }
 
     }
