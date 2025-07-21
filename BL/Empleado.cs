@@ -114,7 +114,7 @@ namespace BL
             try
             {
 
-                var query = _context.Empleados.FromSqlRaw("EmpleadoGetAll").ToList();
+                var query = _context.VwEmpleados.FromSqlRaw("EmpleadoGetAll").ToList();
 
                 if (query.Count > 0){
 
@@ -127,12 +127,13 @@ namespace BL
                         empleado.Nombre = empleadoScaffold.Nombre;
                         empleado.ApellidoPaterno = empleadoScaffold.ApellidoPaterno;
                         empleado.ApellidoMaterno = empleadoScaffold.ApellidoMaterno;
-                        //empleado.FechaNacimiento = empleadoScaffold.FechaNacimiento;
+                        empleado.FechaNacimiento = empleadoScaffold.FechaNacimiento;
                         empleado.RFC = empleadoScaffold.Rfc;
                         empleado.NSS = empleadoScaffold.Nss;
                         empleado.CURP = empleadoScaffold.Curp;
-                        //empleado.FechaIngreso = empleadoScaffold.FechaIngreso;
+                        empleado.FechaIngreso = empleadoScaffold.FechaIngreso;
                         empleado.Departamento.IdDepartamento = empleadoScaffold.IdDepartamento;
+                        empleado.Departamento.Descripcion = empleadoScaffold.Descripcion;
                         empleado.SalarioBase = (int?)empleadoScaffold.SalarioBase;
                         empleado.NoFaltas = empleadoScaffold.NoFaltas;
 
@@ -160,7 +161,7 @@ namespace BL
 
             try {
 
-                var query = _context.Empleados.FromSqlRaw($"EmpleadoGetById {IdEmpleado}").ToList().SingleOrDefault();
+                var query = _context.VwEmpleados.FromSqlRaw($"EmpleadoGetById {IdEmpleado}").ToList().SingleOrDefault();
 
                 if (query != null) { 
                     
@@ -171,11 +172,11 @@ namespace BL
                     empleado.Nombre = query.Nombre;
                     empleado.ApellidoPaterno = query.ApellidoPaterno;
                     empleado.ApellidoMaterno = query.ApellidoMaterno;
-                    //empleado.FechaNacimiento = empleadoScaffold.FechaNacimiento;
+                    empleado.FechaNacimiento = query.FechaNacimiento;
                     empleado.RFC = query.Rfc;
                     empleado.NSS = query.Nss;
                     empleado.CURP = query.Curp;
-                    //empleado.FechaIngreso = empleadoScaffold.FechaIngreso;
+                    empleado.FechaIngreso = query.FechaIngreso;
                     empleado.Departamento.IdDepartamento = query.IdDepartamento;
                     empleado.SalarioBase = (int?)query.SalarioBase;
                     empleado.NoFaltas = query.NoFaltas;

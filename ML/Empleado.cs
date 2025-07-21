@@ -21,6 +21,6 @@ namespace ML
         public ML.Departamento? Departamento { get; set; }
         public int? SalarioBase { get; set; }
         public int? NoFaltas { get; set; }
-
+        public List<object>? Empleados { get; set; }
     }
 }
