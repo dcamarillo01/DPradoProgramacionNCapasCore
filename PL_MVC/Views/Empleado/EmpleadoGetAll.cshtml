@@ -30,29 +30,40 @@
                                 <th>Departamento</th>
                                 <th>SalarioBase</th>
                                 <th>#NoFaltas</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
                             </tr>
                         </thead>
-                            <tbody>
+                        <tbody>
 
-                                @foreach (ML.Empleado empleado in Model.Empleados)
-                                {
+                            @foreach (ML.Empleado empleado in Model.Empleados)
+                            {
                                 <tr>
-                                   <td>@empleado.IdEmpleado</td>
-                                   <td>@empleado.Nombre</td>
-                                   <td>@empleado.ApellidoPaterno</td>
-                                   <td>@empleado.ApellidoMaterno</td>
-                                   <td>@empleado.FechaNacimiento</td>
-                                   <td>@empleado.RFC</td>
-                                   <td>@empleado.NSS</td>
-                                   <td>@empleado.CURP</td>
-                                   <td>@empleado.FechaIngreso</td>
-                                   <td>@empleado.Departamento</td>
-                                   <td>$@empleado.SalarioBase</td>
-                                   <td>@empleado.NoFaltas</td>
+                                    <td>@empleado.IdEmpleado</td>
+                                    <td>@empleado.Nombre</td>
+                                    <td>@empleado.ApellidoPaterno</td>
+                                    <td>@empleado.ApellidoMaterno</td>
+                                    <td>@empleado.FechaNacimiento</td>
+                                    <td>@empleado.RFC</td>
+                                    <td>@empleado.NSS</td>
+                                    <td>@empleado.CURP</td>
+                                    <td>@empleado.FechaIngreso</td>
+                                    <td>@empleado.Departamento.Descripcion</td>
+                                    <td>$@empleado.SalarioBase</td>
+                                    <td>@empleado.NoFaltas</td>
+                                    <td>
+                                        <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"
+                                           class="btn btn-warning">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = empleado.IdEmpleado })" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
+                                    </td>
                                 </tr>
 
-                                }
-                            </tbody>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>

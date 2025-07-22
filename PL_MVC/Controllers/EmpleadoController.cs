@@ -54,6 +54,18 @@ namespace PL_MVC.Controllers
 
             ML.Result resultDepartamento = _departamento.GetAll();
             empleado.Departamento.Departamentos = resultDepartamento.Objects;
+
+            if (IdEmpleado > 0) {
+
+                ML.Result resultGetById = _empleado.GetById(IdEmpleado.Value);
+
+                if (resultGetById.Correct) {
+
+                    empleado = (ML.Empleado) resultGetById.Object;
+                    empleado.Departamento.Departamentos = resultDepartamento.Objects;
+                }
+
+            }
             
 
             return View(empleado);

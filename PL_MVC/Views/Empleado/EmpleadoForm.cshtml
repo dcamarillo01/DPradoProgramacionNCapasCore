@@ -24,6 +24,7 @@
                         <div class="row">
                             <div class="col" hidden>
                                 @Html.LabelFor(model => model.IdEmpleado, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.IdEmpleado, new { @class = "form-label" })
                             </div>
                             <div class="col">
                                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
@@ -103,7 +104,7 @@
             dateFormat: 'dd/mm/yy', // Date format
             changeMonth: true,      // Month dropdown
             changeYear: true,       // Year dropdown
-            yearRange: "1985:2015" ,  // Year range
+            yearRange: "1985:2025" ,  // Year range
             showAnim: "drop",
             maxDate: '+30Y',
             inline: true
@@ -114,7 +115,7 @@
             dateFormat: 'dd/mm/yy', // Date format
             changeMonth: true,      // Month dropdown
             changeYear: true,       // Year dropdown
-            yearRange: "1985:2015" ,  // Year range
+            yearRange: "1985:2025" ,  // Year range
             showAnim: "drop",
             maxDate: '+30Y',
             inline: true

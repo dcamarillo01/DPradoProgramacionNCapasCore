@@ -185,6 +185,7 @@ namespace BL
 
                 }
 
+                result.Correct = true;
             
             }
             catch (Exception ex) 
