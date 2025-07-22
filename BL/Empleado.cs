@@ -85,7 +85,7 @@ namespace BL
 
                 int filasAfectadas = _context.Database.ExecuteSqlRaw($"EmpleadoDelete {IdEmpleado}");
 
-                if (filasAfectadas > 1)
+                if (filasAfectadas > 0)
                 {
                     result.Correct = true;
                 }
@@ -106,7 +106,7 @@ namespace BL
 
         // =============== GET ALL EMPLEADO =============== \\
 
-        public ML.Result GetAll() {
+        public ML.Result GetAll(ML.Empleado Empleado) {
 
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
@@ -114,7 +114,7 @@ namespace BL
             try
             {
 
-                var query = _context.VwEmpleados.FromSqlRaw("EmpleadoGetAll").ToList();
+                var query = _context.VwEmpleados.FromSqlRaw($"EmpleadoGetAll '{Empleado.Nombre}', '{Empleado.ApellidoPaterno}', '{Empleado.ApellidoMaterno}', '{Empleado.Departamento.IdDepartamento}'" ).ToList();
 
                 if (query.Count > 0){
 

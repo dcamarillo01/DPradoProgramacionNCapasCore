@@ -27,15 +27,53 @@ namespace PL_MVC.Controllers
         [HttpGet]
         public IActionResult EmpleadoGetAll() { 
             
-            ML.Result resultGetAll = _empleado.GetAll();
 
             ML.Empleado empleado = new ML.Empleado();
             empleado.Empleados = new List<object>();
+            empleado.Departamento = new ML.Departamento();
+            empleado.Departamento.Departamentos = new List<object>();
+
+            empleado.Nombre = empleado.Nombre ?? "";
+            empleado.ApellidoPaterno = empleado.ApellidoPaterno ?? "";
+            empleado.ApellidoMaterno = empleado.ApellidoMaterno ?? "";
+
+            ML.Result resultGetAll = _empleado.GetAll(empleado);
 
             empleado.Empleados = resultGetAll.Objects;
 
 
+            // ======== LLenar Departamentos =========== \\
+
+            ML.Result resultDepartamento = _departamento.GetAll();
+
+            empleado.Departamento.Departamentos = resultDepartamento.Objects;
+            empleado.Empleados = resultGetAll.Objects;
+
+
             return View(empleado);
+        }
+
+        [HttpPost]
+        public IActionResult EmpleadoGetAll(ML.Empleado Empleado) {
+
+            Empleado.Nombre = Empleado.Nombre ?? "";
+            Empleado.ApellidoPaterno = Empleado.ApellidoPaterno ?? "";
+            Empleado.ApellidoMaterno = Empleado.ApellidoMaterno ?? "";
+
+
+            // ======== LLenar Departamentos =========== \\
+
+            ML.Result resultDepartamento = _departamento.GetAll();
+
+            Empleado.Departamento.Departamentos = resultDepartamento.Objects;
+
+            ML.Result resultGetAll = _empleado.GetAll(Empleado);
+
+            if (resultGetAll.Correct) {
+                Empleado.Empleados = resultGetAll.Objects;
+            }
+
+            return View(Empleado);
         }
 
 
@@ -99,6 +137,17 @@ namespace PL_MVC.Controllers
 
                 return View();
         }
+
+
+
+        [HttpGet]
+        public IActionResult Delete(int IdEmpleado) {
+
+            ML.Result resultDelete = _empleado.Delete(IdEmpleado);
+
+            return RedirectToAction("EmpleadoGetAll");
+        }
+
 
     }
 }
