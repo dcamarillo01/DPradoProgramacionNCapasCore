@@ -35,19 +35,19 @@
                                                 <input type="hidden" id="idEmpleado"/>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <input class="input" id="nombre" type="text" placeholder="" required="">
                                                         <span>Nombre</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <input class="input" id="apellidoPaterno" type="text" placeholder="" required="">
                                                         <span>ApellidoPaterno</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <input class="input" id="apellidoMaterno" type="text" placeholder="" required="">
                                                         <span>ApellidoMaterno</span>
                                                     </label>
                                                 </div>
@@ -57,19 +57,19 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <input class="input" id="rfc" type="text" placeholder="" required="">
                                                         <span>RFC</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <input class="input" id="nss" type="text" placeholder="" required="">
                                                         <span>NSS</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <input class="input" id="curp" type="text" placeholder="" required="">
                                                         <span>CURP</span>
                                                     </label>
                                                 </div>
@@ -172,6 +172,7 @@
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
     /// DATE PICKER
@@ -277,7 +278,7 @@
                                         <hr />
                                         SalarioBase: ${value.salarioBase}
                                         <hr />
-                                        NoFaltas: ${value.empleadoFaltas}
+                                        NoFaltas: ${value.noFaltas}
                                     </div>
                                     <div class="brutalist-card__actions">
 
@@ -313,14 +314,29 @@
         $("#formEmpleado").on("submit", function (e) {
             e.preventDefault();
 
+            console.log($("#ddlDepartamentos").children("option:selected").val());
+            console.log($("#ddlDepartamentos").find(":selected").val());
+
+            var Departamento = {
+                IdDepartamento: $("#ddlDepartamentos").find(":selected").val(),
+            };
+
             var empleado = {
                 IdEmpleado: $("#idEmpleado").val() || 0,
                 Nombre: $("#nombre").val(),
                 ApellidoPaterno: $("#apellidoPaterno").val(),
-                FechaNacimiento: $("#fechaNacimiento").val()
+                ApellidoMaterno: $("#apellidoMaterno").val(),
+                FechaNacimiento: $("#DatePicker").val(),
+                RFC: $("#rfc").val(),
+                NSS: $("#nss").val(),
+                CURP: $("#curp").val(),
+                Departamento: Departamento,
+                SalarioBase: $("#salarioBase").val(),
+                NoFaltas: $("#noFaltas").val()
+
             };
 
-            var url = usuario.IdUsuario == 0
+            var url = empleado.IdEmpleado == 0
                 ? '@Url.Action("Add", "Usuario")'
                 : '@Url.Action("Update", "Usuario")';
 
@@ -328,21 +344,21 @@
 
             $.ajax({
                 type: "POST",
-                url: url,
-                data: usuario,
+                url: '@Url.Action("AddJS","Empleado")',
+                data: empleado,
                 success: function (result) {
                     console.log(result)
                     if (result.correct) {
                         Swal.fire({
                             icon: 'success',
-                            title: usuario.IdUsuario == 0 ? '¡Agregado!' : '¡Actualizado!',
-                            text: 'El usuario se guardó correctamente.'
+                            title: empleado.IdEmpleado == 0 ? '¡Agregado!' : '¡Actualizado!',
+                            text: 'El empleado se registro correctamente.'
                             }).then(() => {
-                                $('#modalUsuario').modal('hide');
+                                $('#exampleModal').modal('hide');
                                 location.reload();
                             });
-                        $("#formUsuario")[0].reset();
-                        $("#idUsuario").val(0);
+                        $("#formEmpleado")[0].reset();
+                        $("#idEmpleado").val(0);
                     } else {
                         Swal.fire({
                             icon: 'error',

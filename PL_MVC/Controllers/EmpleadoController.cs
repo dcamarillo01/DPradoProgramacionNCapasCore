@@ -231,6 +231,14 @@ namespace PL_MVC.Controllers
             return Json(result);
         }
 
+        public JsonResult AddJS(ML.Empleado empleado) {
+
+            ML.Result result = _empleado.Add(empleado);
+
+
+            return Json(result);
+        }
+
 
 
     }
