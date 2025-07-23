@@ -11,19 +11,56 @@
             <h2>Empleados</h2>
             <div class="row">
                 <div class="col">
+
                     @* ================ CARTAS EMPLEADO ==============  *@
-                    <div class="row">
-                        <div class="col">
-                            <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                <button type="button" class="btn btn-outline-primary" onclick="FillDepartamentos(), abrirModal()",>Agregar</button>
-                                <button type="button" class="btn btn-outline-primary" onclick="abrirModal()">Buscar</button>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                    Launch demo modal
-                                </button>
-                            </div>
+                    <div class="row justify-content-end" style="padding-bottom:20px">
+                        <div class="btn-group col-6" role="group" aria-label="Basic outlined example">
+                            <button type="button" class="btn btn-outline-primary" onclick="FillDepartamentos(),abrirModal()" ,>Agregar</button>
+                            <button type="button" class="btn btn-outline-primary" id="buscarBTN" onclick="FillDepartamentos()"><i class="bi bi-search"></i></button>
+
+                        </div>
+                    </div>
+                    @* ============== BUSCAR ========================= *@
+
+                    <div class="row " style="padding-bottom:20px">
+                        <div class="col" style="display:none" id="tablaBuscar">
+                            <form id="formBuscar" >
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="name" class="form-label">Nombre   </label>
+                                        <input type="text" id="buscarNombre" name="name" placeholder="Nombre" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="email" class="form-label">ApellidoPaterno</label>
+                                        <input type="email" id="buscarApellidoPaterno" name="apellidoPaterno" placeholder="ApellidoPaterno" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="phone" class="form-label">ApellidoMaterno</label>
+                                        <input type="text" id="buscarApellidoMaterno" name="apellidoMaterno" placeholder="ApellidoMaterno" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label>
+                                            <label class="form-label">Departamento</label>
+                                            <select name="departamentos" id="ddlDepartamentos" class="form-control">
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-end" style="padding-top:10px">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-outline-info">
+                                            Buscar
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
                         </div>
                     </div>
 
+
+                    @* ============ MODAL ============= *@
                     <div class="row">
                         <div class="col">
                             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -32,7 +69,7 @@
                                         <form class="form" id="formEmpleado">
                                             <p class="title">Registrar Empleado </p>
                                             <div class="row">
-                                                <input type="hidden" id="idEmpleado"/>
+                                                <input type="hidden" id="idEmpleado" />
                                                 <div class="col">
                                                     <label>
                                                         <input class="input" id="nombre" type="text" placeholder="" required="">
@@ -53,7 +90,7 @@
                                                 </div>
 
                                             </div>
-                                            
+
                                             <div class="row">
                                                 <div class="col">
                                                     <label>
@@ -90,13 +127,12 @@
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <select name="cars" id="ddlDepartamentos" class="input">
-                                                            
+                                                        <select name="departamentos" id="ddlDepartamentos2" class="input">
                                                         </select>
                                                     </label>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="row">
                                                 <div class="col">
                                                     <label>
@@ -111,11 +147,10 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            
+
 
                                             <button class="submit">Submit</button>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
@@ -204,10 +239,22 @@
 
     });
 
-    // LLenar Departamentos 
+    $(document).ready(function () {
+        $("#buscarBTN").click(function () {
+            $("#tablaBuscar").toggle();
+            if ($("#tablaBuscar").is(":visible")) {
+                $('#tablaBuscar').show();
+
+            } else {
+                $('#tablaBuscar').hide();
+
+            }
+        });
+    });
+
+    // LLenar Departamentos
     function FillDepartamentos() {
-        var IdEstado = $('#ddlEstado').val();
-        console.log(IdEstado)
+
 
         $.ajax({
             url: '@Url.Action("GetDepartamentos", "Empleado")',
@@ -219,12 +266,25 @@
                 console.log(resultDepartamento.correct)
                 if (resultDepartamento.correct) {
 
-                    
+                    $("#ddlDepartamentos").empty()
+
+
                     $("#ddlDepartamentos").append('<option value=""> Seleccione un departamento</option>')
-               
+
                     $.each(resultDepartamento.objects, function (i, departamento) {
+
                         $("#ddlDepartamentos").append('<option value="'+ departamento.idDepartamento +'">'+departamento.descripcion+'</option>')
                     })
+                    $("#ddlDepartamentos2").empty()
+
+
+                    $("#ddlDepartamentos2").append('<option value=""> Seleccione un departamento</option>')
+
+                    $.each(resultDepartamento.objects, function (i, departamento) {
+
+                        $("#ddlDepartamentos2").append('<option value="'+ departamento.idDepartamento +'">'+departamento.descripcion+'</option>')
+                    })
+
                 }
             },
             error: function (ex) {
@@ -301,10 +361,93 @@
     });
 
 
+
+    // GetAllOpen
+    $(document).ready(function (){
+        $("#formBuscar").on("submit", function (e) {
+            e.preventDefault();
+
+
+
+            var Departamento = {
+                IdDepartamento: $("#ddlDepartamentos").find(":selected").val(),
+            };
+
+            console.log($("#buscarNombre").val());
+
+            var empleado = {
+                Nombre: $("#buscarNombre").val(),
+                ApellidoPaterno: $("#buscarApellidoPaterno").val(),
+                ApellidoMaterno: $("#buscarApellidoMaterno").val(),
+                Departamento: Departamento
+            };
+
+            console.log(empleado)
+
+
+        $.ajax({
+            url: '@Url.Action("GetAllJson", "Empleado")',
+            type: "GET",
+            data: empleado,
+            success: function (data) {
+                $("#bodyCard").empty();
+                $.each(data.objects, function (index, value) {
+                    console.log(index,value)
+                    let imagen = value.imagen;
+                    $("#bodyCard").append(
+                        `
+                                            <div class="col-4">
+                                <div class="brutalist-card">
+                                    <div class="brutalist-card__header">
+                                        <div class="brutalist-card__icon" style="color:white">
+                                           ${value.idEmpleado}
+                                        </div>
+                                        <div class="brutalist-card__alert">${value.nombre} ${value.apellidoPaterno}</div>
+                                    </div>
+                                    <div class="brutalist-card__message">
+
+                                        FechaNacimiento: ${value.fechaNacimiento}
+                                        <hr />
+                                        RFC:${value.rfc}
+                                        <hr />
+                                        NSS:${value.nss}
+                                        <hr />
+                                        CURP: ${value.curp}
+                                        <hr />
+                                        FechaIngreso: ${value.fechaIngreso}
+                                        <hr />
+                                        SalarioBase: ${value.salarioBase}
+                                        <hr />
+                                        NoFaltas: ${value.noFaltas}
+                                    </div>
+                                    <div class="brutalist-card__actions">
+
+                                        <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = 0 })"
+                                           class="brutalist-card__button brutalist-card__button--mark">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = 0 })" onclick="return confirm('Deseas eliminar usuario?') " class="brutalist-card__button brutalist-card__button--read"><i class="bi bi-trash3"></i></a>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        `
+                    )
+                });
+            }
+        })
+        }
+        )});
+
+    
+
     // Agregar
 
     function abrirModal(){
          $('#exampleModal').modal('show');
+
     }
 
 
@@ -314,11 +457,9 @@
         $("#formEmpleado").on("submit", function (e) {
             e.preventDefault();
 
-            console.log($("#ddlDepartamentos").children("option:selected").val());
-            console.log($("#ddlDepartamentos").find(":selected").val());
 
             var Departamento = {
-                IdDepartamento: $("#ddlDepartamentos").find(":selected").val(),
+                IdDepartamento: $("#ddlDepartamentos2").find(":selected").val(),
             };
 
             var empleado = {
@@ -344,7 +485,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("AddJS","Empleado")',
+                url: '@Url.Action("AddJS", "Empleado")',
                 data: empleado,
                 success: function (result) {
                     console.log(result)
@@ -375,12 +516,13 @@
                     });
                 }
             });
-        });
-    });
+        })
+        }
+    );
 
 
 
-    
+
 
 
 </script>
