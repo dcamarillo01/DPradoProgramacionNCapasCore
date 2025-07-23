@@ -1,0 +1,370 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<container>
+    <div class="row">
+        <div class="col">
+            <h2>Empleados</h2>
+            <div class="row">
+                <div class="col">
+                    @* ================ CARTAS EMPLEADO ==============  *@
+                    <div class="row">
+                        <div class="col">
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <button type="button" class="btn btn-outline-primary" onclick="FillDepartamentos(), abrirModal()",>Agregar</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="abrirModal()">Buscar</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Launch demo modal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content" style="background:none; border:none">
+                                        <form class="form" id="formEmpleado">
+                                            <p class="title">Registrar Empleado </p>
+                                            <div class="row">
+                                                <input type="hidden" id="idEmpleado"/>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <span>Nombre</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <span>ApellidoPaterno</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <span>ApellidoMaterno</span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <span>RFC</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <span>NSS</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="input" type="text" placeholder="" required="">
+                                                        <span>CURP</span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="DatePicker" class="input">
+                                                        <span>FechaNacimiento</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="DatePicker2" class="input">
+                                                        <span>FechaIngreso</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <select name="cars" id="ddlDepartamentos" class="input">
+                                                            
+                                                        </select>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="salarioBase" class="input">
+                                                        <span>SalarioBase</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="noFaltas" class="input">
+                                                        <span>NoFaltas</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+
+                                            <button class="submit">Submit</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" id="bodyCard">
+
+                    @* @foreach (ML.Empleado empleado in Model.Empleados)
+                        {
+                            <div class="col-4">
+                                <div class="brutalist-card">
+                                    <div class="brutalist-card__header">
+                                        <div class="brutalist-card__icon" style="color:white"> 
+                                           @empleado.IdEmpleado
+                                        </div>
+                                        <div class="brutalist-card__alert">@empleado.Nombre @empleado.ApellidoPaterno</div>
+                                    </div>
+                                    <div class="brutalist-card__message">
+
+                                        FechaNacimiento: @empleado.FechaNacimiento
+                                        <hr />
+                                        RFC:@empleado.RFC
+                                        <hr />
+                                        NSS:@empleado.NSS
+                                        <hr />
+                                        CURP:@empleado.CURP
+                                        <hr />
+                                        FechaIngreso: @empleado.FechaIngreso
+                                        <hr />
+                                        SalarioBase: $@empleado.SalarioBase
+                                        <hr />
+                                        NoFaltas: @empleado.NoFaltas
+
+                                    </div>
+                                    <div class="brutalist-card__actions">
+                                        @*  <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"
+                                            class="brutalist-card__button brutalist-card__button--mark">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = empleado.IdEmpleado })" onclick="return confirm('Deseas eliminar usuario?') " class="brutalist-card__button brutalist-card__button--read"><i class="bi bi-trash3"></i></a> *@
+                    @* </div> *@
+                    @*    </div> 
+
+                                
+                             </div> 
+                             } *@ 
+                </div>
+            </div>
+        </div>
+    </div>
+</container>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    /// DATE PICKER
+
+
+    $(document).ready(function () {
+        $("#DatePicker").datepicker({
+            dateFormat: 'dd/mm/yy', // Date format
+            changeMonth: true,      // Month dropdown
+            changeYear: true,       // Year dropdown
+            yearRange: "1985:2025" ,  // Year range
+            showAnim: "drop",
+            maxDate: '+30Y',
+            inline: true
+        });
+
+        $("#DatePicker").attr("readonly", true);
+        $("#DatePicker2").datepicker({
+            dateFormat: 'dd/mm/yy', // Date format
+            changeMonth: true,      // Month dropdown
+            changeYear: true,       // Year dropdown
+            yearRange: "1985:2025" ,  // Year range
+            showAnim: "drop",
+            maxDate: '+30Y',
+            inline: true
+        });
+
+        $("#DatePicker2").attr("readonly", true);
+
+    });
+
+    // LLenar Departamentos 
+    function FillDepartamentos() {
+        var IdEstado = $('#ddlEstado').val();
+        console.log(IdEstado)
+
+        $.ajax({
+            url: '@Url.Action("GetDepartamentos", "Empleado")',
+            dataType: 'JSON',
+            method: 'GET',
+            data: {},
+            success: function (resultDepartamento) {
+                console.log(resultDepartamento)
+                console.log(resultDepartamento.correct)
+                if (resultDepartamento.correct) {
+
+                    
+                    $("#ddlDepartamentos").append('<option value=""> Seleccione un departamento</option>')
+               
+                    $.each(resultDepartamento.objects, function (i, departamento) {
+                        $("#ddlDepartamentos").append('<option value="'+ departamento.idDepartamento +'">'+departamento.descripcion+'</option>')
+                    })
+                }
+            },
+            error: function (ex) {
+                alert("Error en GetMunicipioByIdEstado")
+            }
+        })
+    }
+
+        //GetAll
+    $(document).ready(function () {
+        //Mando los datos a mi controlador
+
+
+        var empleado = {
+            IdDepartamento: 0,
+            Nombre: "",
+            ApellidoPaterno: "",
+            ApellidoMaterno: ""
+        };
+
+
+        $.ajax({
+            url: '@Url.Action("GetAllJson", "Empleado")',
+            type: "GET",
+            data: {empleado},
+            success: function (data) {
+                $.each(data.objects, function (index, value) {
+                    console.log(index,value)
+                    let imagen = value.imagen;
+                    $("#bodyCard").append(
+                        `
+                                            <div class="col-4">
+                                <div class="brutalist-card">
+                                    <div class="brutalist-card__header">
+                                        <div class="brutalist-card__icon" style="color:white">
+                                           ${value.idEmpleado}
+                                        </div>
+                                        <div class="brutalist-card__alert">${value.nombre} ${value.apellidoPaterno}</div>
+                                    </div>
+                                    <div class="brutalist-card__message">
+
+                                        FechaNacimiento: ${value.fechaNacimiento}
+                                        <hr />
+                                        RFC:${value.rfc}
+                                        <hr />
+                                        NSS:${value.nss}
+                                        <hr />
+                                        CURP: ${value.curp}
+                                        <hr />
+                                        FechaIngreso: ${value.fechaIngreso}
+                                        <hr />
+                                        SalarioBase: ${value.salarioBase}
+                                        <hr />
+                                        NoFaltas: ${value.empleadoFaltas}
+                                    </div>
+                                    <div class="brutalist-card__actions">
+
+                                        <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = 0 })"
+                                           class="brutalist-card__button brutalist-card__button--mark">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = 0 })" onclick="return confirm('Deseas eliminar usuario?') " class="brutalist-card__button brutalist-card__button--read"><i class="bi bi-trash3"></i></a>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        `
+                    )
+                });
+            }
+        })
+    });
+
+
+    // Agregar
+
+    function abrirModal(){
+         $('#exampleModal').modal('show');
+    }
+
+
+
+    // ========================= AGREGAR ====================== \\
+    $(document).ready(function () {
+        $("#formEmpleado").on("submit", function (e) {
+            e.preventDefault();
+
+            var empleado = {
+                IdEmpleado: $("#idEmpleado").val() || 0,
+                Nombre: $("#nombre").val(),
+                ApellidoPaterno: $("#apellidoPaterno").val(),
+                FechaNacimiento: $("#fechaNacimiento").val()
+            };
+
+            var url = usuario.IdUsuario == 0
+                ? '@Url.Action("Add", "Usuario")'
+                : '@Url.Action("Update", "Usuario")';
+
+            console.log(url);
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: usuario,
+                success: function (result) {
+                    console.log(result)
+                    if (result.correct) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: usuario.IdUsuario == 0 ? '¡Agregado!' : '¡Actualizado!',
+                            text: 'El usuario se guardó correctamente.'
+                            }).then(() => {
+                                $('#modalUsuario').modal('hide');
+                                location.reload();
+                            });
+                        $("#formUsuario")[0].reset();
+                        $("#idUsuario").val(0);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo guardar: ' + result.ErrorMessage
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error inesperado: ' + error
+                    });
+                }
+            });
+        });
+    });
+
+
+
+    
+
+
+</script>

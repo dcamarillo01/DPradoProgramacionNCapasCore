@@ -25,8 +25,8 @@ namespace PL_MVC.Controllers
         // =================== GET ALL ======================= \\
 
         [HttpGet]
-        public IActionResult EmpleadoGetAll() { 
-            
+        public IActionResult EmpleadoGetAll() {
+
 
             ML.Empleado empleado = new ML.Empleado();
             empleado.Empleados = new List<object>();
@@ -77,6 +77,62 @@ namespace PL_MVC.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult EmpleadoJS()
+        {
+
+
+            ML.Empleado empleado = new ML.Empleado();
+            empleado.Empleados = new List<object>();
+            empleado.Departamento = new ML.Departamento();
+            empleado.Departamento.Departamentos = new List<object>();
+
+            empleado.Nombre = empleado.Nombre ?? "";
+            empleado.ApellidoPaterno = empleado.ApellidoPaterno ?? "";
+            empleado.ApellidoMaterno = empleado.ApellidoMaterno ?? "";
+
+            ML.Result resultGetAll = _empleado.GetAll(empleado);
+
+            empleado.Empleados = resultGetAll.Objects;
+
+
+            // ======== LLenar Departamentos =========== \\
+
+            ML.Result resultDepartamento = _departamento.GetAll();
+
+            empleado.Departamento.Departamentos = resultDepartamento.Objects;
+            empleado.Empleados = resultGetAll.Objects;
+
+
+            return View(empleado);
+        }
+
+        [HttpPost]
+        public IActionResult EmpleadoJS(ML.Empleado Empleado)
+        {
+
+            Empleado.Nombre = Empleado.Nombre ?? "";
+            Empleado.ApellidoPaterno = Empleado.ApellidoPaterno ?? "";
+            Empleado.ApellidoMaterno = Empleado.ApellidoMaterno ?? "";
+
+
+            // ======== LLenar Departamentos =========== \\
+
+            ML.Result resultDepartamento = _departamento.GetAll();
+
+            Empleado.Departamento.Departamentos = resultDepartamento.Objects;
+
+            ML.Result resultGetAll = _empleado.GetAll(Empleado);
+
+            if (resultGetAll.Correct)
+            {
+                Empleado.Empleados = resultGetAll.Objects;
+            }
+
+            return View(Empleado);
+        }
+
+
 
         // ===================== FORM ADD EMPLOYEE ======================== \\
 
@@ -99,12 +155,12 @@ namespace PL_MVC.Controllers
 
                 if (resultGetById.Correct) {
 
-                    empleado = (ML.Empleado) resultGetById.Object;
+                    empleado = (ML.Empleado)resultGetById.Object;
                     empleado.Departamento.Departamentos = resultDepartamento.Objects;
                 }
 
             }
-            
+
 
             return View(empleado);
         }
@@ -115,11 +171,11 @@ namespace PL_MVC.Controllers
             if (Empleado.IdEmpleado > 0)
             {
 
-                ML.Result resultUpdate = _empleado.Update(Empleado,Empleado.IdEmpleado);
+                ML.Result resultUpdate = _empleado.Update(Empleado, Empleado.IdEmpleado);
 
                 if (resultUpdate.Correct) {
 
-                    return RedirectToAction("EmpleadoGetAll","Empleado");
+                    return RedirectToAction("EmpleadoGetAll", "Empleado");
                 }
 
             }
@@ -129,13 +185,13 @@ namespace PL_MVC.Controllers
 
                 if (resultAdd.Correct) {
 
-                    return RedirectToAction("EmpleadoGetAll","Empleado");
+                    return RedirectToAction("EmpleadoGetAll", "Empleado");
                 }
-            
+
             }
 
 
-                return View();
+            return View();
         }
 
 
@@ -147,6 +203,34 @@ namespace PL_MVC.Controllers
 
             return RedirectToAction("EmpleadoGetAll");
         }
+
+
+
+        // =================== METODOS PARA CONSUMO CON JS AJAX ======================== \\4
+
+
+        public JsonResult GetAllJson(ML.Empleado Empleado) {
+
+
+            Empleado.Nombre = Empleado.Nombre ?? "";
+            Empleado.ApellidoPaterno = Empleado.ApellidoPaterno ?? "";
+            Empleado.ApellidoMaterno = Empleado.ApellidoMaterno ?? "";
+
+            Empleado.Departamento = new ML.Departamento();
+
+
+            ML.Result result = _empleado.GetAll(Empleado);
+
+            return Json(result);
+        }
+
+        public JsonResult GetDepartamentos() {
+
+            ML.Result result = _departamento.GetAll();
+
+            return Json(result);
+        }
+
 
 
     }
