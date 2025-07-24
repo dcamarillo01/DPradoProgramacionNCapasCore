@@ -239,6 +239,32 @@ namespace PL_MVC.Controllers
             return Json(result);
         }
 
+        public JsonResult UpdateJS(ML.Empleado empleado) {
+
+            ML.Result result = _empleado.Update(empleado, empleado.IdEmpleado);
+
+            return Json(result);
+        }
+
+        public JsonResult DeleteJS(int IdEmpleado) {
+
+            ML.Result result = _empleado.Delete(IdEmpleado);
+
+            return Json(result);
+        }
+
+
+        // ========= GET BY ID JSON =========\\
+
+        public JsonResult GetByIdJson(int EmpleadoID)
+        {
+
+            ML.Result result = _empleado.GetById(EmpleadoID);
+
+            return Json(result);
+        }
+
+
 
 
     }

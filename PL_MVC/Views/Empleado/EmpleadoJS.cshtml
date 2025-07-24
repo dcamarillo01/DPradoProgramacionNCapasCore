@@ -24,18 +24,18 @@
 
                     <div class="row " style="padding-bottom:20px">
                         <div class="col" style="display:none" id="tablaBuscar">
-                            <form id="formBuscar" >
+                            <form id="formBuscar">
                                 <div class="row">
                                     <div class="col">
                                         <label for="name" class="form-label">Nombre   </label>
                                         <input type="text" id="buscarNombre" name="name" placeholder="Nombre" class="form-control">
                                     </div>
                                     <div class="col">
-                                        <label for="email" class="form-label">ApellidoPaterno</label>
-                                        <input type="email" id="buscarApellidoPaterno" name="apellidoPaterno" placeholder="ApellidoPaterno" class="form-control">
+                                        <label for="name" class="form-label">ApellidoPaterno</label>
+                                        <input type="text" id="buscarApellidoPaterno" name="apellidoPaterno" placeholder="ApellidoPaterno" class="form-control">
                                     </div>
                                     <div class="col">
-                                        <label for="phone" class="form-label">ApellidoMaterno</label>
+                                        <label for="name" class="form-label">ApellidoMaterno</label>
                                         <input type="text" id="buscarApellidoMaterno" name="apellidoMaterno" placeholder="ApellidoMaterno" class="form-control">
                                     </div>
                                     <div class="col">
@@ -159,6 +159,7 @@
 
                 </div>
                 <div class="row" id="bodyCard">
+
 
                     @* @foreach (ML.Empleado empleado in Model.Empleados)
                         {
@@ -312,7 +313,6 @@
             data: {empleado},
             success: function (data) {
                 $.each(data.objects, function (index, value) {
-                    console.log(index,value)
                     let imagen = value.imagen;
                     $("#bodyCard").append(
                         `
@@ -342,12 +342,18 @@
                                     </div>
                                     <div class="brutalist-card__actions">
 
-                                        <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = 0 })"
-                                           class="brutalist-card__button brutalist-card__button--mark">
+                                        <button id="btnEditar"
+                                            class="brutalist-card__button brutalist-card__button--mark">
                                             <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                        </button>
 
-                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = 0 })" onclick="return confirm('Deseas eliminar usuario?') " class="brutalist-card__button brutalist-card__button--read"><i class="bi bi-trash3"></i></a>
+                                        <button id="btnDelete"
+                                            class="brutalist-card__button brutalist-card__button--read">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+
+
+
                                     </div>
                                 </div>
 
@@ -441,16 +447,111 @@
         }
         )});
 
-    
 
-    // Agregar
+
 
     function abrirModal(){
+                        $("#formEmpleado")[0].reset();
+
          $('#exampleModal').modal('show');
 
     }
 
 
+    // =========================== GET BY ID ================== \\
+
+    $(document).on('click', '#btnEditar', function () {
+
+         FillDepartamentos()
+        // Obtener Id
+
+        var EmpleadoID = ($(this).parent().parent().find('div').find('div')[0].childNodes[0].data);
+        console.log(EmpleadoID)
+
+        // Realizar get by Id
+
+        $.ajax({
+            url: "@Url.Action("GetByIdJson", "Empleado")",
+            type: "GET",
+            data: {EmpleadoID},
+            success: function(resultGetById){
+
+                console.log(resultGetById.object)
+                console.log(resultGetById.object.nombre)
+
+                // Llenar modal con datos
+
+
+                $("#idEmpleado").val(resultGetById.object.idEmpleado),
+                $("#nombre").val(resultGetById.object.nombre),
+                $("#apellidoPaterno").val(resultGetById.object.apellidoPaterno),
+                $("#apellidoMaterno").val(resultGetById.object.apellidoMaterno),
+                $("#DatePicker").val(resultGetById.object.fechaNacimiento),
+                $("#DatePicker2").val(resultGetById.object.fechaIngreso),
+                $("#rfc").val(resultGetById.object.rfc),
+                $("#nss").val(resultGetById.object.nss),
+                $("#curp").val(resultGetById.object.curp),
+                $("#ddlDepartamentos2").val(resultGetById.object.departamento.idDepartamento)
+                $("#salarioBase").val(resultGetById.object.salarioBase),
+                $("#noFaltas").val(resultGetById.object.noFaltas)
+                $('#exampleModal').modal('show');
+
+
+
+            } ,
+            error: function(resultGetById){
+
+            }
+        })
+
+    });
+
+
+    // =========================== DELETE ======================= \\
+
+    $(document).on('click', '#btnDelete', function(){
+
+        var IdEmpleado = ($(this).parent().parent().find('div').find('div')[0].childNodes[0].data);
+
+        var TheCard = $(this).parent().parent();
+
+            Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $.ajax({
+            url: '@Url.Action("DeleteJS", "Empleado")',
+            type: 'GET',
+            data: {IdEmpleado},
+            success: function(result){
+
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "Your file has been deleted.",
+                  icon: "success"
+                });
+
+                TheCard.hide('slow');
+
+            },
+            error: function(result){
+
+            }
+        });
+
+              }
+            });
+
+
+
+
+    });
 
     // ========================= AGREGAR ====================== \\
     $(document).ready(function () {
@@ -461,6 +562,8 @@
             var Departamento = {
                 IdDepartamento: $("#ddlDepartamentos2").find(":selected").val(),
             };
+
+            console.log( $("#idEmpleado").val());
 
             var empleado = {
                 IdEmpleado: $("#idEmpleado").val() || 0,
@@ -478,14 +581,14 @@
             };
 
             var url = empleado.IdEmpleado == 0
-                ? '@Url.Action("Add", "Usuario")'
-                : '@Url.Action("Update", "Usuario")';
+                ? '@Url.Action("AddJS", "Empleado")'
+                : '@Url.Action("UpdateJS", "Empleado")';
 
             console.log(url);
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("AddJS", "Empleado")',
+                url: url,
                 data: empleado,
                 success: function (result) {
                     console.log(result)
