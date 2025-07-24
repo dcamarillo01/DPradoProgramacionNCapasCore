@@ -168,30 +168,46 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public IActionResult EmpleadoForm(ML.Empleado Empleado) {
 
-            if (Empleado.IdEmpleado > 0)
+            if (ModelState.IsValid)
             {
+                if (Empleado.IdEmpleado > 0)
+                {
 
-                ML.Result resultUpdate = _empleado.Update(Empleado, Empleado.IdEmpleado);
+                    ML.Result resultUpdate = _empleado.Update(Empleado, Empleado.IdEmpleado);
 
-                if (resultUpdate.Correct) {
+                    if (resultUpdate.Correct)
+                    {
 
-                    return RedirectToAction("EmpleadoGetAll", "Empleado");
+                        return RedirectToAction("EmpleadoGetAll", "Empleado");
+                    }
+
                 }
+                else
+                {
 
+                    ML.Result resultAdd = _empleado.Add(Empleado);
+
+                    if (resultAdd.Correct)
+                    {
+
+                        return RedirectToAction("EmpleadoGetAll", "Empleado");
+                    }
+
+                }
             }
             else {
 
-                ML.Result resultAdd = _empleado.Add(Empleado);
+                ML.Result resultDepartamento = _departamento.GetAll();
+                Empleado.Departamento.Departamentos = resultDepartamento.Objects;
 
-                if (resultAdd.Correct) {
 
-                    return RedirectToAction("EmpleadoGetAll", "Empleado");
-                }
-
+                return View(Empleado);
             }
 
 
-            return View();
+
+
+                return View();
         }
 
 
@@ -208,7 +224,7 @@ namespace PL_MVC.Controllers
 
         // =================== METODOS PARA CONSUMO CON JS AJAX ======================== \\4
 
-
+        [HttpGet]
         public JsonResult GetAllJson(ML.Empleado Empleado) {
 
 
@@ -223,6 +239,22 @@ namespace PL_MVC.Controllers
 
             return Json(result);
         }
+        [HttpPost]
+        public JsonResult GetAllOpenJson(ML.Empleado Empleado) {
+
+
+            Empleado.Nombre = Empleado.Nombre ?? "";
+            Empleado.ApellidoPaterno = Empleado.ApellidoPaterno ?? "";
+            Empleado.ApellidoMaterno = Empleado.ApellidoMaterno ?? "";
+
+
+
+            ML.Result result = _empleado.GetAll(Empleado);
+
+            return Json(result);
+        }
+
+        [HttpGet]
 
         public JsonResult GetDepartamentos() {
 
@@ -231,6 +263,7 @@ namespace PL_MVC.Controllers
             return Json(result);
         }
 
+        [HttpPost]
         public JsonResult AddJS(ML.Empleado empleado) {
 
             ML.Result result = _empleado.Add(empleado);
@@ -239,6 +272,7 @@ namespace PL_MVC.Controllers
             return Json(result);
         }
 
+        [HttpPut]
         public JsonResult UpdateJS(ML.Empleado empleado) {
 
             ML.Result result = _empleado.Update(empleado, empleado.IdEmpleado);
@@ -246,6 +280,7 @@ namespace PL_MVC.Controllers
             return Json(result);
         }
 
+        [HttpGet]
         public JsonResult DeleteJS(int IdEmpleado) {
 
             ML.Result result = _empleado.Delete(IdEmpleado);
@@ -256,6 +291,7 @@ namespace PL_MVC.Controllers
 
         // ========= GET BY ID JSON =========\\
 
+        [HttpGet]
         public JsonResult GetByIdJson(int EmpleadoID)
         {
 

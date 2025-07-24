@@ -379,7 +379,7 @@
                 IdDepartamento: $("#ddlDepartamentos").find(":selected").val(),
             };
 
-            console.log($("#buscarNombre").val());
+            console.log($("#ddlDepartamentos").find(":selected").val());
 
             var empleado = {
                 Nombre: $("#buscarNombre").val(),
@@ -392,13 +392,12 @@
 
 
         $.ajax({
-            url: '@Url.Action("GetAllJson", "Empleado")',
-            type: "GET",
-            data: empleado,
+            url: '@Url.Action("GetAllOpenJson", "Empleado")',
+            type: "POST",
+            data: {empleado},
             success: function (data) {
                 $("#bodyCard").empty();
                 $.each(data.objects, function (index, value) {
-                    console.log(index,value)
                     let imagen = value.imagen;
                     $("#bodyCard").append(
                         `
@@ -428,12 +427,19 @@
                                     </div>
                                     <div class="brutalist-card__actions">
 
-                                        <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = 0 })"
-                                           class="brutalist-card__button brutalist-card__button--mark">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
 
-                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = 0 })" onclick="return confirm('Deseas eliminar usuario?') " class="brutalist-card__button brutalist-card__button--read"><i class="bi bi-trash3"></i></a>
+                                        <button id="btnEditar"
+                                            class="brutalist-card__button brutalist-card__button--mark">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+
+                                        <button id="btnDelete"
+                                            class="brutalist-card__button brutalist-card__button--read">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+
+
+
                                     </div>
                                 </div>
 

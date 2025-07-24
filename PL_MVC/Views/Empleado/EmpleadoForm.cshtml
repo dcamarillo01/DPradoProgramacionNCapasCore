@@ -29,14 +29,17 @@
                             <div class="col">
                                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger", @style = "font-size:15px" })
                             </div>
                             <div class="col">
                                 @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger", @style = "font-size:15px" })
                             </div>
                             <div class="col">
                                 @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger", @style = "font-size:15px" })
                             </div>
                         </div>
                         <div class="row">
@@ -73,10 +76,12 @@
                                 <div class="col">
                                     @Html.LabelFor(model => model.SalarioBase, new { @class = "form-label" })
                                     @Html.TextBoxFor(model => model.SalarioBase, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.SalarioBase, "", new { @class = "text-danger", @style = "font-size:15px" })
                                 </div>
                                 <div class="col">
                                     @Html.LabelFor(model => model.NoFaltas, new { @class = "form-label" })
                                     @Html.TextBoxFor(model => model.NoFaltas, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NoFaltas, "", new { @class = "text-danger", @style = "font-size:15px" })
                                 </div>
                         </div>
 
