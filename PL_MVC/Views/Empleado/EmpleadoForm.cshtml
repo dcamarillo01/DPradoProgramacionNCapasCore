@@ -46,14 +46,20 @@
                             <div class="col">
                                 @Html.LabelFor(model => model.RFC, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.RFC, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RFC, "", new { @class = "text-danger", @style = "font-size:15px" })
+
                             </div>
                             <div class="col">
                                 @Html.LabelFor(model => model.NSS, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.NSS, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NSS, "", new { @class = "text-danger", @style = "font-size:15px" })
+
                             </div>
                             <div class="col">
                                 @Html.LabelFor(model => model.CURP, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.CURP, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CURP, "", new { @class = "text-danger", @style = "font-size:15px" })
+
                             </div>
                         </div>
 
