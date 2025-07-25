@@ -45,14 +45,13 @@
                                             </select>
                                         </label>
                                     </div>
+                                  
                                 </div>
 
-                                <div class="row justify-content-end" style="padding-top:10px">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-outline-info">
+                                <div class="row justify-content-end" style="padding-top:10px; padding-right:50px">
+                                        <button type="submit" class="btn btn-outline-primary" style="width:200px">
                                             Buscar
                                         </button>
-                                    </div>
 
                                 </div>
                             </form>
@@ -63,28 +62,28 @@
                     @* ============ MODAL ============= *@
                     <div class="row">
                         <div class="col">
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-bs-focus="false">
                                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div class="modal-content" style="background:none; border:none">
-                                        <form class="form" id="formEmpleado">
+                                        <form class="form needs-validation" id="formEmpleado">
                                             <p class="title">Registrar Empleado </p>
                                             <div class="row">
                                                 <input type="hidden" id="idEmpleado" />
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" id="nombre" type="text" placeholder="" required="">
+                                                        <input class="form-control input" id="nombre" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
                                                         <span>Nombre</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" id="apellidoPaterno" type="text" placeholder="" required="">
+                                                        <input class="form-control input" id="apellidoPaterno" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
                                                         <span>ApellidoPaterno</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" id="apellidoMaterno" type="text" placeholder="" required="">
+                                                        <input class="form-control input" id="apellidoMaterno" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
                                                         <span>ApellidoMaterno</span>
                                                     </label>
                                                 </div>
@@ -94,19 +93,19 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" id="rfc" type="text" placeholder="" required="">
+                                                        <input class="form-control input" id="rfc" type="text" placeholder="" required onblur="validateRFC()">
                                                         <span>RFC</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" id="nss" type="text" placeholder="" required="">
+                                                        <input class="form-control input" id="nss" type="text" placeholder="" required onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
                                                         <span>NSS</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input class="input" id="curp" type="text" placeholder="" required="">
+                                                        <input class="form-control input" id="curp" type="text" placeholder="" required onblur ="validateCURP()">
                                                         <span>CURP</span>
                                                     </label>
                                                 </div>
@@ -114,20 +113,20 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                    <label>
-                                                        <input type="text" id="DatePicker" class="input">
+                                                    <label onfocus="">
+                                                        <input type="text" id="DatePicker" class="form-control input " required>
                                                         <span>FechaNacimiento</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input type="text" id="DatePicker2" class="input">
+                                                        <input type="text" id="DatePicker2" class="form-control input">
                                                         <span>FechaIngreso</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <select name="departamentos" id="ddlDepartamentos2" class="input">
+                                                        <select name="departamentos" id="ddlDepartamentos2" class="input form-control">
                                                         </select>
                                                     </label>
                                                 </div>
@@ -136,13 +135,15 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <label>
-                                                        <input type="text" id="salarioBase" class="input">
+                                                        <input type="text" id="salarioBase" class="input form-control" required
+                                                               onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
                                                         <span>SalarioBase</span>
                                                     </label>
                                                 </div>
                                                 <div class="col">
                                                     <label>
-                                                        <input type="text" id="noFaltas" class="input">
+                                                        <input type="text" id="noFaltas" class="input form-control" required
+                                                               onkeypress ="validateNumber(this, event)" , onblur="validateNumber(this, event)">
                                                         <span>NoFaltas</span>
                                                     </label>
                                                 </div>
@@ -160,46 +161,6 @@
                 </div>
                 <div class="row" id="bodyCard">
 
-
-                    @* @foreach (ML.Empleado empleado in Model.Empleados)
-                        {
-                            <div class="col-4">
-                                <div class="brutalist-card">
-                                    <div class="brutalist-card__header">
-                                        <div class="brutalist-card__icon" style="color:white"> 
-                                           @empleado.IdEmpleado
-                                        </div>
-                                        <div class="brutalist-card__alert">@empleado.Nombre @empleado.ApellidoPaterno</div>
-                                    </div>
-                                    <div class="brutalist-card__message">
-
-                                        FechaNacimiento: @empleado.FechaNacimiento
-                                        <hr />
-                                        RFC:@empleado.RFC
-                                        <hr />
-                                        NSS:@empleado.NSS
-                                        <hr />
-                                        CURP:@empleado.CURP
-                                        <hr />
-                                        FechaIngreso: @empleado.FechaIngreso
-                                        <hr />
-                                        SalarioBase: $@empleado.SalarioBase
-                                        <hr />
-                                        NoFaltas: @empleado.NoFaltas
-
-                                    </div>
-                                    <div class="brutalist-card__actions">
-                                        @*  <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"
-                                            class="brutalist-card__button brutalist-card__button--mark">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = empleado.IdEmpleado })" onclick="return confirm('Deseas eliminar usuario?') " class="brutalist-card__button brutalist-card__button--read"><i class="bi bi-trash3"></i></a> *@
-                    @* </div> *@
-                    @*    </div> 
-
-                                
-                             </div> 
-                             } *@ 
                 </div>
             </div>
         </div>
@@ -209,429 +170,18 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+
 <script>
 
-    /// DATE PICKER
-
-
-    $(document).ready(function () {
-        $("#DatePicker").datepicker({
-            dateFormat: 'dd/mm/yy', // Date format
-            changeMonth: true,      // Month dropdown
-            changeYear: true,       // Year dropdown
-            yearRange: "1985:2025" ,  // Year range
-            showAnim: "drop",
-            maxDate: '+30Y',
-            inline: true
-        });
-
-        $("#DatePicker").attr("readonly", true);
-        $("#DatePicker2").datepicker({
-            dateFormat: 'dd/mm/yy', // Date format
-            changeMonth: true,      // Month dropdown
-            changeYear: true,       // Year dropdown
-            yearRange: "1985:2025" ,  // Year range
-            showAnim: "drop",
-            maxDate: '+30Y',
-            inline: true
-        });
-
-        $("#DatePicker2").attr("readonly", true);
-
-    });
-
-    $(document).ready(function () {
-        $("#buscarBTN").click(function () {
-            $("#tablaBuscar").toggle();
-            if ($("#tablaBuscar").is(":visible")) {
-                $('#tablaBuscar').show();
-
-            } else {
-                $('#tablaBuscar').hide();
-
-            }
-        });
-    });
-
-    // LLenar Departamentos
-    function FillDepartamentos() {
-
-
-        $.ajax({
-            url: '@Url.Action("GetDepartamentos", "Empleado")',
-            dataType: 'JSON',
-            method: 'GET',
-            data: {},
-            success: function (resultDepartamento) {
-                console.log(resultDepartamento)
-                console.log(resultDepartamento.correct)
-                if (resultDepartamento.correct) {
-
-                    $("#ddlDepartamentos").empty()
-
-
-                    $("#ddlDepartamentos").append('<option value=""> Seleccione un departamento</option>')
-
-                    $.each(resultDepartamento.objects, function (i, departamento) {
-
-                        $("#ddlDepartamentos").append('<option value="'+ departamento.idDepartamento +'">'+departamento.descripcion+'</option>')
-                    })
-                    $("#ddlDepartamentos2").empty()
-
-
-                    $("#ddlDepartamentos2").append('<option value=""> Seleccione un departamento</option>')
-
-                    $.each(resultDepartamento.objects, function (i, departamento) {
-
-                        $("#ddlDepartamentos2").append('<option value="'+ departamento.idDepartamento +'">'+departamento.descripcion+'</option>')
-                    })
-
-                }
-            },
-            error: function (ex) {
-                alert("Error en GetMunicipioByIdEstado")
-            }
-        })
-    }
-
-        //GetAll
-    $(document).ready(function () {
-        //Mando los datos a mi controlador
-
-
-        var empleado = {
-            IdDepartamento: 0,
-            Nombre: "",
-            ApellidoPaterno: "",
-            ApellidoMaterno: ""
-        };
-
-
-        $.ajax({
-            url: '@Url.Action("GetAllJson", "Empleado")',
-            type: "GET",
-            data: {empleado},
-            success: function (data) {
-                $.each(data.objects, function (index, value) {
-                    let imagen = value.imagen;
-                    $("#bodyCard").append(
-                        `
-                                            <div class="col-4">
-                                <div class="brutalist-card">
-                                    <div class="brutalist-card__header">
-                                        <div class="brutalist-card__icon" style="color:white">
-                                           ${value.idEmpleado}
-                                        </div>
-                                        <div class="brutalist-card__alert">${value.nombre} ${value.apellidoPaterno}</div>
-                                    </div>
-                                    <div class="brutalist-card__message">
-
-                                        FechaNacimiento: ${value.fechaNacimiento}
-                                        <hr />
-                                        RFC:${value.rfc}
-                                        <hr />
-                                        NSS:${value.nss}
-                                        <hr />
-                                        CURP: ${value.curp}
-                                        <hr />
-                                        FechaIngreso: ${value.fechaIngreso}
-                                        <hr />
-                                        SalarioBase: ${value.salarioBase}
-                                        <hr />
-                                        NoFaltas: ${value.noFaltas}
-                                    </div>
-                                    <div class="brutalist-card__actions">
-
-                                        <button id="btnEditar"
-                                            class="brutalist-card__button brutalist-card__button--mark">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-
-                                        <button id="btnDelete"
-                                            class="brutalist-card__button brutalist-card__button--read">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-
-
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        `
-                    )
-                });
-            }
-        })
-    });
-
-
-
-    // GetAllOpen
-    $(document).ready(function (){
-        $("#formBuscar").on("submit", function (e) {
-            e.preventDefault();
-
-
-
-            var Departamento = {
-                IdDepartamento: $("#ddlDepartamentos").find(":selected").val(),
-            };
-
-            console.log($("#ddlDepartamentos").find(":selected").val());
-
-            var empleado = {
-                Nombre: $("#buscarNombre").val(),
-                ApellidoPaterno: $("#buscarApellidoPaterno").val(),
-                ApellidoMaterno: $("#buscarApellidoMaterno").val(),
-                Departamento: Departamento
-            };
-
-            console.log(empleado)
-
-
-        $.ajax({
-            url: '@Url.Action("GetAllOpenJson", "Empleado")',
-            type: "POST",
-            data: {empleado},
-            success: function (data) {
-                $("#bodyCard").empty();
-                $.each(data.objects, function (index, value) {
-                    let imagen = value.imagen;
-                    $("#bodyCard").append(
-                        `
-                                            <div class="col-4">
-                                <div class="brutalist-card">
-                                    <div class="brutalist-card__header">
-                                        <div class="brutalist-card__icon" style="color:white">
-                                           ${value.idEmpleado}
-                                        </div>
-                                        <div class="brutalist-card__alert">${value.nombre} ${value.apellidoPaterno}</div>
-                                    </div>
-                                    <div class="brutalist-card__message">
-
-                                        FechaNacimiento: ${value.fechaNacimiento}
-                                        <hr />
-                                        RFC:${value.rfc}
-                                        <hr />
-                                        NSS:${value.nss}
-                                        <hr />
-                                        CURP: ${value.curp}
-                                        <hr />
-                                        FechaIngreso: ${value.fechaIngreso}
-                                        <hr />
-                                        SalarioBase: ${value.salarioBase}
-                                        <hr />
-                                        NoFaltas: ${value.noFaltas}
-                                    </div>
-                                    <div class="brutalist-card__actions">
-
-
-                                        <button id="btnEditar"
-                                            class="brutalist-card__button brutalist-card__button--mark">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-
-                                        <button id="btnDelete"
-                                            class="brutalist-card__button brutalist-card__button--read">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-
-
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        `
-                    )
-                });
-            }
-        })
-        }
-        )});
-
-
-
-
-    function abrirModal(){
-                        $("#formEmpleado")[0].reset();
-
-         $('#exampleModal').modal('show');
-
-    }
-
-
-    // =========================== GET BY ID ================== \\
-
-    $(document).on('click', '#btnEditar', function () {
-
-         FillDepartamentos()
-        // Obtener Id
-
-        var EmpleadoID = ($(this).parent().parent().find('div').find('div')[0].childNodes[0].data);
-        console.log(EmpleadoID)
-
-        // Realizar get by Id
-
-        $.ajax({
-            url: "@Url.Action("GetByIdJson", "Empleado")",
-            type: "GET",
-            data: {EmpleadoID},
-            success: function(resultGetById){
-
-                console.log(resultGetById.object)
-                console.log(resultGetById.object.nombre)
-
-                // Llenar modal con datos
-
-
-                $("#idEmpleado").val(resultGetById.object.idEmpleado),
-                $("#nombre").val(resultGetById.object.nombre),
-                $("#apellidoPaterno").val(resultGetById.object.apellidoPaterno),
-                $("#apellidoMaterno").val(resultGetById.object.apellidoMaterno),
-                $("#DatePicker").val(resultGetById.object.fechaNacimiento),
-                $("#DatePicker2").val(resultGetById.object.fechaIngreso),
-                $("#rfc").val(resultGetById.object.rfc),
-                $("#nss").val(resultGetById.object.nss),
-                $("#curp").val(resultGetById.object.curp),
-                $("#ddlDepartamentos2").val(resultGetById.object.departamento.idDepartamento)
-                $("#salarioBase").val(resultGetById.object.salarioBase),
-                $("#noFaltas").val(resultGetById.object.noFaltas)
-                $('#exampleModal').modal('show');
-
-
-
-            } ,
-            error: function(resultGetById){
-
-            }
-        })
-
-    });
-
-
-    // =========================== DELETE ======================= \\
-
-    $(document).on('click', '#btnDelete', function(){
-
-        var IdEmpleado = ($(this).parent().parent().find('div').find('div')[0].childNodes[0].data);
-
-        var TheCard = $(this).parent().parent();
-
-            Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-              if (result.isConfirmed) {
-                $.ajax({
-            url: '@Url.Action("DeleteJS", "Empleado")',
-            type: 'GET',
-            data: {IdEmpleado},
-            success: function(result){
-
-                Swal.fire({
-                  title: "Deleted!",
-                  text: "Your file has been deleted.",
-                  icon: "success"
-                });
-
-                TheCard.hide('slow');
-
-            },
-            error: function(result){
-
-            }
-        });
-
-              }
-            });
-
-
-
-
-    });
-
-    // ========================= AGREGAR ====================== \\
-    $(document).ready(function () {
-        $("#formEmpleado").on("submit", function (e) {
-            e.preventDefault();
-
-
-            var Departamento = {
-                IdDepartamento: $("#ddlDepartamentos2").find(":selected").val(),
-            };
-
-            console.log( $("#idEmpleado").val());
-
-            var empleado = {
-                IdEmpleado: $("#idEmpleado").val() || 0,
-                Nombre: $("#nombre").val(),
-                ApellidoPaterno: $("#apellidoPaterno").val(),
-                ApellidoMaterno: $("#apellidoMaterno").val(),
-                FechaNacimiento: $("#DatePicker").val(),
-                RFC: $("#rfc").val(),
-                NSS: $("#nss").val(),
-                CURP: $("#curp").val(),
-                Departamento: Departamento,
-                SalarioBase: $("#salarioBase").val(),
-                NoFaltas: $("#noFaltas").val()
-
-            };
-
-            var url = empleado.IdEmpleado == 0
-                ? '@Url.Action("AddJS", "Empleado")'
-                : '@Url.Action("UpdateJS", "Empleado")';
-
-            console.log(url);
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: empleado,
-                success: function (result) {
-                    console.log(result)
-                    if (result.correct) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: empleado.IdEmpleado == 0 ? '¡Agregado!' : '¡Actualizado!',
-                            text: 'El empleado se registro correctamente.'
-                            }).then(() => {
-                                $('#exampleModal').modal('hide');
-                                location.reload();
-                            });
-                        $("#formEmpleado")[0].reset();
-                        $("#idEmpleado").val(0);
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'No se pudo guardar: ' + result.ErrorMessage
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error inesperado: ' + error
-                    });
-                }
-            });
-        })
-        }
-    );
-
-
-
-
-
+    var urlActionAdd = '@Url.Action("AddJS", "Empleado")';
+    var urlActionUpdate = '@Url.Action("UpdateJS", "Empleado")';
+    var urlActionDelete = '@Url.Action("DeleteJS", "Empleado")';
+    var urlActionGetById = '@Url.Action("GetByIdJson", "Empleado")';
+    var urlActionGetAll = '@Url.Action("GetAllJson", "Empleado")';
+    var urlActionGetAllOpen = '@Url.Action("GetAllOpenJson", "Empleado")';
+    var urlActionDepartamento = '@Url.Action("GetDepartamentos", "Empleado")';
 
 </script>
+<script src="~/js/EmpleadoCrudJS.js"></script>
+<script src="~/js/validacionesRegex.js"></script>

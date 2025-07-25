@@ -11,99 +11,107 @@
             @* ================== TABLA BUSCAR  ==========================*@
             <div class="row">
                 <h2>Empleados</h2>
-                <div class="col table-responsive">
-                    <div class="row justify-content-end" style="padding-bottom:20px" >
-                        <div class="btn-group col-3" role="group" aria-label="Basic example">
-                            <a href="@Url.Action("EmpleadoForm", "Empleado")" class="btn btn-outline-primary">Agregar Empleado</a>
-                            <button class="btn btn-outline-primary" id="buscarBTN"><i class="bi bi-search"></i></button>
+                <div class="col">
+                    <div class="col">
+                        <div class="row justify-content-end" style="padding-bottom:20px">
+                            <div class="btn-group col-3" role="group" aria-label="Basic example">
+                                <a href="@Url.Action("EmpleadoForm", "Empleado")" class="btn btn-outline-primary">Agregar Empleado</a>
+                                <button class="btn btn-outline-primary" id="buscarBTN"><i class="bi bi-search"></i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="row" id="tablaBuscar" style="display:none">
-                        <div class="col">
-                            @using (Html.BeginForm("EmpleadoGetAll", "Empleado", FormMethod.Post))
-                            {
-                                <div class="row" style="padding-bottom:30px">
-                                    <div class="col-3">
-                                        @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
-                                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger", @style = "font-size:15px" })
-                                    </div>
-                                    <div class="col-3">
-                                        @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
-                                        @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger", @style = "font-size:15px" })
-                                    </div>
-                                    <div class="col-3">
-                                        @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
-                                        @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control" })
-                                    </div>
-                                    <div class="col-3">
-                                        @Html.LabelFor(model => model.Departamento.Departamentos, new { @class = "form-label" })
-                                        @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Descripcion"), "Departamento", new { @class = "form-control" })
-                                    </div>
+                </div>
+                <div class="row">
+                    <div class="col table-responsive">
 
-                                    <div class="row">
-                                        <div class="col" style="padding-top:20px">
-                                            <input type="submit" value="Buscar" class="btn btn-info" />
+                        <div class="row" id="tablaBuscar" style="display:none">
+                            <div class="col">
+                                @using (Html.BeginForm("EmpleadoGetAll", "Empleado", FormMethod.Post))
+                                {
+                                    <div class="row" style="padding-bottom:30px">
+                                        <div class="col-3">
+                                            @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                                            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger", @style = "font-size:15px" })
+                                        </div>
+                                        <div class="col-3">
+                                            @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
+                                            @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger", @style = "font-size:15px" })
+                                        </div>
+                                        <div class="col-3">
+                                            @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
+                                            @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control" })
+                                        </div>
+                                        <div class="col-3">
+                                            @Html.LabelFor(model => model.Departamento.Departamentos, new { @class = "form-label" })
+                                            @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Descripcion"), "Departamento", new { @class = "form-control" })
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col" style="padding-top:20px">
+                                                <input type="submit" value="Buscar" class="btn btn-info" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            }
+                                }
 
+                            </div>
                         </div>
+                        <table class="table  table-dark">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nombre</th>
+                                    <th>ApellidoPaterno</th>
+                                    <th>ApellidoMaterno</th>
+                                    <th>FechaNacimiento</th>
+                                    <th>RFC</th>
+                                    <th>NSS</th>
+                                    <th>CURP</th>
+                                    <th>FechaIngreso</th>
+                                    <th>Departamento</th>
+                                    <th>SalarioBase</th>
+                                    <th>#NoFaltas</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (ML.Empleado empleado in Model.Empleados)
+                                {
+                                    <tr>
+                                        <td>@empleado.IdEmpleado</td>
+                                        <td>@empleado.Nombre</td>
+                                        <td>@empleado.ApellidoPaterno</td>
+                                        <td>@empleado.ApellidoMaterno</td>
+                                        <td>@empleado.FechaNacimiento</td>
+                                        <td>@empleado.RFC</td>
+                                        <td>@empleado.NSS</td>
+                                        <td>@empleado.CURP</td>
+                                        <td>@empleado.FechaIngreso</td>
+                                        <td>@empleado.Departamento.Descripcion</td>
+                                        <td>$@empleado.SalarioBase</td>
+                                        <td>@empleado.NoFaltas</td>
+                                        <td>
+                                            <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"
+                                               class="btn btn-warning">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = empleado.IdEmpleado })" onclick="return confirm('Deseas eliminar usuario?') " class="btn btn-danger"><i class="bi bi-trash3"></i></a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+
                     </div>
 
-                    <table class="table  table-dark">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>ApellidoPaterno</th>
-                                <th>ApellidoMaterno</th>
-                                <th>FechaNacimiento</th>
-                                <th>RFC</th>
-                                <th>NSS</th>
-                                <th>CURP</th>
-                                <th>FechaIngreso</th>
-                                <th>Departamento</th>
-                                <th>SalarioBase</th>
-                                <th>#NoFaltas</th>
-                                <th>Editar</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @foreach (ML.Empleado empleado in Model.Empleados)
-                            {
-                                <tr>
-                                    <td>@empleado.IdEmpleado</td>
-                                    <td>@empleado.Nombre</td>
-                                    <td>@empleado.ApellidoPaterno</td>
-                                    <td>@empleado.ApellidoMaterno</td>
-                                    <td>@empleado.FechaNacimiento</td>
-                                    <td>@empleado.RFC</td>
-                                    <td>@empleado.NSS</td>
-                                    <td>@empleado.CURP</td>
-                                    <td>@empleado.FechaIngreso</td>
-                                    <td>@empleado.Departamento.Descripcion</td>
-                                    <td>$@empleado.SalarioBase</td>
-                                    <td>@empleado.NoFaltas</td>
-                                    <td>
-                                        <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"
-                                           class="btn btn-warning">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Delete", "Empleado", new { IdEmpleado = empleado.IdEmpleado })" onclick="return confirm('Deseas eliminar usuario?') " class="btn btn-danger"><i class="bi bi-trash3"></i></a>
-                                    </td>
-                                </tr>
-
-                            }
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
