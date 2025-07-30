@@ -34,10 +34,21 @@ public partial class DpradoProgramacionNcapasContext : DbContext
     public virtual DbSet<VwEmpleado> VwEmpleados { get; set; }
 
     public virtual DbSet<VwUsuario> VwUsuarios { get; set; }
+    public virtual DbSet<DTOs.LoginInfo> LoginInfo { get; set; }
+
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
+
     {
+
+        modelBuilder.Entity<DTOs.LoginInfo>(entity =>
+            {
+                entity.HasNoKey();
+            }
+            );
+
         modelBuilder.Entity<Colonium>(entity =>
         {
             entity.HasKey(e => e.IdColonia).HasName("PK__Colonia__A1580F66BFD61DDD");

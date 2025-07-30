@@ -113,9 +113,9 @@ namespace PL_MVC.Controllers
 
             //Busqueda Filtrada
 
-            Usuario.Nombre = Usuario.Nombre ?? "";
-            Usuario.ApellidoPaterno = Usuario.ApellidoPaterno ?? "";
-            Usuario.ApellidoMaterno = Usuario.ApellidoMaterno ?? "";
+            Usuario.Nombre ??= "";
+            Usuario.ApellidoPaterno ??= "";
+            Usuario.ApellidoMaterno ??= "";
 
             Usuario.Rol = new ML.Rol();
 

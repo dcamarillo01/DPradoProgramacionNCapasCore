@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -118,6 +119,8 @@ namespace SL_REST.Controllers
 
         [HttpGet]
         [Route("GetById/{IdUsuario}")]
+        [Authorize]
+
         public IActionResult GetById(int IdUsuario)
         {
 
