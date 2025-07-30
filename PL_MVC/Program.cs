@@ -1,4 +1,5 @@
 using DL;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -32,6 +33,9 @@ builder.Services.AddScoped<BL.Rol>();
 builder.Services.AddScoped<BL.Colonia>();
 builder.Services.AddScoped<BL.Municipio>();
 builder.Services.AddScoped<BL.Estado>();
+builder.Services.AddScoped<BL.Empleado>();
+builder.Services.AddScoped<BL.Departamento>();
+
 
 //Ignore DataAnnotations
 
@@ -50,6 +54,7 @@ builder.Services.AddSession(options =>
 
 // To use injeccion of Sessions
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 
 var app = builder.Build();
@@ -73,5 +78,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

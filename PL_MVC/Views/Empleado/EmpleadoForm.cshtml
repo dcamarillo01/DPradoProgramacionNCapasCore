@@ -1,0 +1,138 @@
+﻿@model ML.Empleado
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<container>
+    <div class="row">
+        <div class="col">
+            <div class="row rounded-3 shadow-lg">
+                <div class="col">
+                    @using (@Html.BeginForm("EmpleadoForm", "Empleado", FormMethod.Post, new
+                    {
+                        enctype = "multipart/form-data",
+                        @id = "form1",
+                        @class = "needs-validation",
+                        novalidate = "true"
+                    }))
+                    {
+                        <div class="row">
+                            <h2>Empleado</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col" hidden>
+                                @Html.LabelFor(model => model.IdEmpleado, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.IdEmpleado, new { @class = "form-label" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger", @style = "font-size:15px" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger", @style = "font-size:15px" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger", @style = "font-size:15px" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                @Html.LabelFor(model => model.RFC, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.RFC, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RFC, "", new { @class = "text-danger", @style = "font-size:15px" })
+
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.NSS, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.NSS, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NSS, "", new { @class = "text-danger", @style = "font-size:15px" })
+
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.CURP, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.CURP, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CURP, "", new { @class = "text-danger", @style = "font-size:15px" })
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                @Html.LabelFor(model => model.FechaNacimiento, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @id = "DatePicker" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.FechaIngreso, new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.FechaIngreso, new { @class = "form-control", @id = "DatePicker2" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.Departamento.Descripcion, new { @class = "form-label" })
+                                @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Descripcion"), "Seleccione un Departamento", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            
+                                <div class="col">
+                                    @Html.LabelFor(model => model.SalarioBase, new { @class = "form-label" })
+                                    @Html.TextBoxFor(model => model.SalarioBase, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.SalarioBase, "", new { @class = "text-danger", @style = "font-size:15px" })
+                                </div>
+                                <div class="col">
+                                    @Html.LabelFor(model => model.NoFaltas, new { @class = "form-label" })
+                                    @Html.TextBoxFor(model => model.NoFaltas, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NoFaltas, "", new { @class = "text-danger", @style = "font-size:15px" })
+                                </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col" style="text-align:center; padding-top:20px; padding-bottom:20px">
+                                <input type="submit" value="Agregar" class="btn btn-success" />
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</container>
+
+
+<script src="/lib/jquery/dist/jquery.min.js" ></script>
+<script>
+
+    /// ====================== DATE PICKER =================== \\
+
+    $(document).ready(function () {
+        $("#DatePicker").datepicker({
+            dateFormat: 'dd/mm/yy', // Date format
+            changeMonth: true,      // Month dropdown
+            changeYear: true,       // Year dropdown
+            yearRange: "1985:2025" ,  // Year range
+            showAnim: "drop",
+            maxDate: '+30Y',
+            inline: true
+        });
+
+        $("#DatePicker").attr("readonly", true);
+        $("#DatePicker2").datepicker({
+            dateFormat: 'dd/mm/yy', // Date format
+            changeMonth: true,      // Month dropdown
+            changeYear: true,       // Year dropdown
+            yearRange: "1985:2025" ,  // Year range
+            showAnim: "drop",
+            maxDate: '+30Y',
+            inline: true
+        });
+
+        $("#DatePicker2").attr("readonly", true);
+
+    });
+</script>

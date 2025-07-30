@@ -1,0 +1,186 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<container>
+    <div class="row">
+        <div class="col">
+            <h2>Empleados</h2>
+            <div class="row">
+                <div class="col">
+
+                    @* ================ CARTAS EMPLEADO ==============  *@
+                    <div class="row justify-content-end" style="padding-bottom:20px">
+                        <div class="btn-group col-6" role="group" aria-label="Basic outlined example">
+                            <button type="button" class="btn btn-outline-primary" onclick="FillDepartamentos(),abrirModal()" ,>Agregar</button>
+                            <button type="button" class="btn btn-outline-primary" id="buscarBTN" onclick="FillDepartamentos()"><i class="bi bi-search"></i></button>
+
+                        </div>
+                    </div>
+                    @* ============== BUSCAR ========================= *@
+
+                    <div class="row " style="padding-bottom:20px">
+                        <div class="col" style="display:none" id="tablaBuscar">
+                            <form id="formBuscar">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="name" class="form-label">Nombre   </label>
+                                        <input type="text" id="buscarNombre" name="name" placeholder="Nombre" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="name" class="form-label">ApellidoPaterno</label>
+                                        <input type="text" id="buscarApellidoPaterno" name="apellidoPaterno" placeholder="ApellidoPaterno" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="name" class="form-label">ApellidoMaterno</label>
+                                        <input type="text" id="buscarApellidoMaterno" name="apellidoMaterno" placeholder="ApellidoMaterno" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label>
+                                            <label class="form-label">Departamento</label>
+                                            <select name="departamentos" id="ddlDepartamentos" class="form-control">
+                                            </select>
+                                        </label>
+                                    </div>
+                                  
+                                </div>
+
+                                <div class="row justify-content-end" style="padding-top:10px; padding-right:50px">
+                                        <button type="submit" class="btn btn-outline-primary" style="width:200px">
+                                            Buscar
+                                        </button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    @* ============ MODAL ============= *@
+                    <div class="row">
+                        <div class="col">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-bs-focus="false">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content" style="background:none; border:none">
+                                        <form class="form needs-validation" id="formEmpleado">
+                                            <p class="title">Registrar Empleado</p>
+                                            <div class="row">
+                                                <input type="hidden" id="idEmpleado" />
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="form-control input" id="nombre" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
+                                                        <span>Nombre</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="form-control input" id="apellidoPaterno" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
+                                                        <span>ApellidoPaterno</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="form-control input" id="apellidoMaterno" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
+                                                        <span>ApellidoMaterno</span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="form-control input" id="rfc" type="text" placeholder="" required onblur="validateRFC()">
+                                                        <span>RFC</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="form-control input" id="nss" type="text" placeholder="" required onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
+                                                        <span>NSS</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input class="form-control input" id="curp" type="text" placeholder="" required onblur ="validateCURP()">
+                                                        <span>CURP</span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label onfocus="">
+                                                        <input type="text" id="DatePicker" class="form-control input " required>
+                                                        <span>FechaNacimiento</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="DatePicker2" class="form-control input">
+                                                        <span>FechaIngreso</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <select name="departamentos" id="ddlDepartamentos2" class="input form-control">
+                                                        </select>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="salarioBase" class="input form-control" required
+                                                               onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
+                                                        <span>SalarioBase</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label>
+                                                        <input type="text" id="noFaltas" class="input form-control" required
+                                                               onkeypress ="validateNumber(this, event)" , onblur="validateNumber(this, event)">
+                                                        <span>NoFaltas</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                           
+
+                                            <button class="submit">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" id="bodyCard" style="padding-bottom:20px">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</container>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    var urlActionAdd = '@Url.Action("AddJS", "Empleado")';
+    var urlActionUpdate = '@Url.Action("UpdateJS", "Empleado")';
+    var urlActionDelete = '@Url.Action("DeleteJS", "Empleado")';
+    var urlActionGetById = '@Url.Action("GetByIdJson", "Empleado")';
+    var urlActionGetAll = '@Url.Action("GetAllJson", "Empleado")';
+    var urlActionGetAllOpen = '@Url.Action("GetAllOpenJson", "Empleado")';
+    var urlActionDepartamento = '@Url.Action("GetDepartamentos", "Empleado")';
+
+</script>
+<script src="~/js/EmpleadoCrudJS.js"></script>
+<script src="~/js/validacionesRegex.js"></script>
