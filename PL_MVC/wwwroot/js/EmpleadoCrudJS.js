@@ -16,6 +16,7 @@ $(document).ready(function () {
 
 
 
+
     $("#DatePicker").flatpickr({
         dateFormat: "m-d-Y",
     });
@@ -124,7 +125,7 @@ $(document).ready(function () {
                 let imagen = value.imagen;
                 $("#bodyCard").append(
                     `
-                                            <div class="col-4">
+                                            <div class="col-4" style="padding-bottom:30px">
                                 <div class="brutalist-card">
                                     <div class="brutalist-card__header">
                                         <div class="brutalist-card__icon" style="color:white">
@@ -135,17 +136,19 @@ $(document).ready(function () {
                                     <div class="brutalist-card__message">
 
                                         FechaNacimiento: ${value.fechaNacimiento}
-                                        <hr />
+                                        <hr/>
+                                        Departamento: ${value.departamento.descripcion}
+                                        <hr/>
                                         RFC:${value.rfc}
-                                        <hr />
+                                        <hr/>
                                         NSS:${value.nss}
-                                        <hr />
+                                        <hr/>
                                         CURP: ${value.curp}
-                                        <hr />
+                                        <hr/>
                                         FechaIngreso: ${value.fechaIngreso}
-                                        <hr />
+                                        <hr/>
                                         SalarioBase: ${value.salarioBase}
-                                        <hr />
+                                        <hr/>
                                         NoFaltas: ${value.noFaltas}
                                     </div>
                                     <div class="brutalist-card__actions">

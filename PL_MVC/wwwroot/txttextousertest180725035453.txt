@@ -1,6 +1,0 @@
-Idusuario|Nombre|ApellidoPaterno|ApellidoMaterno|Email|UserName|Password|Sexo|Telefono|Celular|FechaNacimiento|CURP|ROL
-1|Diego1|Prado0|Camarillo|diego@gmail.com|DiegoPrado|123456@Hh|H|5555555555|5555555555|12/05/2020|PACD020301HMCRMGA9|1
-2|Jose2|Sanchez|Cerda|Jose@gmail.com|JoseSan|12345678@Hh|H|5555555555|5555555555|12/05/2020|FDKDFJKJKDFK|2
-3|Jennifer|Lopez|Porra|Jennifer@gmail.com|JenniferLo|123456@Hh|M|5555555555|5555555555|12/05/2020|PACD020301HMCRMGA9|2
-4|Lupita|Rodriguez|Ortega5|Lupita@gmail.com|LupitaRo|123456@Hh|M|5555555555|5555555555|12/05/2020|FDKDFJKJKDFK|-3
--1|Pedro|Doriga|Perez|Pedro@gmail.com|PedroDori|123456@Hh|H|5555555555|5555555555|12/05/2020|FDKDFJKJKDFK|5

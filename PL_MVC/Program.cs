@@ -1,4 +1,5 @@
 using DL;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -55,6 +56,7 @@ builder.Services.AddSession(options =>
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
+
 var app = builder.Build();
 
 
@@ -76,5 +78,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
