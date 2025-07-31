@@ -365,7 +365,7 @@ namespace PL_MVC.Controllers
         // ========================= FORMULARIO ================================ \\
         //GET : UsuarioFormulario
         [HttpGet]
-        public ActionResult Formulario(int? IdUsuario , string? token)
+        public ActionResult Formulario(int? IdUsuario )
         {
 
             ML.Usuario usuario = new ML.Usuario();
@@ -400,7 +400,7 @@ namespace PL_MVC.Controllers
                 //ML.Result usuarioById = GetByIdSoap(IdUsuario.Value);
                 //usuario = (ML.Usuario)usuarioById.Object;
 
-
+                var token = HttpContext.Session.GetString("token");
                 // ==================== IMPLEMENTACION CON API ===================== \\
                 // GetById Utilizando API REST
                 ML.Result resultAPIGetId = GeyByIdAPI(IdUsuario.Value,  token);
@@ -450,7 +450,7 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public ActionResult Formulario(ML.Usuario usuario, IFormFile? ImagenUser)
         {
-
+            
             //ML.Usuario usuario = new ML.Usuario();
             //usuario.Rol = new ML.Rol();
 
@@ -498,6 +498,9 @@ namespace PL_MVC.Controllers
 
             if (ModelState.IsValid)
             {
+                var token = HttpContext.Session.GetString("token");
+
+
                 if (usuario.IdUsuario > 0)
                 {
 
@@ -521,10 +524,23 @@ namespace PL_MVC.Controllers
                     /// WEB SERVICE API REST
                     //UpdateByAPI(usuario);
                     // =================== IMPLEMENTACION CON API ==================\\
-                    ML.Result resultUpdate = UpdateByAPI(usuario);
-                    if (resultUpdate.Correct) {
+                    ML.Result resultUpdate = UpdateByAPI(usuario, token);
+                    if (resultUpdate.Correct)
+                    {
                         return RedirectToAction("GetAll", "Usuario");
                     }
+                    else {
+
+                        if (resultUpdate.ErrorMessage == "Unauthorized") {
+
+                            Models.ErrorViewModel error = new Models.ErrorViewModel();
+                            error.ErrorMessage = resultUpdate.ErrorMessage;
+
+                            return View("Error", error);
+                        }
+
+                    }
+                    
 
                 }
                 else
@@ -543,10 +559,23 @@ namespace PL_MVC.Controllers
                     //AddByAPI(usuario);
 
                     // ====================== Implementacion con API ============ \\
-                    ML.Result resultAdd = AddByAPI(usuario);
 
-                    if (resultAdd.Correct) { 
+
+                    ML.Result resultAdd = AddByAPI(usuario, token);
+
+                    if (resultAdd.Correct)
+                    {
                         return RedirectToAction("GetAll", "Usuario");
+                    }
+                    else { 
+                        
+                        if(resultAdd.ErrorMessage == "Unauthorized")
+                        {
+                            Models.ErrorViewModel error = new Models.ErrorViewModel();
+                            error.ErrorMessage = resultAdd.ErrorMessage;
+
+                            return View("Error", error);
+                        }
                     }
 
                 }
@@ -587,7 +616,7 @@ namespace PL_MVC.Controllers
 
         // DELETE : UsuarioDelete
         [HttpGet]
-        public ActionResult Delete(int IdUsuario, string token)
+        public ActionResult Delete(int IdUsuario)
         {
             // Delete desde BL
             //_usuario.Delete(IdUsuario);
@@ -601,7 +630,10 @@ namespace PL_MVC.Controllers
 
             //Delete Usando API REST 
 
-           ML.Result result = DeleteByAPI(IdUsuario, token);
+            var token = HttpContext.Session.GetString("token");
+
+
+            ML.Result result = DeleteByAPI(IdUsuario, token);
             if (result.Correct)
             {
                 return RedirectToAction("GetAll", "Usuario");
@@ -1243,7 +1275,7 @@ namespace PL_MVC.Controllers
         }
 
         //[NonAction]
-        public  ML.Result AddByAPI(ML.Usuario Usuario)
+        public  ML.Result AddByAPI(ML.Usuario Usuario, string token)
         {
             ML.Result resultAdd = new Result();
 
@@ -1261,6 +1293,8 @@ namespace PL_MVC.Controllers
             {
                 var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
                 client.BaseAddress = new Uri(userEndPoint);
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+
                 //HTTP POST 
                 var postTask = client.PostAsJsonAsync<ML.Usuario>("Add", Usuario); //Serializar 
                 postTask.Wait();
@@ -1273,11 +1307,16 @@ namespace PL_MVC.Controllers
                     resultAdd.Object = result.Content;
                     return resultAdd;
                 }
+                else {
+
+                    resultAdd.Correct = false;
+                    resultAdd.ErrorMessage = result.StatusCode.ToString();
+                }
             }
             return resultAdd;
         }
         //[NonAction]
-        public  ML.Result UpdateByAPI(ML.Usuario Usuario)
+        public  ML.Result UpdateByAPI(ML.Usuario Usuario, string token)
         {
             ML.Result resultUpdate = new Result();
 
@@ -1296,6 +1335,7 @@ namespace PL_MVC.Controllers
             {
                 var userEndPoint = _configuration.GetValue<string>("ApiEndPoint"); 
                 client.BaseAddress = new Uri(userEndPoint);
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 //HTTP POST 
                 var postTask = client.PutAsJsonAsync<ML.Usuario>($"Update/{Usuario.IdUsuario}", Usuario); //Serializar 
                 postTask.Wait();
@@ -1307,6 +1347,12 @@ namespace PL_MVC.Controllers
                     resultUpdate.Correct = true;
                     resultUpdate.Object = result.Content;
                     return resultUpdate;
+                }
+                else {
+
+                    resultUpdate.Correct = false;
+                    resultUpdate.ErrorMessage = result.StatusCode.ToString();
+                
                 }
             }
             return resultUpdate;

@@ -19,6 +19,7 @@ namespace SL_REST.Controllers
 
         [HttpPost]
         [Route("Add")]
+        [Authorize]
         public IActionResult Add([FromBody] ML.Usuario usuario)
         {
 
@@ -53,6 +54,7 @@ namespace SL_REST.Controllers
 
         [HttpPut]
         [Route("Update/{IdUsuario}")]
+        [Authorize]
         public IActionResult Update(int IdUsuario, [FromBody] ML.Usuario usuario)
         {
 
