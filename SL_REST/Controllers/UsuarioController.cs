@@ -84,6 +84,8 @@ namespace SL_REST.Controllers
 
         [HttpDelete]
         [Route("Delete/{IdUsuario}")]
+        [Authorize]
+
         public IActionResult Delete(int IdUsuario)
         {
 

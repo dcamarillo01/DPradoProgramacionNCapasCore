@@ -1,9 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PL_MVC.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly IConfiguration _configuration;
+
+
+        public LoginController(IConfiguration configuration) { 
+            
+            _configuration = configuration;
+        }
+
+
         public IActionResult Index()
         {
             return View();
@@ -20,7 +30,19 @@ namespace PL_MVC.Controllers
         public IActionResult Login(ML.Login Login) {
 
 
-            return View();
+            var token = LoginApi(Login);
+
+            if (token != "")
+            {
+                HttpContext.Session.SetString("token", token);
+
+                return RedirectToAction("GetAll", "Usuario");
+            }
+            else { 
+                return View(Login);
+            }
+
+
         }
 
 
@@ -28,12 +50,32 @@ namespace PL_MVC.Controllers
         ///  Consumo de API Login
        
 
-        public ML.Result LoginApi()
+        public string LoginApi(ML.Login Login)
         {
-
             ML.Result result = new();
 
-            return result;
+            using(var client = new HttpClient()) {
+
+                var loginEndPoint = _configuration.GetValue<string>("ApiLoginEndPoint");
+                client.BaseAddress = new Uri(loginEndPoint);
+
+                var loginTask = client.PostAsJsonAsync("LoginUser", Login);
+                loginTask.Wait();
+
+                var resultLogin = loginTask.Result;
+
+                if (resultLogin.IsSuccessStatusCode)
+                {
+
+                    return resultLogin.Content.ReadAsStringAsync().Result.ToString();
+                }
+                //else {
+                //    return loginTask.Result.Content.ErrorMessage.ToString();
+                //}
+
+            }
+
+            return string.Empty;
         }
 
     }

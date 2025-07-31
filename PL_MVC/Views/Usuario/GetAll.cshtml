@@ -10,6 +10,7 @@
 
     var sessionErroresFile = HttpContextAccessor.HttpContext.Session.GetString("ErroresFile");
     var sessionNoErrorFile = HttpContextAccessor.HttpContext.Session.GetString("noErrorFile");
+    var sessionToken = HttpContextAccessor.HttpContext.Session.GetString("token");
     
 }
 
@@ -214,10 +215,10 @@
                                 <td>@usuario.Direccion.NumeroExterior</td>
 
                                 <td>
-                                    <a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario })" onclick="return confirm('Deseas eliminar usuario?') "><i class="bi bi-trash"></i></a>
+                                    <a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario, token = sessionToken })" onclick="return confirm('Deseas eliminar usuario?') "><i class="bi bi-trash"></i></a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-info" href="@Url.Action("Formulario", "Usuario", new { IdUsuario = usuario.IdUsuario })"><i class="bi bi-pencil-square"></i></a>
+                                    <a class="btn btn-info" href="@Url.Action("Formulario", "Usuario", new { IdUsuario = usuario.IdUsuario, token = sessionToken })"><i class="bi bi-pencil-square"></i></a>
                                 </td>
                             </tr>
 
