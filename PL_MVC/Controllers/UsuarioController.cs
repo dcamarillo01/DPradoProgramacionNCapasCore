@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using ML;
@@ -46,9 +47,10 @@ namespace PL_MVC.Controllers
         // ======================== GET ALL ================================ \\
 
         [HttpGet]
+        [Authorize]
         public ActionResult GetAll()
         {
-            ML.Usuario usuario = new ML.Usuario
+            ML.Usuario usuario = new()
             {
                 Rol = new ML.Rol(),
                 Direccion = new ML.Direccion()
@@ -400,10 +402,10 @@ namespace PL_MVC.Controllers
                 //ML.Result usuarioById = GetByIdSoap(IdUsuario.Value);
                 //usuario = (ML.Usuario)usuarioById.Object;
 
-                var token = HttpContext.Session.GetString("token");
+                //var token = HttpContext.Session.GetString("token");
                 // ==================== IMPLEMENTACION CON API ===================== \\
                 // GetById Utilizando API REST
-                ML.Result resultAPIGetId = GeyByIdAPI(IdUsuario.Value,  token);
+                ML.Result resultAPIGetId = GeyByIdAPI(IdUsuario.Value);
 
                 if (resultAPIGetId.Correct)
                 {
@@ -498,7 +500,7 @@ namespace PL_MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var token = HttpContext.Session.GetString("token");
+                //var token = HttpContext.Session.GetString("token");
 
 
                 if (usuario.IdUsuario > 0)
@@ -524,7 +526,7 @@ namespace PL_MVC.Controllers
                     /// WEB SERVICE API REST
                     //UpdateByAPI(usuario);
                     // =================== IMPLEMENTACION CON API ==================\\
-                    ML.Result resultUpdate = UpdateByAPI(usuario, token);
+                    ML.Result resultUpdate = UpdateByAPI(usuario);
                     if (resultUpdate.Correct)
                     {
                         return RedirectToAction("GetAll", "Usuario");
@@ -561,7 +563,7 @@ namespace PL_MVC.Controllers
                     // ====================== Implementacion con API ============ \\
 
 
-                    ML.Result resultAdd = AddByAPI(usuario, token);
+                    ML.Result resultAdd = AddByAPI(usuario);
 
                     if (resultAdd.Correct)
                     {
@@ -633,7 +635,7 @@ namespace PL_MVC.Controllers
             var token = HttpContext.Session.GetString("token");
 
 
-            ML.Result result = DeleteByAPI(IdUsuario, token);
+            ML.Result result = DeleteByAPI(IdUsuario);
             if (result.Correct)
             {
                 return RedirectToAction("GetAll", "Usuario");
@@ -1248,6 +1250,8 @@ namespace PL_MVC.Controllers
                     //RecuperarBaseAddress de AppSettings  
                     var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
                     client.BaseAddress = new Uri(userEndPoint);
+                    var token = Request.Cookies["session"];
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                     var responseTask = client.PostAsJsonAsync("GetAll", Usuario);
                     responseTask.Wait(); //abrir otro hilo 
                     var resultServicio = responseTask.Result;
@@ -1275,7 +1279,7 @@ namespace PL_MVC.Controllers
         }
 
         //[NonAction]
-        public  ML.Result AddByAPI(ML.Usuario Usuario, string token)
+        public  ML.Result AddByAPI(ML.Usuario Usuario)
         {
             ML.Result resultAdd = new Result();
 
@@ -1293,6 +1297,7 @@ namespace PL_MVC.Controllers
             {
                 var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
                 client.BaseAddress = new Uri(userEndPoint);
+                var token = Request.Cookies["session"];
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 
                 //HTTP POST 
@@ -1316,7 +1321,7 @@ namespace PL_MVC.Controllers
             return resultAdd;
         }
         //[NonAction]
-        public  ML.Result UpdateByAPI(ML.Usuario Usuario, string token)
+        public  ML.Result UpdateByAPI(ML.Usuario Usuario)
         {
             ML.Result resultUpdate = new Result();
 
@@ -1335,6 +1340,7 @@ namespace PL_MVC.Controllers
             {
                 var userEndPoint = _configuration.GetValue<string>("ApiEndPoint"); 
                 client.BaseAddress = new Uri(userEndPoint);
+                var token = Request.Cookies["session"];
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 //HTTP POST 
                 var postTask = client.PutAsJsonAsync<ML.Usuario>($"Update/{Usuario.IdUsuario}", Usuario); //Serializar 
@@ -1358,7 +1364,7 @@ namespace PL_MVC.Controllers
             return resultUpdate;
         }
         //[NonAction]
-        public  ML.Result DeleteByAPI(int IdUsuario, string token)
+        public  ML.Result DeleteByAPI(int IdUsuario)
         {
 
             ML.Result result = new ML.Result();
@@ -1366,6 +1372,7 @@ namespace PL_MVC.Controllers
             {
                 var userEndPoint = _configuration.GetValue<string>("ApiEndPoint"); ;
                 client.BaseAddress = new Uri(userEndPoint);
+                var token = Request.Cookies["session"];
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 
 
@@ -1395,7 +1402,7 @@ namespace PL_MVC.Controllers
         }
 
         //[NonAction]
-        public  ML.Result GeyByIdAPI(int IdUsuario, string token)
+        public  ML.Result GeyByIdAPI(int IdUsuario)
         {
 
             ML.Result resultGetById = new ML.Result();
@@ -1405,6 +1412,8 @@ namespace PL_MVC.Controllers
 
                 var userEndPoint = _configuration.GetValue<string>("ApiEndPoint");
                 client.BaseAddress = new Uri(userEndPoint);
+
+                var token = Request.Cookies["session"];
 
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 

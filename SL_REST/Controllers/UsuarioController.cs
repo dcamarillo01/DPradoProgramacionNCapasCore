@@ -105,6 +105,7 @@ namespace SL_REST.Controllers
 
         [HttpPost]
         [Route("GetAll")]
+        [Authorize]
         public IActionResult GetAll(ML.Usuario? usuario)
         {
 

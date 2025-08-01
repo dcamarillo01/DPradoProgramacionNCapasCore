@@ -163,20 +163,22 @@ namespace BL
 
                 var query = _context.VwEmpleados.FromSqlRaw($"EmpleadoGetById {IdEmpleado}").ToList().SingleOrDefault();
 
-                if (query != null) { 
-                    
-                    ML.Empleado empleado = new ML.Empleado();
-                    empleado.Departamento = new ML.Departamento();
+                if (query != null) {
 
-                    empleado.IdEmpleado = (int)query.IdEmpleado;
-                    empleado.Nombre = query.Nombre;
-                    empleado.ApellidoPaterno = query.ApellidoPaterno;
-                    empleado.ApellidoMaterno = query.ApellidoMaterno;
-                    empleado.FechaNacimiento = query.FechaNacimiento;
-                    empleado.RFC = query.Rfc;
-                    empleado.NSS = query.Nss;
-                    empleado.CURP = query.Curp;
-                    empleado.FechaIngreso = query.FechaIngreso;
+                    ML.Empleado empleado = new()
+                    {
+                        Departamento = new ML.Departamento(),
+
+                        IdEmpleado = (int)query.IdEmpleado,
+                        Nombre = query.Nombre,
+                        ApellidoPaterno = query.ApellidoPaterno,
+                        ApellidoMaterno = query.ApellidoMaterno,
+                        FechaNacimiento = query.FechaNacimiento,
+                        RFC = query.Rfc,
+                        NSS = query.Nss,
+                        CURP = query.Curp,
+                        FechaIngreso = query.FechaIngreso
+                    };
                     empleado.Departamento.IdDepartamento = query.IdDepartamento;
                     empleado.SalarioBase = (int?)query.SalarioBase;
                     empleado.NoFaltas = query.NoFaltas;
