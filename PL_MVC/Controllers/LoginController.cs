@@ -73,6 +73,8 @@ namespace PL_MVC.Controllers
                 if (resultLogin.IsSuccessStatusCode)
                 {
 
+                    HttpContext.Session.Remove("WrongCredentiasl");
+
 
                     HttpContext.Response.Cookies.Append("session", token, new Microsoft.AspNetCore.Http.CookieOptions
                     { Expires = DateTime.Now.AddMinutes(30) }
@@ -81,14 +83,16 @@ namespace PL_MVC.Controllers
                     return RedirectToAction("Index", "Home");
 
                 }
-                //else
-                //{
-                //    return loginTask.Result.Content.ReadAsStringAsync().Result.ToString();
-                //}
+                else
+                {
+
+                    HttpContext.Session.SetString("WrongCredentiasl", "La contraseña o correo son incorrectos");
+
+                    return View();
+                }
 
             }
 
-            return View();
 
         }
 

@@ -1,4 +1,5 @@
-﻿@model ML.Usuario
+﻿@using System.Security.Claims
+@model ML.Usuario
 
 @{
     ViewBag.Title = "GetAll";
@@ -171,8 +172,11 @@
                             <th>Calle</th>
                             <th>#Interior</th>
                             <th>#Exterior</th>
-                            <th>Delete</th>
-                            <th>Edit</th>
+                            @if (@User.FindFirst(ClaimTypes.Role)?.Value! == "Administrador")
+                            {
+                                <th>Delete</th>
+                                <th>Edit</th>
+                            }
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -184,6 +188,7 @@
                                 <td>
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="StatusUser" onchange="UserStatus( this, @usuario.IdUsuario)">
+                                        
                                     </div>
                                 </td>
                                 <td>@usuario.IdUsuario</td>
@@ -213,12 +218,16 @@
                                 <td>@usuario.Direccion.NumeroInterior</td>
                                 <td>@usuario.Direccion.NumeroExterior</td>
 
-                                <td>
-                                    <a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario})" onclick="return confirm('Deseas eliminar usuario?') "><i class="bi bi-trash"></i></a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-info" href="@Url.Action("Formulario", "Usuario", new { IdUsuario = usuario.IdUsuario})"><i class="bi bi-pencil-square"></i></a>
-                                </td>
+                                @if (@User.FindFirst(ClaimTypes.Role)?.Value! == "Administrador")
+                                {
+                                    <td>
+                                        <a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario })" onclick="return confirm('Deseas eliminar usuario?') "><i class="bi bi-trash"></i></a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info" href="@Url.Action("Formulario", "Usuario", new { IdUsuario = usuario.IdUsuario })"><i class="bi bi-pencil-square"></i></a>
+                                    </td>
+                                }
+                                
                             </tr>
 
 

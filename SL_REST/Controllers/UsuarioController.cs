@@ -105,7 +105,7 @@ namespace SL_REST.Controllers
 
         [HttpPost]
         [Route("GetAll")]
-        [Authorize]
+        
         public IActionResult GetAll(ML.Usuario? usuario)
         {
 
@@ -124,7 +124,7 @@ namespace SL_REST.Controllers
 
         [HttpGet]
         [Route("GetById/{IdUsuario}")]
-        [Authorize]
+        
 
         public IActionResult GetById(int IdUsuario)
         {
