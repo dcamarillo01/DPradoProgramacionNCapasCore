@@ -94,8 +94,7 @@ namespace PL_MVC.Controllers
         //, HttpPostedFileBase archivo
         public ActionResult GetAll(ML.Usuario Usuario, IFormFile ImportFile2)
         {
-            //Traer roles 
-            Usuario.Rol = new ML.Rol();
+            
 
             //Busqueda Filtrada
 
@@ -103,8 +102,7 @@ namespace PL_MVC.Controllers
             Usuario.ApellidoPaterno ??= "";
             Usuario.ApellidoMaterno ??= "";
 
-            Usuario.Rol = new ML.Rol();
-
+            
 
             //BL ======== BUSQUEDA ABIERTA ===============
             //ML.Result result = _usuario.GetAll(Usuario);
