@@ -1,8 +1,11 @@
 using DL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +38,7 @@ builder.Services.AddScoped<BL.Municipio>();
 builder.Services.AddScoped<BL.Estado>();
 builder.Services.AddScoped<BL.Empleado>();
 builder.Services.AddScoped<BL.Departamento>();
-
+builder.Services.AddScoped<BL.UserProfile>();
 
 //Ignore DataAnnotations
 
@@ -54,6 +57,49 @@ builder.Services.AddSession(options =>
 
 // To use injeccion of Sessions
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "yourdomain.com",
+            ValidAudience = "yourdomain.com",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d4c9482eb6bab9aef587ff82afcb000d"))
+        };
+
+        options.Events = new JwtBearerEvents { 
+            
+            OnMessageReceived = context => 
+            {
+                if (context.Request.Cookies.ContainsKey("session"))
+                {
+                    context.Token = context.Request.Cookies["session"];
+                }
+
+                return Task.CompletedTask;
+            },
+            OnChallenge = context => //401
+            {
+                context.HandleResponse();
+                context.Response.Redirect("/Login/Login");
+
+                return  Task.CompletedTask; 
+            },
+            OnForbidden = context => 
+            {
+
+                context.Response.Redirect("/Home/AccessDenied");
+                return Task.CompletedTask;
+            }
+        };
+
+    });
 
 
 
@@ -77,7 +123,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 
 app.Run();

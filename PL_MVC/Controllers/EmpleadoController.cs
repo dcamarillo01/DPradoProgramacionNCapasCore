@@ -173,7 +173,7 @@ namespace PL_MVC.Controllers
                 if (Empleado.IdEmpleado > 0)
                 {
 
-                    ML.Result resultUpdate = _empleado.Update(Empleado, Empleado.IdEmpleado);
+                    ML.Result resultUpdate = _empleado.Update(Empleado, Empleado.IdEmpleado.Value);
 
                     if (resultUpdate.Correct)
                     {
@@ -275,7 +275,7 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public JsonResult UpdateJS(ML.Empleado empleado) {
 
-            ML.Result result = _empleado.Update(empleado, empleado.IdEmpleado);
+            ML.Result result = _empleado.Update(empleado, empleado.IdEmpleado.Value);
 
             return Json(result);
         }

@@ -10,7 +10,7 @@ namespace ML
     public class Empleado
     {
 
-        public int IdEmpleado { get; set; }
+        public int? IdEmpleado { get; set; }
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(30, ErrorMessage = "El nombre debe tener como máximo 30 caracteres.")]
         [RegularExpression(@"^[a-z A-Z]+$", ErrorMessage = "Solo se aceptan letras")]

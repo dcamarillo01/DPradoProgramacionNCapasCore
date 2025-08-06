@@ -147,7 +147,7 @@ $(document).ready(function () {
                                         <hr/>
                                         FechaIngreso: ${value.fechaIngreso}
                                         <hr/>
-                                        SalarioBase: ${value.salarioBase}
+                                        SalarioBase: $${value.salarioBase}
                                         <hr/>
                                         NoFaltas: ${value.noFaltas}
                                     </div>

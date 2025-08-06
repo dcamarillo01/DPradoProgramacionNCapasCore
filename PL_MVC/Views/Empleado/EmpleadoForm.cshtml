@@ -8,7 +8,11 @@
 <container>
     <div class="row">
         <div class="col">
+            <div class="row" style="padding-bottom:20px">
+                <h2>Empleado</h2>
+            </div>
             <div class="row rounded-3 shadow-lg">
+                
                 <div class="col">
                     @using (@Html.BeginForm("EmpleadoForm", "Empleado", FormMethod.Post, new
                     {
@@ -18,15 +22,13 @@
                         novalidate = "true"
                     }))
                     {
-                        <div class="row">
-                            <h2>Empleado</h2>
-                        </div>
-                        <div class="row">
+
+                        <div class="row" style="padding-top:20px">
                             <div class="col" hidden>
                                 @Html.LabelFor(model => model.IdEmpleado, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.IdEmpleado, new { @class = "form-label" })
                             </div>
-                            <div class="col">
+                            <div class="col" >
                                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
                                 @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger", @style = "font-size:15px" })

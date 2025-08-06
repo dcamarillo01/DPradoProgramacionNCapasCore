@@ -1,0 +1,111 @@
+﻿@model ML.UserProfile
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<container class="container">
+    <div class="row">
+        <div class="col">
+
+
+            <div class="row">
+                <div class="col">
+
+                    <table class="table table-responsive table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>IdUserProfile</th>
+                                <th>IdEmpleado</th>
+                                <th>UserName</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Status</th>
+                                <th>Rol</th>
+                                <th>Delete</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (ML.UserProfile profile in Model.UserProfiles)
+                            {
+                                <tr>
+                                    <td>@profile.IdUserProfile</td>
+                                    <td>@profile.Empleado.IdEmpleado</td>
+                                    <td>@profile.UserName</td>
+                                    <td>@profile.Email</td>
+                                    <td>@profile.PasswordHash</td>
+                                    <td>@profile.Status</td>
+                                    <td>@profile.Rol.Nombre</td>
+                                    
+                                    <td>
+                                        <a class="btn btn-danger" onclick="Delete(this, @profile.IdUserProfile)"><i class="bi bi-trash"></i></a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info" href="@Url.Action("FormUserProfile", "UserProfile", new { IdUserProfile = profile.IdUserProfile })"><i class="bi bi-pencil-square"></i></a>
+                                    </td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</container>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+
+    function Delete(input, IdUserProfile){
+
+        console.log(input)
+        var IdUserProfile = parseInt(IdUserProfile);
+        var row = $(input).parent().parent();
+        console.log(row)
+        Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            $.ajax({
+
+            url: "@Url.Action("Delete", "UserProfile")" ,
+            dataType: "JSON" ,
+            method: "Post",
+            data: {IdUserProfile},
+            success: function(){
+                Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+
+                    row.hide('slow');
+            },
+            error: function(){
+
+            }
+
+        });
+
+        }
+    });
+        
+       
+    }
+
+</script>

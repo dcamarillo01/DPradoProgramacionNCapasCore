@@ -1,6 +1,9 @@
 using DL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,25 @@ builder.Services.AddDbContext<DpradoProgramacionNcapasContext>(options =>
 
 //Donde va a vivir la coneccion.
 builder.Services.AddScoped<BL.Usuario>();
+builder.Services.AddScoped<BL.Login>();
+
+//Configuracion de JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "yourdomain.com",
+            ValidAudience = "yourdomain.com",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d4c9482eb6bab9aef587ff82afcb000d"))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 //Ignore DataAnotations
 builder.Services.Configure<ApiBehaviorOptions>(options =>

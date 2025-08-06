@@ -27,7 +27,7 @@
                             <form id="formBuscar">
                                 <div class="row">
                                     <div class="col">
-                                        <label for="name" class="form-label">Nombre   </label>
+                                        <label for="name" class="form-label">Nombre</label>
                                         <input type="text" id="buscarNombre" name="name" placeholder="Nombre" class="form-control">
                                     </div>
                                     <div class="col">
@@ -45,13 +45,13 @@
                                             </select>
                                         </label>
                                     </div>
-                                  
+
                                 </div>
 
                                 <div class="row justify-content-end" style="padding-top:10px; padding-right:50px">
-                                        <button type="submit" class="btn btn-outline-primary" style="width:200px">
-                                            Buscar
-                                        </button>
+                                    <button type="submit" class="btn btn-outline-primary" style="width:200px">
+                                        Buscar
+                                    </button>
 
                                 </div>
                             </form>
@@ -64,93 +64,83 @@
                         <div class="col">
                             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-bs-focus="false">
                                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                    <div class="modal-content" style="background:none; border:none">
-                                        <form class="form needs-validation" id="formEmpleado">
-                                            <p class="title">Registrar Empleado</p>
+                                    <div class="modal-content">
+                                        <form class="form needs-validation" id="formEmpleado" style="padding:20px">
+                                            <h2 class="title">Registrar Empleado</h2>
                                             <div class="row">
                                                 <input type="hidden" id="idEmpleado" />
-                                                <div class="col">
-                                                    <label>
-                                                        <input class="form-control input" id="nombre" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
-                                                        <span>Nombre</span>
-                                                    </label>
+                                                <div class="col form-outline mb-4">
+                                                    <label class="form-label">Nombre</label>
+                                                    <input class="form-control" id="nombre" type="text" placeholder="" required onkeypress="validateLetters(this, event)" , onblur="validateLetters(this, event)">
                                                 </div>
                                                 <div class="col">
-                                                    <label>
-                                                        <input class="form-control input" id="apellidoPaterno" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
-                                                        <span>ApellidoPaterno</span>
-                                                    </label>
+                                                        <label class="form-label">ApellidoPaterno</label>
+                                                        <input class="form-control" id="apellidoPaterno" type="text" placeholder="" required onkeypress="validateLetters(this, event)" , onblur="validateLetters(this, event)">
                                                 </div>
                                                 <div class="col">
-                                                    <label>
-                                                        <input class="form-control input" id="apellidoMaterno" type="text" placeholder="" required onkeypress ="validateLetters(this, event)" , onblur="validateLetters(this, event)">
-                                                        <span>ApellidoMaterno</span>
-                                                    </label>
+                                                    <label class="form-label">ApellidoMaterno</label>
+
+                                                        <input class="form-control" id="apellidoMaterno" type="text" placeholder="" required onkeypress="validateLetters(this, event)" , onblur="validateLetters(this, event)">
                                                 </div>
 
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row form">
                                                 <div class="col">
-                                                    <label>
-                                                        <input class="form-control input" id="rfc" type="text" placeholder="" required onblur="validateRFC()">
-                                                        <span>RFC</span>
-                                                    </label>
+                                                    <label class="form-label">RFC</label>
+
+                                                        <input class="form-control " id="rfc" type="text" placeholder="" required onblur="validateRFC()">
                                                 </div>
                                                 <div class="col">
-                                                    <label>
-                                                        <input class="form-control input" id="nss" type="text" placeholder="" required onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
-                                                        <span>NSS</span>
-                                                    </label>
+                                                        <label class="form-label">NSS</label>
+
+                                                        <input class="form-control" id="nss" type="text" placeholder="" required onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
                                                 </div>
                                                 <div class="col">
-                                                    <label>
-                                                        <input class="form-control input" id="curp" type="text" placeholder="" required onblur ="validateCURP()">
-                                                        <span>CURP</span>
-                                                    </label>
+                                                    <label class="form-label">CURP</label>
+
+                                                    <input class="form-control " id="curp" type="text" placeholder="" required onblur="validateCURP()">
                                                 </div>
 
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                    <label onfocus="">
-                                                        <input type="text" id="DatePicker" class="form-control input " required>
-                                                        <span>FechaNacimiento</span>
-                                                    </label>
+                                                    <label class="form-label">FechaNacimiento</label>
+
+                                                    <input type="text" id="DatePicker" class="form-control input " required>
                                                 </div>
                                                 <div class="col">
-                                                    <label>
+                                                        <label class="form-label">FechaIngreso</label>
+
                                                         <input type="text" id="DatePicker2" class="form-control input">
-                                                        <span>FechaIngreso</span>
-                                                    </label>
                                                 </div>
                                                 <div class="col">
-                                                    <label>
+                                                        <label class="form-label">Departamento</label>
+
                                                         <select name="departamentos" id="ddlDepartamentos2" class="input form-control">
                                                         </select>
-                                                    </label>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col">
-                                                    <label>
+                                                        <label class="form-label">SalarioBase</label>
+
                                                         <input type="text" id="salarioBase" class="input form-control" required
                                                                onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
-                                                        <span>SalarioBase</span>
-                                                    </label>
                                                 </div>
                                                 <div class="col">
-                                                    <label>
-                                                        <input type="text" id="noFaltas" class="input form-control" required
-                                                               onkeypress ="validateNumber(this, event)" , onblur="validateNumber(this, event)">
-                                                        <span>NoFaltas</span>
-                                                    </label>
+                                                        <label class="form-label">NoFaltas</label>
+
+                                                        <input type="text" id="noFaltas" class="form-control" required
+                                                               onkeypress="validateNumber(this, event)" , onblur="validateNumber(this, event)">
                                                 </div>
                                             </div>
-                                           
 
-                                            <button class="submit">Submit</button>
+                                            <div class="row justify-content-center" style="padding-top:20px; padding-bottom:20px">
+                                                <button class="btn btn-outline-success" type="submit">Agregar</button>
+
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -160,7 +150,6 @@
 
                 </div>
                 <div class="row" id="bodyCard" style="padding-bottom:20px">
-
                 </div>
             </div>
         </div>

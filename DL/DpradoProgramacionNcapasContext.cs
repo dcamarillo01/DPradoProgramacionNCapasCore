@@ -25,19 +25,36 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
     public virtual DbSet<Estado> Estados { get; set; }
 
+    public virtual DbSet<HistorialPermiso> HistorialPermisos { get; set; }
+
     public virtual DbSet<Municipio> Municipios { get; set; }
 
+    public virtual DbSet<Permiso> Permisos { get; set; }
+
     public virtual DbSet<Rol> Rols { get; set; }
+
+    public virtual DbSet<StatusPermiso> StatusPermisos { get; set; }
+
+    public virtual DbSet<UserProfile> UserProfiles { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     public virtual DbSet<VwEmpleado> VwEmpleados { get; set; }
 
+    public virtual DbSet<VwUserProfile> VwUserProfiles { get; set; }
+
     public virtual DbSet<VwUsuario> VwUsuarios { get; set; }
 
+    public virtual DbSet<DTOs.LoginInfo> LoginInfo { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<DTOs.LoginInfo>(entity =>
+            {
+                entity.HasNoKey();
+        }
+            );
+
         modelBuilder.Entity<Colonium>(entity =>
         {
             entity.HasKey(e => e.IdColonia).HasName("PK__Colonia__A1580F66BFD61DDD");
@@ -138,6 +155,30 @@ public partial class DpradoProgramacionNcapasContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<HistorialPermiso>(entity =>
+        {
+            entity.HasKey(e => e.IdHistorialPermiso).HasName("PK__Historia__0000E4BF3B23DA73");
+
+            entity.ToTable("HistorialPermiso");
+
+            entity.Property(e => e.Observaciones)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.AprovoRechazoNavigation).WithMany(p => p.HistorialPermisos)
+                .HasForeignKey(d => d.AprovoRechazo)
+                .HasConstraintName("FK__Historial__Aprov__7E37BEF6");
+
+            entity.HasOne(d => d.IdPermisoNavigation).WithMany(p => p.HistorialPermisos)
+                .HasForeignKey(d => d.IdPermiso)
+                .HasConstraintName("FK__Historial__IdPer__7C4F7684");
+
+            entity.HasOne(d => d.IdStatusPermisoNavigation).WithMany(p => p.HistorialPermisos)
+                .HasForeignKey(d => d.IdStatusPermiso)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Historial__IdSta__7D439ABD");
+        });
+
         modelBuilder.Entity<Municipio>(entity =>
         {
             entity.HasKey(e => e.IdMunicipio).HasName("PK__Municipi__61005978A5F33F2D");
@@ -154,6 +195,32 @@ public partial class DpradoProgramacionNcapasContext : DbContext
                 .HasConstraintName("FK__Municipio__IdEst__276EDEB3");
         });
 
+        modelBuilder.Entity<Permiso>(entity =>
+        {
+            entity.HasKey(e => e.IdPermiso).HasName("PK__Permiso__0D626EC86BBF0723");
+
+            entity.ToTable("Permiso");
+
+            entity.Property(e => e.Motivo)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.IdAutorizadorNavigation).WithMany(p => p.PermisoIdAutorizadorNavigations)
+                .HasForeignKey(d => d.IdAutorizador)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Permiso__IdAutor__797309D9");
+
+            entity.HasOne(d => d.IdEmpleadoNavigation).WithMany(p => p.PermisoIdEmpleadoNavigations)
+                .HasForeignKey(d => d.IdEmpleado)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Permiso__IdEmple__778AC167");
+
+            entity.HasOne(d => d.IdStatusPermisoNavigation).WithMany(p => p.Permisos)
+                .HasForeignKey(d => d.IdStatusPermiso)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Permiso__IdStatu__787EE5A0");
+        });
+
         modelBuilder.Entity<Rol>(entity =>
         {
             entity.HasKey(e => e.IdRol).HasName("PK__Rol__2A49584C2EE226C4");
@@ -163,6 +230,44 @@ public partial class DpradoProgramacionNcapasContext : DbContext
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<StatusPermiso>(entity =>
+        {
+            entity.HasKey(e => e.IdStatusPermiso).HasName("PK__StatusPe__D8526C0774A89F0F");
+
+            entity.ToTable("StatusPermiso");
+
+            entity.Property(e => e.IdStatusPermiso).ValueGeneratedNever();
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<UserProfile>(entity =>
+        {
+            entity.HasKey(e => e.IdUserProfile).HasName("PK__UserProf__2CAC89ABE08BDE83");
+
+            entity.ToTable("UserProfile");
+
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.UserName)
+                .HasMaxLength(25)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.IdEmpleadoNavigation).WithMany(p => p.UserProfiles)
+                .HasForeignKey(d => d.IdEmpleado)
+                .HasConstraintName("FK__UserProfi__IdEmp__06CD04F7");
+
+            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.UserProfiles)
+                .HasForeignKey(d => d.IdRol)
+                .HasConstraintName("FK__UserProfi__IdRol__07C12930");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
@@ -247,6 +352,27 @@ public partial class DpradoProgramacionNcapasContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("RFC");
             entity.Property(e => e.SalarioBase).HasColumnType("money");
+        });
+
+        modelBuilder.Entity<VwUserProfile>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vwUserProfile");
+
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.RolType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(25)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<VwUsuario>(entity =>

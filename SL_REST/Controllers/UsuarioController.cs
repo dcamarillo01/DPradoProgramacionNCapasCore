@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -18,6 +19,7 @@ namespace SL_REST.Controllers
 
         [HttpPost]
         [Route("Add")]
+        [Authorize]
         public IActionResult Add([FromBody] ML.Usuario usuario)
         {
 
@@ -52,6 +54,7 @@ namespace SL_REST.Controllers
 
         [HttpPut]
         [Route("Update/{IdUsuario}")]
+        [Authorize]
         public IActionResult Update(int IdUsuario, [FromBody] ML.Usuario usuario)
         {
 
@@ -83,6 +86,8 @@ namespace SL_REST.Controllers
 
         [HttpDelete]
         [Route("Delete/{IdUsuario}")]
+        [Authorize]
+
         public IActionResult Delete(int IdUsuario)
         {
 
@@ -100,6 +105,7 @@ namespace SL_REST.Controllers
 
         [HttpPost]
         [Route("GetAll")]
+        
         public IActionResult GetAll(ML.Usuario? usuario)
         {
 
@@ -118,6 +124,8 @@ namespace SL_REST.Controllers
 
         [HttpGet]
         [Route("GetById/{IdUsuario}")]
+        
+
         public IActionResult GetById(int IdUsuario)
         {
 

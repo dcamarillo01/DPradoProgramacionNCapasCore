@@ -29,5 +29,13 @@ public partial class Empleado
 
     public int? NoFaltas { get; set; }
 
+    public virtual ICollection<HistorialPermiso> HistorialPermisos { get; set; } = new List<HistorialPermiso>();
+
     public virtual Departamento? IdDepartamentoNavigation { get; set; }
+
+    public virtual ICollection<Permiso> PermisoIdAutorizadorNavigations { get; set; } = new List<Permiso>();
+
+    public virtual ICollection<Permiso> PermisoIdEmpleadoNavigations { get; set; } = new List<Permiso>();
+
+    public virtual ICollection<UserProfile> UserProfiles { get; set; } = new List<UserProfile>();
 }
