@@ -12,18 +12,29 @@
         <div class="col">
             <div class="row">
                 <div class="col" style="padding-bottom:20px">
-                    <h1>Crear cuenta</h1>
+                    @if (Model.IdUserProfile > 0)
+                    {
+                        <h1>Editar cuenta</h1>
+                    }
+                    else
+                    {
+                        <h1>Crear cuenta</h1>
+
+                    }
                 </div>
 
                 <div class="row shadow-lg rounded-3">
                     <div class="col " style="padding-top:20px">
-                        @using (Html.BeginForm("FormUserProfile", "UserProfile",new { @class = "form-login" }))
+                        @using (Html.BeginForm("FormUserProfile", "UserProfile", new { @class = "form-login" }))
                         {
 
                             <div hidden>
                                 @Html.TextBoxFor(model => model.Empleado.IdEmpleado)
                             </div>
-                          
+                            <div hidden>
+                                @Html.TextBoxFor(model => model.IdUserProfile)
+                            </div>
+
                             <div class="flex-column-login">
                                 @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
 
@@ -74,10 +85,21 @@
 
                             <div>
                                 @Html.LabelFor(model => model.Rol.Roles)
-                                @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"),"Selecciona un Rol", new {@class ="form-control"})
+                                @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol", new { @class = "form-control" })
                             </div>
-                            <button class="button-submit-login" type="submit">Registrar</button>
-                           
+
+                            @if (Model.IdUserProfile > 0)
+                            {
+                                <button class="button-submit-login" type="submit">Editar</button>
+
+                            }
+                            else
+                            {
+                                <button class="button-submit-login" type="submit">Registrar</button>
+
+
+                            }
+
                         }
                     </div>
                 </div>

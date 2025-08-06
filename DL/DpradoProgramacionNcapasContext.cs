@@ -41,17 +41,18 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
     public virtual DbSet<VwEmpleado> VwEmpleados { get; set; }
 
+    public virtual DbSet<VwUserProfile> VwUserProfiles { get; set; }
+
     public virtual DbSet<VwUsuario> VwUsuarios { get; set; }
-    
+
     public virtual DbSet<DTOs.LoginInfo> LoginInfo { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-        modelBuilder.Entity<DTOs.LoginInfo>( entity =>
+        modelBuilder.Entity<DTOs.LoginInfo>(entity =>
             {
                 entity.HasNoKey();
-            }
+        }
             );
 
         modelBuilder.Entity<Colonium>(entity =>
@@ -149,9 +150,6 @@ public partial class DpradoProgramacionNcapasContext : DbContext
             entity.ToTable("Estado");
 
             entity.Property(e => e.IdEstado).ValueGeneratedNever();
-            entity.Property(e => e.Clave)
-                .HasMaxLength(2)
-                .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -354,6 +352,27 @@ public partial class DpradoProgramacionNcapasContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("RFC");
             entity.Property(e => e.SalarioBase).HasColumnType("money");
+        });
+
+        modelBuilder.Entity<VwUserProfile>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vwUserProfile");
+
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.RolType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(25)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<VwUsuario>(entity =>

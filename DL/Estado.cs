@@ -9,7 +9,5 @@ public partial class Estado
 
     public string Nombre { get; set; } = null!;
 
-    public string? Clave { get; set; }
-
     public virtual ICollection<Municipio> Municipios { get; set; } = new List<Municipio>();
 }

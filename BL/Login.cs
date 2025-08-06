@@ -30,17 +30,16 @@ namespace BL
                 if (query != null)
                 {
 
-                    ML.Usuario usuario = new()
+                    ML.UserProfile userProfile= new()
                     {
                         Rol = new()
                     };
 
-                    usuario.Nombre = query.UsuarioNombre;
-                    usuario.ApellidoPaterno = query.ApellidoPaterno;
-                    usuario.ApellidoMaterno = query.ApellidoMaterno;
-                    usuario.Rol.Nombre = query.RolNombre;
+                    userProfile.UserName = query.UserName;
+                    userProfile.Email = query.Email;
+                    userProfile.Rol.Nombre = query.RolNombre;
 
-                    result.Object = usuario;
+                    result.Object = userProfile;
 
                     result.Correct = true;
 

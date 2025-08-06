@@ -28,14 +28,14 @@ namespace SL_REST.Controllers
             ML.Result result = _login.LoginUser(login);
             if (result.Correct)
             {
-                ML.Usuario usuario = new()
+                ML.UserProfile userProfile = new()
                 {
                     Rol = new()
                 };
 
-                usuario = (ML.Usuario) result.Object;
+                userProfile = (ML.UserProfile) result.Object;
                 //JWT
-                var token = GenerateJWT(usuario);
+                var token = GenerateJWT(userProfile);
 
                 return Ok(token);
             }
@@ -48,13 +48,14 @@ namespace SL_REST.Controllers
 
 
         [NonAction]
-        public string GenerateJWT(ML.Usuario Usuario) 
+        public string GenerateJWT(ML.UserProfile userProfile) 
         {
 
             var claims = new[] 
             {
-                new Claim(ClaimTypes.Role, Usuario.Rol.Nombre),
-                new Claim(ClaimTypes.Name, Usuario.Nombre)
+                new Claim(ClaimTypes.Role, userProfile.Rol.Nombre),
+                new Claim(ClaimTypes.Name, userProfile.UserName),
+                new Claim(ClaimTypes.Email, userProfile.Email)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d4c9482eb6bab9aef587ff82afcb000d"));

@@ -15,8 +15,10 @@ namespace ML
         public string? Email { get; set; }
         public string? PasswordHash { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
         public ML.Rol? Rol { get; set; }
+
+        public  List<object>? UserProfiles { get; set; }
 
     }
 }

@@ -11,9 +11,8 @@ namespace DL
 
         public class LoginInfo {
 
-            public string? UsuarioNombre { get; set; }
-            public string? ApellidoPaterno { get; set; }
-            public string? ApellidoMaterno { get; set; }
+            public string? UserName { get; set; }
+            public string? Email { get; set; }
             public string? RolNombre { get; set; }
 
         }
