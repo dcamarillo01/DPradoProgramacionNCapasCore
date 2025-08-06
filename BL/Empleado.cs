@@ -180,6 +180,7 @@ namespace BL
                         FechaIngreso = query.FechaIngreso
                     };
                     empleado.Departamento.IdDepartamento = query.IdDepartamento;
+                    empleado.Departamento.Descripcion = query.Descripcion;
                     empleado.SalarioBase = (int?)query.SalarioBase;
                     empleado.NoFaltas = query.NoFaltas;
 

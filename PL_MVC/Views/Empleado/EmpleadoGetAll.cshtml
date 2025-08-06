@@ -74,8 +74,10 @@
                                     <th>Departamento</th>
                                     <th>SalarioBase</th>
                                     <th>#NoFaltas</th>
+                                    <th>CrearCuenta</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,6 +97,13 @@
                                         <td>@empleado.Departamento.Descripcion</td>
                                         <td>$@empleado.SalarioBase</td>
                                         <td>@empleado.NoFaltas</td>
+                                        <td>
+                                            <a href="@Url.Action("FormUserProfile", "UserProfile", new { IdEmpleado = empleado.IdEmpleado })"
+                                               class="btn btn-info">
+                                                <i class="bi bi-person-badge-fill"></i>
+
+                                            </a>
+                                        </td>
                                         <td>
                                             <a href="@Url.Action("EmpleadoForm", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"
                                                class="btn btn-warning">
