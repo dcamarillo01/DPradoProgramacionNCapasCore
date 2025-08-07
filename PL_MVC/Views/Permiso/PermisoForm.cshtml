@@ -1,0 +1,88 @@
+﻿@model ML.Permiso
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<container class="container ">
+    <div class="row mx-auto">
+        <div class="col">
+
+            <div class="row">
+                <div class="col" style="padding-bottom:30px">
+                    <h1>Solicitar Permiso</h1>
+                </div>
+            </div>
+
+            <div class="row shadow-lg mx-auto rounded-3" style="padding:20px; width:70%">
+                <div class="col">
+
+                    @using (Html.BeginForm("PermisoForm","Permiso", FormMethod.Post))
+                            {
+                    
+                        <div class="row">
+                            <div class="col">
+                                <input id="FechaPermiso" hidden />
+
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-3">
+                                        @Html.LabelFor(model => model.HoraInicio, new { @class = "form-label" })
+                                        @Html.TextBoxFor(model => model.HoraInicio, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-3">
+                                        @Html.LabelFor(model => model.HoraFin, new { @class = "form-label" })
+                                        @Html.TextBoxFor(model => model.HoraFin, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:20px">
+                                    @Html.LabelFor(model => model.Motivo, new { @class = "form-label" })
+                                    @Html.TextBoxFor(model => model.Motivo, new { @class = "form-control" })
+                                </div>
+                                
+                            </div>
+                        </div>
+                    
+                    
+                    }
+
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</container>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+   
+
+    
+    $(document).ready(function () {
+        
+         $("#FechaPermiso").flatpickr(
+        {
+        mode: "range",
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        inline: true
+        // disable: [
+        //     function(date) {
+        //         disable every multiple of 8
+        //         return !(date.getDate() % 8);
+        //     }
+        // ]
+    }
+
+    );
+    });
+    
+</script>
