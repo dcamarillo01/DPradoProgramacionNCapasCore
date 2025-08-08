@@ -13,6 +13,6 @@ namespace ML
         public string? FechaRevision { get; set; }
         public ML.StatusPermiso? StatusPermiso { get; set; }
         public string? Observaciones { get; set; }
-        public bool? AprovoRechazo { get; set; }
+        public ML.Empleado? AprovoRechazo { get; set; }
     }
 }

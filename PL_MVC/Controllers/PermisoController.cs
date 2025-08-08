@@ -1,4 +1,5 @@
 ﻿using BL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,10 +9,12 @@ namespace PL_MVC.Controllers
     {
 
         private readonly BL.Permiso _permiso;
+        private readonly BL.HistorialPermiso _permisoHistorial;
 
-        public PermisoController(BL.Permiso permiso) { 
+        public PermisoController(BL.Permiso permiso, BL.HistorialPermiso permisoHistorial) { 
             
             _permiso = permiso;
+            _permisoHistorial = permisoHistorial;
         }
 
         public IActionResult Index()
@@ -20,6 +23,7 @@ namespace PL_MVC.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Administrador, JefeDirecto")]
         public IActionResult PermisoGetAll() {
 
             ML.Permiso permiso = new();
@@ -85,6 +89,28 @@ namespace PL_MVC.Controllers
 
 
             return View(permiso);
+        }
+
+
+
+        //public ActionResult HistorialPermiso(ML.HistorialPermiso)
+        //{
+        //    var model = repository.GetThingByParameter(parameter1);
+        //    var partialViewModel = new PartialViewModel(model);
+        //    return PartialView(partialViewModel);
+        //}
+
+        public JsonResult HistorialPermiso(ML.HistorialPermiso historial) {
+
+            historial.AprovoRechazo = new();
+
+            var userNameClaim = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            historial.AprovoRechazo.IdEmpleado = Convert.ToInt32(userNameClaim);
+
+            ML.Result result = _permisoHistorial.AprobarRechazarSolicitud(historial);
+
+
+            return Json(result);
         }
 
     }

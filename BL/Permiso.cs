@@ -134,23 +134,6 @@ namespace BL
             return result;
         }
 
-        public ML.Result AprobarRechazarSolicitud() {
-
-            ML.Result result = new();
-
-            try { 
-                
-
-            }
-            catch (Exception ex) {
-
-                result.Correct = false;
-                result.ErrorMessage = ex.Message;
-                result.Ex = ex;
-            }
-
-            return result;
-        }
 
     }
 }

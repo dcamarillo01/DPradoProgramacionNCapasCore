@@ -41,10 +41,10 @@
                                     <td>@permiso.HoraFin</td>
                                     <td>@permiso.Motivo</td>
                                     <td>
-                                        <btn class="btn ">Aprobar</btn>
+                                        <btn class="btn btn-success" onclick="AprovarRechazar(this,2)">Aprobar</btn>
                                     </td>
                                     <td>
-                                        <btn class="btn">Rechazar</btn>
+                                        <btn class="btn btn-danger" onclick="AprovarRechazar(this,3)">Rechazar</btn>
                                     </td>
                                 </tr>
                             }
@@ -55,4 +55,73 @@
         </div>
     </div>
 </container>
+
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+
+    function AprovarRechazar(input ,status) {
+
+    var IdPermiso = $(input).parent().parent().find('td')[0].firstChild.data
+
+    var IdStatus = status;
+    console.log(status)
+
+    Swal.fire({
+           title: "Submit your Github username",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off"
+    }
+    })
+    .then(message => {
+
+        var Permiso = {
+            IdPermiso : IdPermiso
+        }
+
+        var StatusPermiso = {
+            IdStatusPermiso : IdStatus
+        }
+
+        console.log(IdStatus)
+
+        var historial = {
+
+        Observaciones : message.value,
+        Permiso: Permiso,
+        StatusPermiso: StatusPermiso
+        }
+
+        $.ajax({
+            url: "@Url.Action("HistorialPermiso", "Permiso")",
+            type: "POST",
+            data: {historial},
+            dataType: "JSON",
+            success: function(){
+
+                    Swal.fire({
+      title: "Solicitud Revisada",
+      icon: "success"
+    });
+            },
+            error: function(){
+
+            }
+        });
+
+    });
+
+    }
+    
+
+
+</script>
 
