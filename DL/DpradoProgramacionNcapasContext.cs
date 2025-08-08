@@ -46,10 +46,17 @@ public partial class DpradoProgramacionNcapasContext : DbContext
     public virtual DbSet<VwUsuario> VwUsuarios { get; set; }
 
     public virtual DbSet<DTOs.LoginInfo> LoginInfo { get; set; }
+    public virtual DbSet<DTOs.GetBoss> GetBosses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DTOs.LoginInfo>(entity =>
+            {
+                entity.HasNoKey();
+        }
+            );
+
+        modelBuilder.Entity<DTOs.GetBoss>(entity =>
             {
                 entity.HasNoKey();
         }

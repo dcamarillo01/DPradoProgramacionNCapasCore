@@ -16,12 +16,14 @@ namespace ML
         public string? FechaSolicitud { get; set; }
         public string? FechaInicio { get; set; }
         public string? FechaFin{ get; set; }
-        public TimeOnly? HoraInicio { get; set; }
-        public TimeOnly? HoraFin { get; set; }
+        public string? HoraInicio { get; set; }
+        public string? HoraFin { get; set; }
         public string? Motivo { get; set; }
 
         public ML.StatusPermiso? StatusPermiso { get; set; }
         public ML.Empleado? EmpleadoAutorizador { get; set; }
+
+        public List<object>? Permisos { get; set; }
 
 
     }

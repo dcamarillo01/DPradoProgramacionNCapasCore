@@ -32,12 +32,14 @@ namespace BL
 
                     ML.UserProfile userProfile= new()
                     {
-                        Rol = new()
+                        Rol = new(),
+                        Empleado = new()
                     };
 
                     userProfile.UserName = query.UserName;
                     userProfile.Email = query.Email;
                     userProfile.Rol.Nombre = query.RolNombre;
+                    userProfile.Empleado.IdEmpleado = query.IdEmpleado;
 
                     result.Object = userProfile;
 

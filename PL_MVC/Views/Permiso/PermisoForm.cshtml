@@ -12,7 +12,7 @@
 
             <div class="row">
                 <div class="col" style="padding-bottom:30px">
-                    <h1>Solicitar Permiso</h1>
+                    <h1>Permiso</h1>
                 </div>
             </div>
 
@@ -23,26 +23,42 @@
                             {
                     
                         <div class="row">
-                            <div class="col">
-                                <input id="FechaPermiso" hidden />
+                            <div hidden>@Html.TextBoxFor(model => model.Empleado.IdEmpleado)</div>
 
+                            <div class="col">
+                                @* <input id="FechaPermiso" hidden /> *@
+                                @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaPermiso" })
                             </div>
                             <div class="col">
                                 <div class="row">
-                                    <div class="col-3">
-                                        @Html.LabelFor(model => model.HoraInicio, new { @class = "form-label" })
-                                        @Html.TextBoxFor(model => model.HoraInicio, new { @class = "form-control" })
+                                    <div class="col-6 form-floating mb-3">
+                                        @Html.TextBoxFor(model => model.HoraInicio, new { @class = "form-control", @id = "horaInicio", @placeholder = "name@example.com", type = "text" })
+                                        @Html.LabelFor(model => model.HoraInicio, new { @class = "", @for = "horaInicio" })
+                                        
                                     </div>
-                                    <div class="col-3">
-                                        @Html.LabelFor(model => model.HoraFin, new { @class = "form-label" })
-                                        @Html.TextBoxFor(model => model.HoraFin, new { @class = "form-control" })
+                                    <div class="col-6 form-floating mb-3">
+
+                                        @Html.TextBoxFor(model => model.HoraFin, new { @class = "form-control", @id = "horaFin", @placeholder = "name2@example.com", type = "time" })
+                                        @Html.LabelFor(model => model.HoraFin, new { @class = "", @for = "horaFin" })
                                     </div>
                                 </div>
-                                <div class="row" style="padding-top:20px">
-                                    @Html.LabelFor(model => model.Motivo, new { @class = "form-label" })
-                                    @Html.TextBoxFor(model => model.Motivo, new { @class = "form-control" })
+                                <div class="row" style="padding-top:20px;" >
+                                    <div class="col form-floating">
+                                        @Html.TextAreaFor(model => model.Motivo, new { @class = "form-control", @id = "motivo", @placeholder = "name2@example.com" })
+                                        @Html.LabelFor(model => model.Motivo, new { @class = "", @for = "motivo" })
+                                    </div>
+                                    
                                 </div>
-                                
+                                <div class="row">
+                                    <div class="col">
+                                        @Html.DropDownListFor(model => model.EmpleadoAutorizador.IdEmpleado, new SelectList(Model.EmpleadoAutorizador.Empleados, "IdEmpleado", "Nombre"), "Selecciona Jefe", new { @class="form-control"})
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-outline-secondary">Solicitar Permiso</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     
@@ -61,6 +77,7 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 
    
@@ -73,7 +90,8 @@
         mode: "range",
         minDate: "today",
         dateFormat: "Y-m-d",
-        inline: true
+        inline: true, 
+        outerWidth: "100%"
         // disable: [
         //     function(date) {
         //         disable every multiple of 8
@@ -82,7 +100,40 @@
         // ]
     }
 
+
+
+
     );
     });
+
+    $(document).ready(function () {
+        
+         $("#horaInicio").flatpickr(
+        {
+       enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    }
+        
+
+
+    );
+    });
+
+    $(document).ready(function () {
+        
+         $("#horaFin").flatpickr(
+        {
+       enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    }
+        
+
+
+    );
+    });
+
+    
     
 </script>
