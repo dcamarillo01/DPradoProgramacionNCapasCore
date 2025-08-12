@@ -1,6 +1,8 @@
 ﻿using BL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 
 namespace PL_MVC.Controllers
@@ -10,11 +12,16 @@ namespace PL_MVC.Controllers
 
         private readonly BL.Permiso _permiso;
         private readonly BL.HistorialPermiso _permisoHistorial;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PermisoController(BL.Permiso permiso, BL.HistorialPermiso permisoHistorial) { 
-            
+        public PermisoController(BL.Permiso permiso, BL.HistorialPermiso permisoHistorial, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        {
+
             _permiso = permiso;
             _permisoHistorial = permisoHistorial;
+            _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -109,8 +116,70 @@ namespace PL_MVC.Controllers
 
             ML.Result result = _permisoHistorial.AprobarRechazarSolicitud(historial);
 
+            ML.Result resultEmailTo = _permisoHistorial.GetEmailByIdPermiso(historial.Permiso.IdPermiso);
+
+            if (resultEmailTo.Correct) {
+
+                enviarCorreoSolicitud(resultEmailTo.Object.ToString(), historial);
+            }
+
 
             return Json(result);
+        }
+
+        [NonAction]
+        public IActionResult enviarCorreoSolicitud(string EmailTo, ML.HistorialPermiso historial) {
+
+            try {
+
+                var Email = _configuration.GetValue<string>("EmailSMTP");
+                var Password = _configuration.GetValue<string>("AppSMTPPassword");
+
+                string body = "";
+
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string contentRootPath = _webHostEnvironment.ContentRootPath;
+
+                string path = "";
+                path = Path.Combine(webRootPath, "EmailTemplates\\Clock.html");
+
+                StreamReader reader = new StreamReader(path);
+
+                var AprovoRechazo = historial.StatusPermiso.IdStatusPermiso == 2 ? "Aprovada" : "Rechazada";
+
+                body = reader.ReadToEnd();
+                //body = body.Replace("{{Nombre}}",EmailTo);
+                body = body.Replace("{{AprovoRechazo}}", AprovoRechazo);
+                body = body.Replace("{{Observaciones}}", historial.Observaciones);
+                body = body.Replace("{{UrlAction}}" , Url.Action("Index","Home"));
+
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(Email,Password),
+                    EnableSsl = true
+                };
+
+
+                var message = new MailMessage
+                {
+                    From = new MailAddress(Email, "FakeCompany"),
+                    Subject = "Solicitud de Ausencia",
+                    Body = body,
+                    IsBodyHtml = true,
+                };
+
+                message.To.Add(Email);
+                smtpClient.Send(message);
+
+
+            }
+            catch (Exception ex) { 
+            
+            }
+
+            return Empty;
         }
 
     }

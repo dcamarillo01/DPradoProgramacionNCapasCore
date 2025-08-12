@@ -70,12 +70,14 @@
     function AprovarRechazar(input ,status) {
 
     var IdPermiso = $(input).parent().parent().find('td')[0].firstChild.data
+    var row = $(input).parent().parent()
+    console.log(row)
 
     var IdStatus = status;
     console.log(status)
 
     Swal.fire({
-           title: "Submit your Github username",
+           title: "Observaciones",
     input: "text",
     inputAttributes: {
       autocapitalize: "off"
@@ -111,6 +113,10 @@
       title: "Solicitud Revisada",
       icon: "success"
     });
+            
+            row.hide('slow')
+                        
+
             },
             error: function(){
 

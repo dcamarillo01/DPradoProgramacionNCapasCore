@@ -25,5 +25,10 @@ namespace DL
             public string? Nombre { get; set; }
         }
 
+        public class GetEmailByIdPermiso { 
+            public string? Email { get; set; }
+
+        }
+
     }
 }

@@ -51,5 +51,40 @@ namespace BL
         }
 
 
+        public ML.Result GetEmailByIdPermiso(int IdPermiso) {
+
+            ML.Result result = new();
+
+            try {
+
+                var query = _context.GetEmailByIdPermisos.FromSqlRaw($"GetEmailForRequestStatus {IdPermiso}").AsEnumerable().SingleOrDefault();
+
+                if (query != null)
+                {
+
+                    var Email = query.Email;
+                    result.Object = Email;
+
+                    result.Correct = true;
+                    return result;
+                }
+                else {
+
+                    result.Correct = false;
+                    result.ErrorMessage = "Correo no encontrado";
+                }
+
+            }
+            catch (Exception ex) {
+
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+
+        }
+
     }
 }
