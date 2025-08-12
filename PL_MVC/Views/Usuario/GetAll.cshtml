@@ -186,10 +186,22 @@
 
                             <tr>
                                 <td>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="StatusUser" onchange="UserStatus( this, @usuario.IdUsuario)">
-                                        
-                                    </div>
+
+                                    @if (usuario.Status == true)
+                                    {
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="StatusUser" checked onchange="UserStatus( this, @usuario.IdUsuario)">
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="StatusUser" onchange="UserStatus( this, @usuario.IdUsuario)">
+
+                                        </div>
+                                    }
+                                    
                                 </td>
                                 <td>@usuario.IdUsuario</td>
                                 @if (usuario.Imagen != null)

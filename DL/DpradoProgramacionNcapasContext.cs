@@ -51,22 +51,24 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<DTOs.LoginInfo>(entity =>
-            {
-                entity.HasNoKey();
+        {
+            entity.HasNoKey();
         }
-            );
-        modelBuilder.Entity<DTOs.GetEmailByIdPermiso>(entity =>
-            {
-                entity.HasNoKey();
-        }
-            );
+          );
 
         modelBuilder.Entity<DTOs.GetBoss>(entity =>
-            {
-                entity.HasNoKey();
+        {
+            entity.HasNoKey();
         }
-            );
+          );
+
+        modelBuilder.Entity<DTOs.GetEmailByIdPermiso>(entity =>
+        {
+            entity.HasNoKey();
+        }
+          );
 
         modelBuilder.Entity<Colonium>(entity =>
         {
@@ -262,6 +264,8 @@ public partial class DpradoProgramacionNcapasContext : DbContext
             entity.HasKey(e => e.IdUserProfile).HasName("PK__UserProf__2CAC89ABE08BDE83");
 
             entity.ToTable("UserProfile");
+
+            entity.HasIndex(e => e.Email, "UQ_Email").IsUnique();
 
             entity.Property(e => e.Email)
                 .HasMaxLength(50)

@@ -63,7 +63,7 @@ namespace ML
         public List<object>? Usuarios { get; set; }
         public ML.Direccion? Direccion { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
 
         
 

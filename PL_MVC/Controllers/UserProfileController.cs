@@ -150,5 +150,13 @@ namespace PL_MVC.Controllers
 
         }
 
+        [HttpPost]
+        public JsonResult ChangeStatus(int IdUserProfile, bool Status) {
+
+            ML.Result result = _userProfile.ChangeStatus(IdUserProfile, Status);
+
+            return Json(result);
+        }
+
     }
 }

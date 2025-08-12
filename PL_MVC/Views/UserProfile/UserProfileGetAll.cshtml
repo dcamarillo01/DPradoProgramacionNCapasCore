@@ -16,12 +16,12 @@
                     <table class="table table-responsive table-sm">
                         <thead class="table-dark">
                             <tr>
+                                <th>Status</th>
                                 <th>IdUserProfile</th>
                                 <th>IdEmpleado</th>
                                 <th>UserName</th>
                                 <th>Email</th>
                                 <th>Password</th>
-                                <th>Status</th>
                                 <th>Rol</th>
                                 <th>Delete</th>
                                 <th>Edit</th>
@@ -32,12 +32,32 @@
                             @foreach (ML.UserProfile profile in Model.UserProfiles)
                             {
                                 <tr>
+
+                                    @if (profile.Status == true)
+                                    {
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" onchange="ChangeStatus(this, @profile.IdUserProfile)" checked />
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" onchange="ChangeStatus(this, @profile.IdUserProfile)" />
+                                            </div>
+                                        </td>
+                                    }
+
+                                    @* <td>@profile.Status</td> *@
+
                                     <td>@profile.IdUserProfile</td>
                                     <td>@profile.Empleado.IdEmpleado</td>
                                     <td>@profile.UserName</td>
                                     <td>@profile.Email</td>
                                     <td>@profile.PasswordHash</td>
-                                    <td>@profile.Status</td>
                                     <td>@profile.Rol.Nombre</td>
                                     
                                     <td>
@@ -106,6 +126,29 @@
     });
         
        
+    }
+
+
+
+    function ChangeStatus(input, IdUserProfile){
+        
+        var Status = $(input).is(':checked');
+        console.log(IdUserProfile);
+
+        $.ajax({
+            
+            url: "@Url.Action("ChangeStatus", "UserProfile")",
+            method: "POST",
+            dataType: "Json",
+            data: {IdUserProfile, Status},
+            success: function (){
+                console.log("Se actualizo estado")
+            },
+            error: function(){
+            
+            }
+        });
+
     }
 
 </script>
