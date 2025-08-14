@@ -1,0 +1,235 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<container class="container">
+    <div class="row">
+        <div class=" col">
+
+            <div class="row">
+                <div class="col">
+                    <h1>Historial de Permisos</h1>
+                </div>
+                <div class="row justify-content-end" style="padding-bottom:20px">
+                    <div class="btn-group col-6" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-outline-primary" id="buscarBTN"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+
+
+                @* BUSQUEDA ABIERTA *@
+
+                <div class="row " style="padding-bottom:20px">
+                    <div class="col" style="display:none" id="tablaBuscar">
+                        <form id="formBuscar">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" id="buscarNombre" name="name" placeholder="Nombre" class="form-control">
+                                </div>
+                                <div class="col" style="padding-top:30px">
+                                    <input type="radio" class="btn-check " name="radio-group" id="btnAprovado" autocomplete="off" value="2">
+                                    <label class="btn btn-outline-secondary" for="btnAprovado">Aprovado</label>
+
+                                    <input type="radio" class="btn-check" name="radio-group" id="btnRechazado" autocomplete="off" value="3">
+                                    <label class="btn btn-outline-secondary" for="btnRechazado">Rechazado</label>
+                                    <input type="radio" class="btn-check" name="radio-group" id="btnNothing" autocomplete="off" value="3">
+                                    <label class="btn btn-outline-secondary" for="btnNothing">Sin Filtro</label>
+                                </div>
+
+                                <div class="row justify-content-end" style="padding-top:10px; padding-right:50px">
+                                    <button type="submit" class="btn btn-outline-primary" style="width:200px">
+                                        Buscar
+                                    </button>
+
+                                </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                @* =========================== TABLA HISTORIAL ========================== *@
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-responsive table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>IdPermiso</th>
+                                <th>FechaRevision</th>
+                                <th>Status</th>
+                                <th>Observaciones</th>
+                                <th>IdAutorizo</th>
+                                <th>Autorizo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</container>
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+        $(document).ready(function () {
+        $("#buscarBTN").click(function () {
+            $("#tablaBuscar").toggle();
+            if ($("#tablaBuscar").is(":visible")) {
+                $('#tablaBuscar').show();
+
+            } else {
+                $('#tablaBuscar').hide();
+
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+    var AprovoRechazo = {
+        Nombre: ""
+    }
+
+    var StatusPermiso = {
+        Descripcion : ""
+    }
+
+    var historial = {
+        AprovoRechazo: AprovoRechazo,
+        StatusPermiso: StatusPermiso
+    }
+
+
+    $.ajax({
+
+        url: "@Url.Action("HistorialGetAllJson", "Permiso")",
+        method: "POST",
+        dataType: "Json",
+        data: {historial},
+        success: function (data) {
+            console.log(data)
+
+            $.each(data.objects, function (index, value) {
+
+
+
+                let imagen = value.imagen;
+                $("#tbody").append(
+                    `
+                         <tr id="${value.idHistorialPermiso}" style="display: none;">
+                                <td>${value.permiso.idPermiso}</td>
+                                <td>${value.fechaRevision}</td>
+                                <td>${value.statusPermiso.descripcion}</td>
+                                <td>${value.observaciones}</td>
+                                <td>${value.aprovoRechazo.idEmpleado}</td>
+                                <td>${value.aprovoRechazo.nombre}</td>
+                         </tr>
+                    `
+                )
+
+                // $("#tbody").show("slow");
+                $(`#${value.idHistorialPermiso}`).appendTo('#tbody').show(1000);
+            });
+        },
+        error: function(){
+
+        }
+
+    });
+
+
+
+    });
+
+
+
+    $(document).ready(function () {
+        $("#formBuscar").on("submit", function (e) {
+            e.preventDefault();
+
+            var Aprovado = $("#btnAprovado").is(':checked');
+            var Rechazado = $("#btnRechazado").is(':checked');
+            console.log(Aprovado)
+            console.log(Rechazado)
+
+            if(Aprovado){
+                var Status = "Aprovado";
+            }else if(Rechazado){
+                var Status = "Rechazado";
+            }else{
+                var Status = "";
+            }
+
+            var Nombre = $("#buscarNombre").val();
+            console.log(Nombre)
+
+
+             var AprovoRechazo = {
+                     Nombre: Nombre
+             }
+
+            var StatusPermiso = {
+                    Descripcion : Status
+            }
+
+            var historial = {
+                AprovoRechazo: AprovoRechazo,
+                StatusPermiso: StatusPermiso
+            }
+
+
+
+            $.ajax({
+
+            url: "@Url.Action("HistorialGetAllJson", "Permiso")",
+            method: "POST",
+            dataType: "Json",
+            data: {historial},
+            success: function (data) {
+                console.log(data)
+            $("#tbody").empty();
+
+            $.each(data.objects, function (index, value) {
+
+
+
+                let imagen = value.imagen;
+                $("#tbody").append(
+                    `
+                         <tr id="${value.idHistorialPermiso}" style="display: none;">
+                                <td>${value.permiso.idPermiso}</td>
+                                <td>${value.fechaRevision}</td>
+                                <td>${value.statusPermiso.descripcion}</td>
+                                <td>${value.observaciones}</td>
+                                <td>${value.aprovoRechazo.idEmpleado}</td>
+                                <td>${value.aprovoRechazo.nombre}</td>
+                         </tr>
+                    `
+                )
+
+                // $("#tbody").show("slow");
+                $(`#${value.idHistorialPermiso}`).appendTo('#tbody').show(1000);
+            });
+        },
+        error: function(){
+
+        }
+
+    });
+
+
+        }
+        )
+    });
+
+
+</script>

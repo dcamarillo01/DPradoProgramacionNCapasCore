@@ -147,13 +147,13 @@ namespace BL
             return result;
         }
 
-        public ML.Result GetById(int IdUserProfile) {
+        public ML.Result GetById(int IdEmpleado) {
 
             ML.Result result = new();
 
             try {
 
-                var query = _context.VwUserProfiles.FromSqlRaw($"UserProfileGetById {IdUserProfile}").AsEnumerable().SingleOrDefault();
+                var query = _context.VwUserProfiles.FromSqlRaw($"UserProfileGetById {IdEmpleado}").AsEnumerable().SingleOrDefault();
 
                 if (query != null)
                 {

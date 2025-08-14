@@ -51,16 +51,22 @@ namespace PL_MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult FormUserProfile(int? IdEmpleado, int? IdUserProfile)
+        public IActionResult FormUserProfile(int? IdEmpleado)
         {
 
             ML.UserProfile userProfile = new();
             userProfile.Empleado = new();
             userProfile.Rol = new();
 
-            //Get Empleado By Id
 
-            if (IdEmpleado > 0) {
+            ML.Result resultGetProfileById = _userProfile.GetById(IdEmpleado.Value);
+            if (resultGetProfileById.Correct)
+            {
+
+                userProfile = (ML.UserProfile)resultGetProfileById.Object;
+            }
+            else {
+
                 ML.Result resultGetEmpleadyById = _empleado.GetById(IdEmpleado.Value);
                 if (resultGetEmpleadyById.Correct)
                 {
@@ -73,15 +79,7 @@ namespace PL_MVC.Controllers
                     userProfile.UserName = empleado.Nombre + empleado.ApellidoPaterno + empleado.IdEmpleado;
                     userProfile.Email = empleado.Nombre.First() + empleado.ApellidoPaterno + empleado.IdEmpleado + "@" + empleado.Departamento.Descripcion + ".com";
                 }
-            }
 
-            if (IdUserProfile > 0) {
-
-                ML.Result resultGetProfileById = _userProfile.GetById(IdUserProfile.Value);
-                if (resultGetProfileById.Correct) {
-
-                    userProfile = (ML.UserProfile) resultGetProfileById.Object;
-                }
             }
 
             //Llenar Roles 

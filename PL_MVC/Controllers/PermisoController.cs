@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Security.Claims;
 
 namespace PL_MVC.Controllers
@@ -127,6 +128,24 @@ namespace PL_MVC.Controllers
             return Json(result);
         }
 
+        [HttpGet]
+        public IActionResult HistorialGetAll() {
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult HistorialGetAllJson(ML.HistorialPermiso historial) {
+
+            historial.StatusPermiso.Descripcion = historial.StatusPermiso.Descripcion ?? "";
+            historial.AprovoRechazo.Nombre = historial.AprovoRechazo.Nombre ?? "";
+
+            ML.Result result = _permisoHistorial.GetAll(historial);
+
+            return Json(result);
+        }
+
+
         [NonAction]
         public IActionResult enviarCorreoSolicitud(string EmailTo, ML.HistorialPermiso historial) {
 
@@ -140,18 +159,42 @@ namespace PL_MVC.Controllers
                 string webRootPath = _webHostEnvironment.WebRootPath;
                 string contentRootPath = _webHostEnvironment.ContentRootPath;
 
+                var AprovoRechazo = historial.StatusPermiso.IdStatusPermiso == 2 ? "Aprovada" : "Rechazada";
+
+                string pathImg = "";
+
+                if (AprovoRechazo == "Aprovada")
+                {
+                    pathImg = Path.Combine(webRootPath, "Imagenes\\Approved2.png");
+
+                }
+                else { 
+                pathImg = Path.Combine(webRootPath, "Imagenes\\Rejected.png");
+
+                }
+
+
+                //string html = @"<html><body><img src=""cid:YourPictureId""></body></html>";
+
+
+
+
+
+
+
                 string path = "";
                 path = Path.Combine(webRootPath, "EmailTemplates\\Clock.html");
 
                 StreamReader reader = new StreamReader(path);
 
-                var AprovoRechazo = historial.StatusPermiso.IdStatusPermiso == 2 ? "Aprovada" : "Rechazada";
+                
 
                 body = reader.ReadToEnd();
                 //body = body.Replace("{{Nombre}}",EmailTo);
                 body = body.Replace("{{AprovoRechazo}}", AprovoRechazo);
                 body = body.Replace("{{Observaciones}}", historial.Observaciones);
                 body = body.Replace("{{UrlAction}}" , Url.Action("Index","Home"));
+                //body = body.Replace("{{imgStatus}}", pathImg);
 
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
@@ -170,6 +213,14 @@ namespace PL_MVC.Controllers
                     IsBodyHtml = true,
                 };
 
+                AlternateView altView = AlternateView.CreateAlternateViewFromString(body, null, MediaTypeNames.Text.Html);
+
+                LinkedResource yourPictureRes = new LinkedResource(pathImg, MediaTypeNames.Image.Jpeg);
+                yourPictureRes.ContentId = "YourPictureId";
+                altView.LinkedResources.Add(yourPictureRes);
+
+
+                message.AlternateViews.Add(altView);
                 message.To.Add(Email);
                 smtpClient.Send(message);
 
