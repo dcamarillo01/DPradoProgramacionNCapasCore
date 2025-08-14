@@ -193,7 +193,7 @@ namespace PL_MVC.Controllers
                 //body = body.Replace("{{Nombre}}",EmailTo);
                 body = body.Replace("{{AprovoRechazo}}", AprovoRechazo);
                 body = body.Replace("{{Observaciones}}", historial.Observaciones);
-                body = body.Replace("{{UrlAction}}" , Url.Action("Index","Home"));
+                body = body.Replace("{{UrlAction}}" , Url.Action("Login","Login"));
                 //body = body.Replace("{{imgStatus}}", pathImg);
 
                 var smtpClient = new SmtpClient("smtp.gmail.com")
