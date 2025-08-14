@@ -14,15 +14,15 @@
                     <h1>Historial de Permisos</h1>
                 </div>
                 <div class="row justify-content-end" style="padding-bottom:20px">
-                    <div class="btn-group col-6" role="group" aria-label="Basic outlined example">
-                        <button type="button" class="btn btn-outline-primary" id="buscarBTN"><i class="bi bi-search"></i></button>
+                    <div class="btn-group col-1" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-outline-primary" id="buscarBTN"><i class="bi bi-filter"></i></button>
                     </div>
                 </div>
 
 
                 @* BUSQUEDA ABIERTA *@
 
-                <div class="row " style="padding-bottom:20px">
+                <div class="row" style="padding-bottom:20px">
                     <div class="col" style="display:none" id="tablaBuscar">
                         <form id="formBuscar">
                             <div class="row">
@@ -32,10 +32,10 @@
                                 </div>
                                 <div class="col" style="padding-top:30px">
                                     <input type="radio" class="btn-check " name="radio-group" id="btnAprovado" autocomplete="off" value="2">
-                                    <label class="btn btn-outline-secondary" for="btnAprovado">Aprovado</label>
+                                    <label class="btn btn-outline-success" for="btnAprovado">Aprovado</label>
 
-                                    <input type="radio" class="btn-check" name="radio-group" id="btnRechazado" autocomplete="off" value="3">
-                                    <label class="btn btn-outline-secondary" for="btnRechazado">Rechazado</label>
+                                    <input type="radio" class="btn-check " name="radio-group" id="btnRechazado" autocomplete="off" value="3">
+                                    <label class="btn btn-outline-danger" for="btnRechazado">Rechazado</label>
                                     <input type="radio" class="btn-check" name="radio-group" id="btnNothing" autocomplete="off" value="3">
                                     <label class="btn btn-outline-secondary" for="btnNothing">Sin Filtro</label>
                                 </div>
