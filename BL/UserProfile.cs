@@ -147,13 +147,13 @@ namespace BL
             return result;
         }
 
-        public ML.Result GetById(int IdUserProfile) {
+        public ML.Result GetById(int IdEmpleado) {
 
             ML.Result result = new();
 
             try {
 
-                var query = _context.VwUserProfiles.FromSqlRaw($"UserProfileGetById {IdUserProfile}").AsEnumerable().SingleOrDefault();
+                var query = _context.VwUserProfiles.FromSqlRaw($"UserProfileGetById {IdEmpleado}").AsEnumerable().SingleOrDefault();
 
                 if (query != null)
                 {
@@ -185,6 +185,35 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage= ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
+
+        public ML.Result ChangeStatus(int IdUserProfile, bool status) {
+
+            ML.Result result = new();
+
+            try {
+
+                var filasAfectadas = _context.Database.ExecuteSqlRaw($"UserProfileStatus {IdUserProfile}, {status}");
+
+                if (filasAfectadas > 0)
+                {
+
+                    result.Correct = true;
+                }
+                else {
+                    result.Correct = false;
+                    result.ErrorMessage = "Error al actualizar status";
+                }
+            }
+            catch (Exception ex) {
+
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
                 result.Ex = ex;
             }
 

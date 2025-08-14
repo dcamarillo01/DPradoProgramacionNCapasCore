@@ -1,0 +1,148 @@
+﻿@model ML.Permiso
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<container class="container ">
+    <div class="row mx-auto">
+        <div class="col">
+
+            <div class="row">
+                <div class="col" style="padding-bottom:30px">
+                    <h1>Permiso</h1>
+                </div>
+            </div>
+
+            <div class="row shadow-lg mx-auto rounded-3" style="padding:20px; width:80%; background-color:#254E70">
+
+                <div class="col">
+
+                    @using (Html.BeginForm("PermisoForm","Permiso", FormMethod.Post))
+                            {
+                    
+                        <div class="row">
+                            <div hidden>@Html.TextBoxFor(model => model.Empleado.IdEmpleado)</div>
+
+                            <div class="col" >
+                                @* <input id="FechaPermiso" hidden /> *@
+                                @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaPermiso" , style = "display:none;"})
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h4 style="color:#E0E1DD">Hora Inicio</h4>
+                                        @* @Html.LabelFor(model => model.HoraInicio, new { @class = "",  style = "font-weight:bold;" }) *@
+                                        @Html.TextBoxFor(model => model.HoraInicio, new { @class = "form-control", @id = "horaInicio"})
+                                        
+                                        
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 style="color:#E0E1DD">Hora Fin</h4>
+
+                                      @*   @Html.LabelFor(model => model.HoraFin, new { @class = "", style = "font-weight:bold;" }) *@
+                                        @Html.TextBoxFor(model => model.HoraFin, new { @class = "form-control", @id = "horaFin" })
+                                       
+                                        
+                                        
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:20px;" >
+                                    <div class="col">
+                                        <h4 style="color:#E0E1DD">Motivo</h4>
+
+                                        @* @Html.LabelFor(model => model.Motivo, new { @class = "" }) *@
+                                        @Html.TextAreaFor(model => model.Motivo, new { @class = "form-control", @id = "motivo" })
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col" style="padding-top:20px">
+                                        @Html.DropDownListFor(model => model.EmpleadoAutorizador.IdEmpleado, new SelectList(Model.EmpleadoAutorizador.Empleados, "IdEmpleado", "Nombre"), "Selecciona Jefe", new { @class="form-control"})
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:20px">
+                                    <div class="col">
+                                        <button style="background-color:#E0E1DD" class="btn">Solicitar Permiso</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    
+                    }
+
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</container>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+   
+
+    
+    $(document).ready(function () {
+        
+         $("#FechaPermiso").flatpickr(
+        {
+        mode: "range",
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        inline: true, 
+        outerWidth: "100%"
+        // disable: [
+        //     function(date) {
+        //         disable every multiple of 8
+        //         return !(date.getDate() % 8);
+        //     }
+        // ]
+    }
+
+
+
+
+    );
+    });
+
+    $(document).ready(function () {
+        
+         $("#horaInicio").flatpickr(
+        {
+       enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    }
+        
+
+
+    );
+    });
+
+    $(document).ready(function () {
+        
+         $("#horaFin").flatpickr(
+        {
+       enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    }
+        
+
+
+    );
+    });
+
+    
+    
+</script>

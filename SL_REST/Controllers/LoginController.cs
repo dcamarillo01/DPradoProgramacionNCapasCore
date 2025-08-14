@@ -55,7 +55,8 @@ namespace SL_REST.Controllers
             {
                 new Claim(ClaimTypes.Role, userProfile.Rol.Nombre),
                 new Claim(ClaimTypes.Name, userProfile.UserName),
-                new Claim(ClaimTypes.Email, userProfile.Email)
+                new Claim(ClaimTypes.Email, userProfile.Email),
+                new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userProfile.Empleado.IdEmpleado))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d4c9482eb6bab9aef587ff82afcb000d"));

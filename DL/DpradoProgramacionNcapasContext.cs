@@ -41,19 +41,35 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
     public virtual DbSet<VwEmpleado> VwEmpleados { get; set; }
 
+    public virtual DbSet<VwHistorialPermiso> VwHistorialPermisos { get; set; }
+
     public virtual DbSet<VwUserProfile> VwUserProfiles { get; set; }
 
     public virtual DbSet<VwUsuario> VwUsuarios { get; set; }
 
     public virtual DbSet<DTOs.LoginInfo> LoginInfo { get; set; }
+    public virtual DbSet<DTOs.GetBoss> GetBosses { get; set; }
+    public virtual DbSet<DTOs.GetEmailByIdPermiso> GetEmailByIdPermisos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DTOs.LoginInfo>(entity =>
-            {
-                entity.HasNoKey();
+        {
+            entity.HasNoKey();
         }
-            );
+           );
+
+        modelBuilder.Entity<DTOs.GetBoss>(entity =>
+        {
+            entity.HasNoKey();
+        }
+           );
+
+        modelBuilder.Entity<DTOs.GetEmailByIdPermiso>(entity =>
+        {
+            entity.HasNoKey();
+        }
+           );
 
         modelBuilder.Entity<Colonium>(entity =>
         {
@@ -250,6 +266,10 @@ public partial class DpradoProgramacionNcapasContext : DbContext
 
             entity.ToTable("UserProfile");
 
+            entity.HasIndex(e => e.Email, "UQ_Email").IsUnique();
+
+            entity.HasIndex(e => e.Email, "UQ_EmailUniqueProfile").IsUnique();
+
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -352,6 +372,26 @@ public partial class DpradoProgramacionNcapasContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("RFC");
             entity.Property(e => e.SalarioBase).HasColumnType("money");
+        });
+
+        modelBuilder.Entity<VwHistorialPermiso>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vwHistorialPermiso");
+
+            entity.Property(e => e.Autorizo)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.FechaRevision)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.Observaciones)
+                .HasMaxLength(255)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<VwUserProfile>(entity =>

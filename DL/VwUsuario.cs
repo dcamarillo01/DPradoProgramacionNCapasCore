@@ -41,6 +41,8 @@ public partial class VwUsuario
 
     public string? NumeroExterior { get; set; }
 
+    public bool? Status { get; set; }
+
     public byte[]? Imagen { get; set; }
 
     public int? IdMunicipio { get; set; }

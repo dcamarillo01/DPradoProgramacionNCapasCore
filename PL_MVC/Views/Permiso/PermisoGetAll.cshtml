@@ -1,0 +1,133 @@
+﻿@model ML.Permiso
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<container class="container">
+    <div class="row">
+        <div class="col">
+
+            <div class="row ">
+                <div class="col">
+
+                    <table class="table table-sm shadow-lg">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>IdPermiso</th>
+                                <th>IdEmpleado</th>
+                                <th>FechaSolicitud</th>
+                                <th>FechaInicio</th>
+                                <th>FechaFin</th>
+                                <th>HoraInicio</th>
+                                <th>HoraFin</th>
+                                <th>Motivo</th>
+                                <th>Aprobar</th>
+                                <th>Rechazar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ML.Permiso permiso in Model.Permisos)
+                            {
+                                <tr>
+                                    <td>@permiso.IdPermiso</td>
+                                    <td>@permiso.Empleado.IdEmpleado</td>
+                                    <td>@permiso.FechaSolicitud</td>
+                                    <td>@permiso.FechaInicio</td>
+                                    <td>@permiso.FechaFin</td>
+                                    <td>@permiso.HoraInicio</td>
+                                    <td>@permiso.HoraFin</td>
+                                    <td>@permiso.Motivo</td>
+                                    <td>
+                                        <btn class="btn btn-success" onclick="AprovarRechazar(this,2)">Aprobar</btn>
+                                    </td>
+                                    <td>
+                                        <btn class="btn btn-danger" onclick="AprovarRechazar(this,3)">Rechazar</btn>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</container>
+
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+
+    function AprovarRechazar(input ,status) {
+
+    var IdPermiso = $(input).parent().parent().find('td')[0].firstChild.data
+    var row = $(input).parent().parent()
+    console.log(row)
+
+    var IdStatus = status;
+    console.log(status)
+
+    Swal.fire({
+           title: "Observaciones",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off"
+    }
+    })
+    .then(message => {
+
+        var Permiso = {
+            IdPermiso : IdPermiso
+        }
+
+        var StatusPermiso = {
+            IdStatusPermiso : IdStatus
+        }
+
+        console.log(IdStatus)
+
+        var historial = {
+
+        Observaciones : message.value,
+        Permiso: Permiso,
+        StatusPermiso: StatusPermiso
+        }
+
+        $.ajax({
+            url: "@Url.Action("HistorialPermiso", "Permiso")",
+            type: "POST",
+            data: {historial},
+            dataType: "JSON",
+            success: function(){
+
+                    Swal.fire({
+      title: "Solicitud Revisada",
+      icon: "success"
+    });
+            
+            row.hide('slow')
+                        
+
+            },
+            error: function(){
+
+            }
+        });
+
+    });
+
+    }
+    
+
+
+</script>
+

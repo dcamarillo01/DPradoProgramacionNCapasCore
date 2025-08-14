@@ -15,14 +15,15 @@
                     @if (Model.IdUserProfile > 0)
                     {
                         <h1>Editar cuenta</h1>
+                        <div class="alert alert-warning">Este usuario ya tiene cuenta</div>
+
                     }
                     else
                     {
                         <h1>Crear cuenta</h1>
-
                     }
                 </div>
-
+                
                 <div class="row shadow-lg rounded-3">
                     <div class="col " style="padding-top:20px">
                         @using (Html.BeginForm("FormUserProfile", "UserProfile", new { @class = "form-login" }))

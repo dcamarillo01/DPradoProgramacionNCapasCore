@@ -181,6 +181,7 @@ namespace BL
                         usuario.FechaNacimiento = row.FechaNacimiento;
                         usuario.Curp = row.Curp;
                         usuario.Rol.Nombre = row.Rol;
+                        usuario.Status = row.Status;
                         usuario.Imagen = row.Imagen;
                         if (usuario.Imagen == null)
                         {

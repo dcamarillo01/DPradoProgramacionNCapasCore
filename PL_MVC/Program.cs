@@ -39,6 +39,8 @@ builder.Services.AddScoped<BL.Estado>();
 builder.Services.AddScoped<BL.Empleado>();
 builder.Services.AddScoped<BL.Departamento>();
 builder.Services.AddScoped<BL.UserProfile>();
+builder.Services.AddScoped<BL.Permiso>();
+builder.Services.AddScoped<BL.HistorialPermiso>();
 
 //Ignore DataAnnotations
 
